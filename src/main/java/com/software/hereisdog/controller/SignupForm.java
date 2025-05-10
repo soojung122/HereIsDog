@@ -1,8 +1,8 @@
 package com.software.hereisdog.controller;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 /**
  * 회원가입 시 사용자로부터 입력받는 데이터

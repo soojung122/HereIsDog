@@ -1,7 +1,7 @@
 package com.software.hereisdog.controller;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 /**
  * 리뷰 등록 시 입력받는 데이터

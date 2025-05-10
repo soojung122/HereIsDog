@@ -9,7 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
+
 
 /**
  * 로그인, 로그아웃, 회원가입을 담당하는 컨트롤러
