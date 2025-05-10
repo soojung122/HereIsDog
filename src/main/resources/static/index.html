@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>여기다멍</title>
+    <style>
+        body {
+            font-family: '맑은 고딕', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #fffdf7;
+        }
+
+        .top-nav {
+            text-align: right;
+            padding: 50px;
+        }
+
+        .top-nav a {
+            margin-left: 10px;
+            text-decoration: none;
+            background-color: #fdf5b2;
+            padding: 8px 14px;
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .logo {
+            margin-top: 100px;
+        }
+
+        .logo .paw {
+            font-size: 40px;
+        }
+
+        .menu {
+            margin-top: 40px;
+        }
+
+        .menu button {
+            background-color: #fdf5b2;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .hint {
+            margin-top: 10px;
+            color: gray;
+            font-size: 14px;
+        }
+
+        .speech-bubble {
+            display: inline-block;
+            background-color: #fffac5;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-left: 10px;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 10px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 10px solid #fffac5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="/login">로그인</a>
+        <a href="/register">회원가입</a>
+    </div>
+
+    <div class="logo" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+        <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 60px; height: 60px;">
+        <h2>여기다멍</h2>
+    </div>
+
+    <div class="menu">
+        <button onclick="location.href='map.html?type=hospital'">병원</button>
+        <button onclick="location.href='map.html?type=cafe'">카페</button>
+        <button onclick="location.href='map.html?type=park'">공원</button>
+        <!-- <div class="speech-bubble">눌러보세요!</div> -->
+    </div>
+
+</body>
+</html>
