@@ -1,0 +1,39 @@
+CREATE TABLE customer (
+    id NUMBER PRIMARY KEY,
+    username VARCHAR2(50) NOT NULL,
+    password VARCHAR2(100) NOT NULL,
+    nickname VARCHAR2(50),
+    email VARCHAR2(100)
+);
+
+CREATE TABLE owner (
+    id NUMBER PRIMARY KEY,
+    username VARCHAR2(50) NOT NULL,
+    password VARCHAR2(100) NOT NULL,
+    nickname VARCHAR2(50),
+    email VARCHAR2(100),
+    business_number VARCHAR2(20)
+);
+
+CREATE SEQUENCE user_seq
+START WITH 1
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+
+CREATE OR REPLACE TRIGGER trg_customer_id
+BEFORE INSERT ON customer
+FOR EACH ROW
+BEGIN
+    SELECT user_seq.NEXTVAL INTO :NEW.id FROM dual;
+END;
+
+CREATE OR REPLACE TRIGGER trg_owner_id
+BEFORE INSERT ON owner
+FOR EACH ROW
+BEGIN
+    SELECT user_seq.NEXTVAL INTO :NEW.id FROM dual;
+END;
+
+SELECT * FROM customer;
+SELECT * FROM owner;

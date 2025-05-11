@@ -62,18 +62,25 @@ public class AuthController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupForm", new SignupForm());
-        return "auth/signupForm";
+        return "signupForm";
     }
 
     /** 회원가입 처리 */
-    @PostMapping("/signup")
+    /*@PostMapping("/signup")
     public String signup(@Valid @ModelAttribute SignupForm signupForm,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "auth/signupForm";
+            return "signupForm";
         }
 
         authService.signup(signupForm);
         return "redirect:/auth/login";
+    }*/
+    @PostMapping("/signup")
+    public String signup(@ModelAttribute SignupForm form) {
+        authService.signup(form);
+        System.out.println("회원가입 성공");
+        return "회원가입 성공";
     }
+
 }

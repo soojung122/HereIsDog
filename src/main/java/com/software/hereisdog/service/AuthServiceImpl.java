@@ -1,14 +1,38 @@
+/*package com.software.hereisdog.service;
+
+import org.springframework.stereotype.Service;
+
+/**
+ * AuthService 인터페이스 구현 클래스
+ */
+/*
+@Service
+public class AuthServiceImpl implements AuthService {
+
+    @Override
+    public boolean login(String username, String password) {
+        // TODO: MyBatis DAO를 이용하여 로그인 검증
+        return true;
+    }
+
+    @Override
+    public void signup(Object signupForm) {
+        // TODO: MyBatis DAO를 이용하여 회원 가입 처리
+    }
+}
+*/
+
 package com.software.hereisdog.service;
 
 import com.software.hereisdog.controller.SignupForm;
 import com.software.hereisdog.dao.mybatis.mapper.UserMapper;
-import com.software.hereisdog.domain.User;
-import com.software.hereisdog.domain.Role;
+import com.software.hereisdog.domain.Customer;
+import com.software.hereisdog.domain.Owner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 로그인, 로그아웃, 회원가입 로직을 처리하는 서비스 구현 클래스
+ * 회원가입 처리 서비스 (Customer / Owner 분기 저장)
  */
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -20,36 +44,37 @@ public class AuthServiceImpl implements AuthService {
         this.userMapper = userMapper;
     }
 
-    /**
-     * 사용자 로그인 처리
-     */
     @Override
     public boolean login(String username, String password) {
-        User user = userMapper.findByUsername(username);
-        return user != null && user.getPassword().equals(password);
+        return false; // 로그인 생략
     }
 
-    /**
-     * 사용자 회원가입 처리
-     * @param signupForm 가입 폼에서 입력받은 사용자 정보
-     */
     @Override
-    public void signup(Object signupForm) {
-        // SignupForm을 실제 타입으로 변환
-        SignupForm form = (SignupForm) signupForm;
+    public void signup(SignupForm form) {
+        //SignupForm form = (SignupForm) signupForm;
 
-        // User 엔티티 생성
-        User user = new User();
-        user.setUsername(form.getUsername());
-        user.setPassword(form.getPassword());
-        user.setEmail(form.getEmail());
+        if (form.getBusinessNumber() != null && !form.getBusinessNumber().isBlank()) {
+            // Owner
+            Owner owner = new Owner();
+            owner.setUsername(form.getUsername());
+            owner.setPassword(form.getPassword());
+            owner.setNickname(form.getNickname());
+            owner.setEmail(form.getEmail());
+            owner.setBusinessNumber(form.getBusinessNumber());
 
-        // 기본 권한 부여 (예: 일반 사용자 role_id = 1)
-        Role role = new Role();
-        role.setId(1L);  // Role 엔티티에 따라 값 조정
-        user.setRole(role);
+            userMapper.insertOwner(owner);
 
-        // DB에 저장
-        userMapper.insertUser(user);
+        } else {
+            // Customer
+            Customer customer = new Customer();
+            customer.setUsername(form.getUsername());
+            customer.setPassword(form.getPassword());
+            customer.setNickname(form.getNickname());
+            customer.setEmail(form.getEmail());
+
+            userMapper.insertCustomer(customer);
+        }
+        System.out.println("회원가입 요청 - " + form.getUsername());
+
     }
 }
