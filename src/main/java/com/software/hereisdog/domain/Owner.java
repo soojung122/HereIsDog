@@ -5,21 +5,11 @@ package com.software.hereisdog.domain;
  */
 public class Owner extends User {
 
-    private String businessNumber;
-
-    public Owner() {}
-
-    public Owner(Long id, String username, String password, String name, String phoneNumber, String businessNumber) {
-        super(id, username, password, name, phoneNumber);
-        this.businessNumber = businessNumber;
+    public Owner() {
+        super();
     }
 
-    // getter/setter
-    public String getBusinessNumber() {
-        return businessNumber;
-    }
-
-    public void setBusinessNumber(String businessNumber) {
-        this.businessNumber = businessNumber;
+    public Owner(Long id, String username, String password, String nickname, String email, String businessNumber) {
+        super(id, username, password, nickname, email, businessNumber);
     }
 }

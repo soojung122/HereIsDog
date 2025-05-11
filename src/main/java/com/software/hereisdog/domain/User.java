@@ -1,24 +1,28 @@
 package com.software.hereisdog.domain;
 
 /**
- * 공통 사용자 정보를 담는 추상 클래스*/
+ * 공통 사용자 정보를 담는 추상 클래스 (UI 기준)
+ */
 public abstract class User {
-    private Long id;
-    private String username;
-    private String password;
-    private String name;
-    private String phoneNumber;
+    private Long id;                // 시스템 부여 ID
+    private String username;        // 사용자 ID
+    private String password;        // 비밀번호
+    private String nickname;        // 닉네임
+    private String email;           // 이메일
+    private String businessNumber;  // 사업자 번호 (owner만)
 
     public User() {}
 
-    public User(Long id, String username, String password, String name, String phoneNumber) {
+    public User(Long id, String username, String password, String nickname, String email, String businessNumber) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.nickname = nickname;
+        this.email = email;
+        this.businessNumber = businessNumber;
     }
 
+    // Getter / Setter
     public Long getId() {
         return id;
     }
@@ -43,19 +47,27 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBusinessNumber() {
+        return businessNumber;
+    }
+
+    public void setBusinessNumber(String businessNumber) {
+        this.businessNumber = businessNumber;
     }
 }

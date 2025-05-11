@@ -62,7 +62,7 @@ public class AuthController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupForm", new SignupForm());
-        return "auth/signupForm";
+        return "signupForm";
     }
 
     /** 회원가입 처리 */
@@ -70,7 +70,7 @@ public class AuthController {
     public String signup(@Valid @ModelAttribute SignupForm signupForm,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "auth/signupForm";
+            return "signupForm";
         }
 
         authService.signup(signupForm);
