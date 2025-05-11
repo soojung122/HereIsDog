@@ -66,7 +66,7 @@ public class AuthController {
     }
 
     /** 회원가입 처리 */
-    @PostMapping("/signup")
+    /*@PostMapping("/signup")
     public String signup(@Valid @ModelAttribute SignupForm signupForm,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -75,5 +75,12 @@ public class AuthController {
 
         authService.signup(signupForm);
         return "redirect:/auth/login";
+    }*/
+    @PostMapping("/signup")
+    public String signup(@ModelAttribute SignupForm form) {
+        authService.signup(form);
+        System.out.println("회원가입 성공");
+        return "회원가입 성공";
     }
+
 }
