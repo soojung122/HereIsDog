@@ -2,6 +2,7 @@ package com.software.hereisdog.controller;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -19,6 +20,13 @@ public class SignupForm {
     @NotEmpty(message = "이메일을 입력하세요.")
     @Email(message = "올바른 이메일 형식이어야 합니다.")
     private String email;
+    
+    @NotEmpty(message = "닉네임을 입력하세요.")
+    @Size(min = 2, max = 20, message = "닉네임은 2자 이상 20자 이하로 입력하세요.")
+    private String nickname;               // 닉네임
+    
+    @Pattern(regexp = "^[0-9]{10}$", message = "사업자 번호는 숫자 10자리여야 합니다.")
+    private String businessNumber;         // 사업자 번호 (owner만)
 
     // 기본 생성자
     public SignupForm() {}
@@ -47,4 +55,10 @@ public class SignupForm {
     public void setEmail(String email) {
         this.email = email;
     }
+    
+    public String getNickname() { return nickname; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
+
+    public String getBusinessNumber() { return businessNumber; }
+    public void setBusinessNumber(String businessNumber) { this.businessNumber = businessNumber; }
 }
