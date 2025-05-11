@@ -1,6 +1,6 @@
 package com.software.hereisdog.controller;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 장소 등록 및 표시용 DTO (지도 렌더링, REST 응답 포함)

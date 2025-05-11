@@ -49,23 +49,6 @@ public class AuthServiceImpl implements AuthService {
         return false; // 로그인 생략
     }
 
-<<<<<<< HEAD
-    /**
-     * 사용자 회원가입 처리
-     * @param signupForm 가입 폼에서 입력받은 사용자 정보
-     */
-
-    @Override
-    public void signup(Object signupForm) {
-        // SignupForm을 실제 타입으로 변환
-        SignupForm form = (SignupForm) signupForm;
-        /*
-        // User 엔티티 생성
-        User user = new User();
-        user.setUsername(form.getUsername());
-        user.setPassword(form.getPassword());
-        user.setEmail(form.getEmail());
-=======
     @Override
     public void signup(SignupForm form) {
         //SignupForm form = (SignupForm) signupForm;
@@ -78,7 +61,6 @@ public class AuthServiceImpl implements AuthService {
             owner.setNickname(form.getNickname());
             owner.setEmail(form.getEmail());
             owner.setBusinessNumber(form.getBusinessNumber());
->>>>>>> d5403291e3d679ff2c3dcca7545b6bc4fbb1817a
 
             userMapper.insertOwner(owner);
 
@@ -94,11 +76,5 @@ public class AuthServiceImpl implements AuthService {
         }
         System.out.println("회원가입 요청 - " + form.getUsername());
 
-<<<<<<< HEAD
-        // DB에 저장
-        userMapper.insertUser(user); */
-    } 
-=======
     }
->>>>>>> d5403291e3d679ff2c3dcca7545b6bc4fbb1817a
 }
