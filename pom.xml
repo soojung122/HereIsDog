@@ -185,24 +185,35 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<compilerArgument>-Xlint:all</compilerArgument>
-					<showWarnings>true</showWarnings>
-					<showDeprecation>true</showDeprecation>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.2</version>
-			</plugin>			
-		</plugins>
-	</build>
+	<resources>
+		<resource>
+			<directory>src/main/webapp</directory>
+			<targetPath>META-INF/resources</targetPath>
+			<includes>
+				<include>**/*.jsp</include>
+			</includes>
+		</resource>
+	</resources>
+
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.7.0</version>
+			<configuration>
+				<source>${java.version}</source>
+				<target>${java.version}</target>
+				<encoding>${project.build.sourceEncoding}</encoding>
+				<compilerArgument>-Xlint:all</compilerArgument>
+				<showWarnings>true</showWarnings>
+				<showDeprecation>true</showDeprecation>
+			</configuration>
+		</plugin>
+		<plugin>
+			<artifactId>maven-war-plugin</artifactId>
+			<version>3.2.2</version>
+		</plugin>
+	</plugins>
+</build>
+
 </project>

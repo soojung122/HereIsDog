@@ -1,6 +1,8 @@
 package com.software.hereisdog.service;
 
 import com.software.hereisdog.controller.PlaceForm;
+import com.software.hereisdog.domain.Place;
+
 import java.util.List;
 
 /**
@@ -9,4 +11,6 @@ import java.util.List;
 public interface PlaceService {
     void registerPlace(PlaceForm placeForm);
     List<Object> findAll();
+    List<Place> filterPlacesByType(String type);
+
 }

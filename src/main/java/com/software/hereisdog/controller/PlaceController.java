@@ -2,12 +2,15 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.PlaceForm;
 import com.software.hereisdog.service.PlaceService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import com.software.hereisdog.domain.Place;
+
 
 /**
  * 장소 등록, 조회를 담당하는 컨트롤러
@@ -36,6 +39,13 @@ public class PlaceController {
         model.addAttribute("placeForm", new PlaceForm());
         return "place/createPlaceForm";
     }
+    
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<Place> filterPlaces(@RequestParam String type) {
+        return placeService.filterPlacesByType(type);
+    }
+
 
     /** 장소 등록 처리 */
     @PostMapping("/new")
