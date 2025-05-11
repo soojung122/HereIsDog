@@ -33,11 +33,12 @@ public class AuthServiceImpl implements AuthService {
      * 사용자 회원가입 처리
      * @param signupForm 가입 폼에서 입력받은 사용자 정보
      */
+
     @Override
     public void signup(Object signupForm) {
         // SignupForm을 실제 타입으로 변환
         SignupForm form = (SignupForm) signupForm;
-
+        /*
         // User 엔티티 생성
         User user = new User();
         user.setUsername(form.getUsername());
@@ -50,6 +51,6 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(role);
 
         // DB에 저장
-        userMapper.insertUser(user);
-    }
+        userMapper.insertUser(user); */
+    } 
 }
