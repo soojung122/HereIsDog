@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
  * 지도 관련 기능을 처리하는 컨트롤러
  */
 @Controller
-@RequestMapping("/map")
 public class MapController {
-
+    
     private final MapService mapService;
 
     @Autowired
@@ -20,10 +19,11 @@ public class MapController {
         this.mapService = mapService;
     }
 
-    /** 지도에 장소 표시 요청 */
-    @GetMapping
-    public String showMap(Model model) {
+    @GetMapping("/map")
+    public String showMap(@RequestParam(required = false) String type, Model model) {
+        model.addAttribute("type", type);
         model.addAttribute("places", mapService.getAllPlaces());
-        return "map/showMap";
+        return "map";  // → /WEB-INF/jsp/map.jsp 로 렌더링됨
     }
+
 }
