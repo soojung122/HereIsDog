@@ -21,15 +21,15 @@ public class FavoriteController {
 
     /** 즐겨찾기 추가 */
     @PostMapping("/{placeId}")
-    public String addFavorite(@PathVariable Long placeId, @SessionAttribute(name = "username") String username) {
-        favoriteService.addFavorite(username, placeId);
+    public String addFavorite(@PathVariable Long placeId, @SessionAttribute(name = "userId") Long userId) {
+        favoriteService.addFavorite(userId, placeId);
         return "redirect:/places";
     }
 
     /** 즐겨찾기 삭제 */
     @DeleteMapping("/{placeId}")
-    public String removeFavorite(@PathVariable Long placeId, @SessionAttribute(name = "username") String username) {
-        favoriteService.removeFavorite(username, placeId);
+    public String removeFavorite(@PathVariable Long placeId, @SessionAttribute(name = "userId") Long userId) {
+        favoriteService.removeFavorite(userId, placeId);
         return "redirect:/favorites";
     }
 }

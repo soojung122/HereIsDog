@@ -1,14 +1,12 @@
 package com.software.hereisdog.controller;
-
 import com.software.hereisdog.service.AdminService;
+import com.software.hereisdog.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-/**
- * 관리자(Admin) 관련 기능을 담당하는 컨트롤러
- */
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -23,7 +21,8 @@ public class AdminController {
     /** 모든 회원 목록 조회 */
     @GetMapping("/users")
     public String listUsers(Model model) {
-        model.addAttribute("users", adminService.findAllUsers());
+        List<User> users = adminService.findAllUsers();
+        model.addAttribute("users", users);
         return "admin/userList";
     }
 

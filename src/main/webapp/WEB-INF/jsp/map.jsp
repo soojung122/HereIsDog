@@ -17,29 +17,24 @@
             font-family: Arial, sans-serif;
             box-sizing: border-box;
         }
-
         body {
             display: flex;
             flex-direction: column;
         }
-
         .logo {
             margin: 30px 20px 0 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .logo .paw {
             font-size: 40px;
             margin: 0;
         }
-
         .logo h2 {
             margin: 0;
             font-size: 28px;
         }
-
         .filter-dropdown {
             background: #ffffff;
             width: 100%;
@@ -47,21 +42,18 @@
             padding: 10px 20px;
             box-sizing: border-box;
         }
-
         .filter-dropdown select {
             padding: 10px;
             border: 1px solid black;
             cursor: pointer;
             background: white;
         }
-
         .container {
             display: flex;
             width: 100%;
             height: 500px;
             box-sizing: border-box;
         }
-
         .sidebar {
             width: 30%;
             padding: 20px;
@@ -70,7 +62,6 @@
             box-sizing: border-box;
             height: 100%;
         }
-
         .map-container {
             flex-grow: 1;
             background: #f0f0f0;
@@ -78,14 +69,12 @@
             height: 100%;
             box-sizing: border-box;
         }
-
         .slide-panel {
             margin-top: 10px;
             height: 100%;
             overflow-y: auto;
             box-sizing: border-box;
         }
-
         .slide-panel div {
             background: #ffffcc;
             padding: 20px;
@@ -99,12 +88,10 @@
             box-sizing: border-box;
             transition: background 0.3s;
         }
-
         .slide-panel div.highlight {
             background: #ffd700 !important;
             border: 2px solid #ff9900;
         }
-
         .map {
             width: 100%;
             height: 100%;
@@ -119,23 +106,18 @@
         <h2>여기다멍</h2>
     </div>
     
-   	<div class="filter-dropdown">
-	    <select id="subFilter" onchange="applySubFilterAjax(this)">
-	        <option value="all">전체</option>
-	        <option value="24hours">24시간 운영</option>
-	        <option value="emergency">응급실</option>
-	    </select>
-	</div>
+    <div class="filter-dropdown">
+        <select id="subFilter" onchange="applySubFilterAjax(this)">
+            <option value="all">전체</option>
+            <option value="24hours">24시간 운영</option>
+            <option value="emergency">응급실</option>
+        </select>
+    </div>
 
     <div class="container">
         <div class="sidebar">
             <div class="slide-panel">
-                <div>공원 정보1(운영시간, 위치, ~)</div>
-                <div>공원 정보2(운영시간, 위치, ~)</div>
-                <div>공원 정보3(운영시간, 위치, ~)</div>
-                <div>공원 정보1(운영시간, 위치, ~)</div>
-                <div>공원 정보2(운영시간, 위치, ~)</div>
-                <div>공원 정보3(운영시간, 위치, ~)</div>
+                <!-- 필터링된 장소 정보가 여기에 들어감 -->
             </div>
         </div>
         <div class="map-container">
@@ -156,72 +138,76 @@
             };
             const map = new kakao.maps.Map(container, options);
 
-            const ps = new kakao.maps.services.Places();
             const type = "<%= type %>";
             const slidePanel = document.querySelector(".slide-panel");
             const markers = [];
 
             let currentInfoWindow = null;  // ✅ 현재 열린 InfoWindow 저장용
 
-            ps.keywordSearch(type, function (data, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    const bounds = new kakao.maps.LatLngBounds();
-                    slidePanel.innerHTML = "";
+            // fetch를 이용해서 서버 API로 장소 데이터 불러오기
+            fetch(`/api/filter?type=${encodeURIComponent(type)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        const bounds = new kakao.maps.LatLngBounds();
+                        slidePanel.innerHTML = "";
 
-                    data.forEach(function (place, index) {
-                        const pos = new kakao.maps.LatLng(place.y, place.x);
-                        const marker = new kakao.maps.Marker({
-                            map: map,
-                            position: pos
-                        });
-                        markers.push(marker);
+                        data.forEach(function (place, index) {
+                            // 마커 생성
+                            const pos = new kakao.maps.LatLng(place.y, place.x);
+                            const marker = new kakao.maps.Marker({
+                                map: map,
+                                position: pos
+                            });
+                            markers.push(marker);
 
-                        const infowindow = new kakao.maps.InfoWindow({
-                            content:
-                                '<div style="padding:5px; font-size:14px;">' +
-                                '<strong><a href="' + place.place_url + '" target="_blank">' + place.place_name + '</a></strong><br/>' +
-                                (place.road_address_name || place.address_name) + '<br/>' +
-                                (place.phone || '') +
-                                '</div>'
-                        });
+                            // 인포윈도우 생성
+                            const infowindow = new kakao.maps.InfoWindow({
+                                content:
+                                    '<div style="padding:5px; font-size:14px;">' +
+                                    '<strong><a href="' + place.place_url + '" target="_blank">' + place.place_name + '</a></strong><br/>' +
+                                    (place.road_address_name || place.address_name) + '<br/>' +
+                                    (place.phone || '') +
+                                    '</div>'
+                            });
 
-                        kakao.maps.event.addListener(marker, 'click', function () {
-                            if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
-                            infowindow.open(map, marker);
-                            currentInfoWindow = infowindow;
-                            highlightSlide(index);
-                        });
-
-                        const placeDiv = document.createElement("div");
-                        placeDiv.classList.add("place-card");
-
-                        placeDiv.innerHTML =
-                            '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
-                            place.place_name + '</a></strong>' +
-                            '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
-                            (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
-
-                        placeDiv.dataset.index = index;
-
-                        placeDiv.onclick = (function (marker, infowindow, pos, index) {
-                            return function () {
-                                map.setCenter(pos);
+                            kakao.maps.event.addListener(marker, 'click', function () {
                                 if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
                                 infowindow.open(map, marker);
                                 currentInfoWindow = infowindow;
                                 highlightSlide(index);
-                            };
-                        })(marker, infowindow, pos, index);
+                            });
 
-                        slidePanel.appendChild(placeDiv);
-                        bounds.extend(pos);
-                    });
+                            // 사이드 패널 항목 생성
+                            const placeDiv = document.createElement("div");
+                            placeDiv.classList.add("place-card");
+                            placeDiv.innerHTML =
+                                '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
+                                place.place_name + '</a></strong>' +
+                                '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
+                                (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
 
-                    map.setBounds(bounds);
-                } else {
-                    slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
-                }
-            });
+                            placeDiv.dataset.index = index;
+
+                            placeDiv.onclick = (function (marker, infowindow, pos, index) {
+                                return function () {
+                                    map.setCenter(pos);
+                                    if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
+                                    infowindow.open(map, marker);
+                                    currentInfoWindow = infowindow;
+                                    highlightSlide(index);
+                                };
+                            })(marker, infowindow, pos, index);
+
+                            slidePanel.appendChild(placeDiv);
+                            bounds.extend(pos);
+                        });
+
+                        map.setBounds(bounds);
+                    } else {
+                        slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
+                    }
+                });
 
             // 현재 위치 마커
             if (navigator.geolocation) {
@@ -253,8 +239,6 @@
         });
     };
     document.head.appendChild(kakaoScript);
-</script>
-
-
+    </script>
 </body>
 </html>

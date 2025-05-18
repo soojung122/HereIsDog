@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ReviewService {
     void registerReview(Long placeId, ReviewForm reviewForm);
-    List<Object> findByPlaceId(Long placeId);
+    List<ReviewForm> findByPlaceId(Long placeId);   // List<Object> → List<ReviewForm>
 }

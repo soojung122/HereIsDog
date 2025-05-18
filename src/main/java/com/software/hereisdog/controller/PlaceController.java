@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 /**
  * 장소 등록, 조회를 담당하는 컨트롤러
@@ -47,4 +48,12 @@ public class PlaceController {
         placeService.registerPlace(placeForm);
         return "redirect:/places";
     }
+    
+ // JSON 응답용 필터 API
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<PlaceForm> filterPlaces(@RequestParam("type") String type) {
+        return placeService.getPlacesByType(type);
+    }
+
 }
