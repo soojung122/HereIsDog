@@ -1,13 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-<%
-    String type = request.getParameter("type");
-    if (type == null) type = "공원";  // 기본값
-%>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>여기다멍 지도 페이지</title>
     <style>
         html, body {
@@ -105,15 +101,13 @@
         <div class="paw">🐾</div>
         <h2>여기다멍</h2>
     </div>
-    
     <div class="filter-dropdown">
-        <select id="subFilter" onchange="applySubFilterAjax(this)">
+        <select id="subFilter" onchange="applySubFilter(this)">
             <option value="all">전체</option>
             <option value="24hours">24시간 운영</option>
             <option value="emergency">응급실</option>
         </select>
     </div>
-
     <div class="container">
         <div class="sidebar">
             <div class="slide-panel">
@@ -127,115 +121,101 @@
 
     <!-- Kakao 지도 API -->
     <script>
+    // Kakao 지도 관련 전역 변수
+    let map, ps, markers = [], currentInfoWindow = null;
+
+    // 지도 생성 함수
+    function initKakaoMap() {
+        const container = document.getElementById("map");
+        const options = {
+            center: new kakao.maps.LatLng(37.5665, 126.9780),
+            level: 3
+        };
+        map = new kakao.maps.Map(container, options);
+        ps = new kakao.maps.services.Places();
+    }
+
+    // 기존 마커 삭제 함수
+    function clearMarkers() {
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+    }
+
+    // 사이드 리스트 하이라이트
+    function highlightSlide(index) {
+        const items = document.querySelectorAll(".place-card");
+        items.forEach((el, i) => el.classList.toggle("highlight", i === index));
+    }
+
+    // 필터 변경 시 동작 함수 (전역 등록)
+    window.applySubFilter = function(select) {
+        var value = select.value;
+        let keyword = "동물병원";
+        if (value === "24hours") keyword = "24시간 동물병원";
+        if (value === "emergency") keyword = "응급실 동물병원";
+
+        // 카카오 장소 API 검색
+        ps.keywordSearch(keyword, function(data, status) {
+            clearMarkers();
+            const slidePanel = document.querySelector(".slide-panel");
+            slidePanel.innerHTML = "";
+
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const bounds = new kakao.maps.LatLngBounds();
+                data.forEach(function(place, idx) {
+                    const pos = new kakao.maps.LatLng(place.y, place.x);
+                    const marker = new kakao.maps.Marker({ map, position: pos });
+                    markers.push(marker);
+
+                    const infowindow = new kakao.maps.InfoWindow({
+                        content:
+                            `<div style="padding:5px; font-size:14px;">
+                            <strong><a href="${place.place_url}" target="_blank">${place.place_name}</a></strong><br/>
+                            ${(place.road_address_name || place.address_name)}<br/>
+                            ${(place.phone ? place.phone : '')}
+                            </div>`
+                    });
+
+                    kakao.maps.event.addListener(marker, 'click', function () {
+                        if (currentInfoWindow) currentInfoWindow.close();
+                        infowindow.open(map, marker);
+                        currentInfoWindow = infowindow;
+                        highlightSlide(idx);
+                    });
+
+                    // 사이드 패널
+                    const placeDiv = document.createElement("div");
+                    placeDiv.classList.add("place-card");
+                    placeDiv.innerHTML =
+                    	  `<strong><a href="${place.place_url}" target="_blank" style="text-decoration:none;color:black;">${place.place_name}</a></strong>
+                    	   <span>📍 ${(place.road_address_name || place.address_name)}</span>
+                    	   ${place.phone ? `<span>📞 ${place.phone}</span>` : ""}`;
+                    placeDiv.dataset.index = idx;
+                    placeDiv.onclick = () => {
+                        map.setCenter(pos);
+                        if (currentInfoWindow) currentInfoWindow.close();
+                        infowindow.open(map, marker);
+                        currentInfoWindow = infowindow;
+                        highlightSlide(idx);
+                    };
+                    slidePanel.appendChild(placeDiv);
+                    bounds.extend(pos);
+                });
+                map.setBounds(bounds);
+            } else {
+                slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
+            }
+        });
+    };
+
+    // Kakao 지도 비동기 로딩
     const kakaoScript = document.createElement("script");
     kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=303355970f1d1827f32ff70b2b262aed&autoload=false&libraries=services";
     kakaoScript.onload = function () {
         kakao.maps.load(function () {
-            const container = document.getElementById("map");
-            const options = {
-                center: new kakao.maps.LatLng(37.5665, 126.9780),
-                level: 3
-            };
-            const map = new kakao.maps.Map(container, options);
-
-            const type = "<%= type %>";
-            const slidePanel = document.querySelector(".slide-panel");
-            const markers = [];
-
-            let currentInfoWindow = null;  // ✅ 현재 열린 InfoWindow 저장용
-
-            // fetch를 이용해서 서버 API로 장소 데이터 불러오기
-            fetch(`/api/filter?type=${encodeURIComponent(type)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        const bounds = new kakao.maps.LatLngBounds();
-                        slidePanel.innerHTML = "";
-
-                        data.forEach(function (place, index) {
-                            // 마커 생성
-                            const pos = new kakao.maps.LatLng(place.y, place.x);
-                            const marker = new kakao.maps.Marker({
-                                map: map,
-                                position: pos
-                            });
-                            markers.push(marker);
-
-                            // 인포윈도우 생성
-                            const infowindow = new kakao.maps.InfoWindow({
-                                content:
-                                    '<div style="padding:5px; font-size:14px;">' +
-                                    '<strong><a href="' + place.place_url + '" target="_blank">' + place.place_name + '</a></strong><br/>' +
-                                    (place.road_address_name || place.address_name) + '<br/>' +
-                                    (place.phone || '') +
-                                    '</div>'
-                            });
-
-                            kakao.maps.event.addListener(marker, 'click', function () {
-                                if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
-                                infowindow.open(map, marker);
-                                currentInfoWindow = infowindow;
-                                highlightSlide(index);
-                            });
-
-                            // 사이드 패널 항목 생성
-                            const placeDiv = document.createElement("div");
-                            placeDiv.classList.add("place-card");
-                            placeDiv.innerHTML =
-                                '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
-                                place.place_name + '</a></strong>' +
-                                '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
-                                (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
-
-                            placeDiv.dataset.index = index;
-
-                            placeDiv.onclick = (function (marker, infowindow, pos, index) {
-                                return function () {
-                                    map.setCenter(pos);
-                                    if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
-                                    infowindow.open(map, marker);
-                                    currentInfoWindow = infowindow;
-                                    highlightSlide(index);
-                                };
-                            })(marker, infowindow, pos, index);
-
-                            slidePanel.appendChild(placeDiv);
-                            bounds.extend(pos);
-                        });
-
-                        map.setBounds(bounds);
-                    } else {
-                        slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
-                    }
-                });
-
-            // 현재 위치 마커
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    const locPosition = new kakao.maps.LatLng(lat, lon);
-
-                    const marker = new kakao.maps.Marker({
-                        position: locPosition,
-                        map: map
-                    });
-
-                    const infowindow = new kakao.maps.InfoWindow({
-                        content: '<div style="padding:5px;">현재 위치</div>'
-                    });
-
-                    infowindow.open(map, marker);
-                });
-            }
-
-            // 리스트 항목 하이라이트 함수
-            function highlightSlide(index) {
-                const items = document.querySelectorAll(".place-card");
-                items.forEach(function (el, i) {
-                    el.classList.toggle("highlight", i === index);
-                });
-            }
+            initKakaoMap();
+            // 페이지 로딩 시 전체 검색 자동 실행
+            window.applySubFilter({ value: "all" });
         });
     };
     document.head.appendChild(kakaoScript);

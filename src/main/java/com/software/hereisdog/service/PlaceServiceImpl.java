@@ -54,26 +54,5 @@ public class PlaceServiceImpl implements PlaceService {
         }
         return result;
     }
-    /*
-    @Override
-    public List<PlaceForm> getPlacesByType(String type) {
-        // api호출확인 임시데이터
-        List<PlaceForm> result = new ArrayList<>();
-
-        PlaceForm p1 = new PlaceForm();
-        p1.setName("테스트 공원1");
-        p1.setAddress("서울시 강남구");
-        p1.setDescription("테스트 설명1");
-
-        PlaceForm p2 = new PlaceForm();
-        p2.setName("테스트 공원2");
-        p2.setAddress("서울시 마포구");
-        p2.setDescription("테스트 설명2");
-
-        result.add(p1);
-        result.add(p2);
-
-        return result;
-    }*/
     
 }
