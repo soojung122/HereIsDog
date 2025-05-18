@@ -124,7 +124,6 @@
     // Kakao 지도 관련 전역 변수
     let map, ps, markers = [], currentInfoWindow = null;
 
-    // 지도 생성 함수
     function initKakaoMap() {
         const container = document.getElementById("map");
         const options = {
@@ -135,13 +134,11 @@
         ps = new kakao.maps.services.Places();
     }
 
-    // 기존 마커 삭제 함수
     function clearMarkers() {
         markers.forEach(marker => marker.setMap(null));
         markers = [];
     }
 
-    // 사이드 리스트 하이라이트
     function highlightSlide(index) {
         const items = document.querySelectorAll(".place-card");
         items.forEach((el, i) => el.classList.toggle("highlight", i === index));
@@ -154,7 +151,6 @@
         if (value === "24hours") keyword = "24시간 동물병원";
         if (value === "emergency") keyword = "응급실 동물병원";
 
-        // 카카오 장소 API 검색
         ps.keywordSearch(keyword, function(data, status) {
             clearMarkers();
             const slidePanel = document.querySelector(".slide-panel");
@@ -183,30 +179,37 @@
                         highlightSlide(idx);
                     });
 
-                    // 사이드 패널
                     const placeDiv = document.createElement("div");
                     placeDiv.classList.add("place-card");
+
                     placeDiv.innerHTML =
-                    	  `<strong><a href="${place.place_url}" target="_blank" style="text-decoration:none;color:black;">${place.place_name}</a></strong>
-                    	   <span>📍 ${(place.road_address_name || place.address_name)}</span>
-                    	   ${place.phone ? `<span>📞 ${place.phone}</span>` : ""}`;
-                    placeDiv.dataset.index = idx;
-                    placeDiv.onclick = () => {
-                        map.setCenter(pos);
-                        if (currentInfoWindow) currentInfoWindow.close();
-                        infowindow.open(map, marker);
-                        currentInfoWindow = infowindow;
-                        highlightSlide(idx);
-                    };
+                        '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
+                        place.place_name + '</a></strong>' +
+                        '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
+                        (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
+
+                    placeDiv.dataset.index = index;
+
+                    placeDiv.onclick = (function (marker, infowindow, pos, index) {
+                        return function () {
+                            map.setCenter(pos);
+                            if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
+                            infowindow.open(map, marker);
+                            currentInfoWindow = infowindow;
+                            highlightSlide(index);
+                        };
+                    })(marker, infowindow, pos, index);
+
                     slidePanel.appendChild(placeDiv);
                     bounds.extend(pos);
                 });
+
                 map.setBounds(bounds);
             } else {
                 slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
             }
         });
-    };
+
 
     // Kakao 지도 비동기 로딩
     const kakaoScript = document.createElement("script");
