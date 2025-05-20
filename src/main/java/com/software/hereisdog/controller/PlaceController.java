@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import com.software.hereisdog.service.PlaceFormValidator;
 
@@ -58,4 +59,13 @@ public class PlaceController {
         placeService.registerPlace(placeForm);
         return "redirect:/places";
     }
+
+    // JSON 응답용 필터 API
+    @GetMapping("/filter")
+    @ResponseBody
+    public List<PlaceForm> filterPlaces(@RequestParam("type") String type) {
+        return placeService.getPlacesByType(type);
+    }
+
+
 }

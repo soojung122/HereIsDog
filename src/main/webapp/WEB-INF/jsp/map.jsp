@@ -1,13 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
+
 <%
     String type = request.getParameter("type");
     if (type == null || type.trim().isEmpty()) type = "공원";
 %>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>여기다멍 지도 페이지</title>
     <style>
         html, body {
@@ -17,29 +19,24 @@
             font-family: Arial, sans-serif;
             box-sizing: border-box;
         }
-
         body {
             display: flex;
             flex-direction: column;
         }
-
         .logo {
             margin: 30px 20px 0 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
         .logo .paw {
             font-size: 40px;
             margin: 0;
         }
-
         .logo h2 {
             margin: 0;
             font-size: 28px;
         }
-
         .filter-dropdown {
             background: #ffffff;
             width: 100%;
@@ -47,21 +44,18 @@
             padding: 10px 20px;
             box-sizing: border-box;
         }
-
         .filter-dropdown select {
             padding: 10px;
             border: 1px solid black;
             cursor: pointer;
             background: white;
         }
-
         .container {
             display: flex;
             width: 100%;
             height: 500px;
             box-sizing: border-box;
         }
-
         .sidebar {
             width: 30%;
             padding: 20px;
@@ -70,7 +64,6 @@
             box-sizing: border-box;
             height: 100%;
         }
-
         .map-container {
             flex-grow: 1;
             background: #f0f0f0;
@@ -78,14 +71,12 @@
             height: 100%;
             box-sizing: border-box;
         }
-
         .slide-panel {
             margin-top: 10px;
             height: 100%;
             overflow-y: auto;
             box-sizing: border-box;
         }
-
         .slide-panel div {
             background: #ffffcc;
             padding: 20px;
@@ -99,12 +90,10 @@
             box-sizing: border-box;
             transition: background 0.3s;
         }
-
         .slide-panel div.highlight {
             background: #ffd700 !important;
             border: 2px solid #ff9900;
         }
-
         .map {
             width: 100%;
             height: 100%;
@@ -115,22 +104,22 @@
 </head>
 <body>
     <div class="logo">
-        <div class="paw">🐾</div>
+        <div class="logo">
+        <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 60px; height: 60px;">
+        </div>
         <h2>여기다멍</h2>
     </div>
-    
-   	<div class="filter-dropdown">
-	    <select id="subFilter" onchange="applySubFilterAjax(this)">
-	        <option value="all">전체</option>
-	        <option value="24hours">24시간 운영</option>
-	        <option value="emergency">응급실</option>
-	    </select>
-	</div>
-
+    <div class="filter-dropdown">
+        <select id="subFilter" onchange="applySubFilter(this)">
+            <option value="all">전체</option>
+            <option value="24hours">24시간 운영</option>
+            <option value="emergency">응급실</option>
+        </select>
+    </div>
     <div class="container">
         <div class="sidebar">
             <div class="slide-panel">
-            	<div>장소를 불러오는 중...</div>
+                <!-- 필터링된 장소 정보가 여기에 들어감 -->
             </div>
         </div>
         <div class="map-container">
@@ -139,153 +128,108 @@
     </div>
 
     <!-- Kakao 지도 API -->
-<script>
-const kakaoScript = document.createElement("script");
-kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=303355970f1d1827f32ff70b2b262aed&autoload=false&libraries=services";
-kakaoScript.onload = function () {
-    kakao.maps.load(function () {
+    <script>
+    // Kakao 지도 관련 전역 변수
+    let map, ps, markers = [], currentInfoWindow = null;
+
+    function initKakaoMap() {
         const container = document.getElementById("map");
         const options = {
             center: new kakao.maps.LatLng(37.5665, 126.9780),
             level: 3
         };
-        const map = new kakao.maps.Map(container, options);
+        map = new kakao.maps.Map(container, options);
+        ps = new kakao.maps.services.Places();
+    }
 
-        const ps = new kakao.maps.services.Places();
-        const type = "<%= type %>";
-        const slidePanel = document.querySelector(".slide-panel");
-        const markers = [];
+    function clearMarkers() {
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+    }
 
-        let currentInfoWindow = null;
-        let userPosition = null;
+    function highlightSlide(index) {
+        const items = document.querySelectorAll(".place-card");
+        items.forEach((el, i) => el.classList.toggle("highlight", i === index));
+    }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                userPosition = new kakao.maps.LatLng(lat, lon);
+    // 필터 변경 시 동작 함수 (전역 등록)
+    window.applySubFilter = function(select) {
+        var value = select.value;
+        let keyword = "동물병원";
+        if (value === "24hours") keyword = "24시간 동물병원";
+        if (value === "emergency") keyword = "응급실 동물병원";
 
-                const marker = new kakao.maps.Marker({
-                    position: userPosition,
-                    map: map
-                });
-
-                const infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="padding:5px;">현재 위치</div>'
-                });
-
-                infowindow.open(map, marker);
-                fetchTwoPages();
-            }, function () {
-                fetchTwoPages();
-            });
-        } else {
-            fetchTwoPages();
-        }
-
-        function fetchTwoPages() {
-            const allResults = [];
-
-            function fetchPage(page) {
-                ps.keywordSearch(type, function (data, status, pagination) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        allResults.push(...data);
-
-                        if (page === 1 && pagination.hasNextPage) {
-                            fetchPage(2); // 다음 페이지 요청
-                        } else {
-                            renderPlaces(allResults);
-                        }
-                    } else {
-                        slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
-                    }
-                }, {
-                    location: userPosition,
-                    page: page
-                });
-            }
-
-            fetchPage(1);
-        }
-
-        function renderPlaces(data) {
-            if (userPosition) {
-                data.forEach(function (place) {
-                    const target = new kakao.maps.LatLng(place.y, place.x);
-                    const polyline = new kakao.maps.Polyline({ path: [userPosition, target] });
-                    place.distance = polyline.getLength();
-                });
-                data.sort((a, b) => a.distance - b.distance);
-            }
-
-            const bounds = new kakao.maps.LatLngBounds();
+        ps.keywordSearch(keyword, function(data, status) {
+            clearMarkers();
+            const slidePanel = document.querySelector(".slide-panel");
             slidePanel.innerHTML = "";
 
-            data.forEach(function (place, index) {
-                const pos = new kakao.maps.LatLng(place.y, place.x);
-                const marker = new kakao.maps.Marker({
-                    map: map,
-                    position: pos
-                });
-                markers.push(marker);
+            if (status === kakao.maps.services.Status.OK && data.length > 0) {
+                const bounds = new kakao.maps.LatLngBounds();
+                data.forEach(function(place, idx) {
+                    const pos = new kakao.maps.LatLng(place.y, place.x);
+                    const marker = new kakao.maps.Marker({ map, position: pos });
+                    markers.push(marker);
 
-                const infowindow = new kakao.maps.InfoWindow({
-                    content:
-                        '<div style="padding:5px; font-size:14px;">' +
-                        '<strong><a href="' + place.place_url + '" target="_blank">' + place.place_name + '</a></strong><br/>' +
-                        (place.road_address_name || place.address_name) + '<br/>' +
-                        (place.phone || '') +
-                        '</div>'
-                });
+                    const infowindow = new kakao.maps.InfoWindow({
+                        content:
+                            `<div style="padding:5px; font-size:14px;">
+                            <strong><a href="${place.place_url}" target="_blank">${place.place_name}</a></strong><br/>
+                            ${(place.road_address_name || place.address_name)}<br/>
+                            ${(place.phone ? place.phone : '')}
+                            </div>`
+                    });
 
-                kakao.maps.event.addListener(marker, 'click', function () {
-                    if (currentInfoWindow) currentInfoWindow.close();
-                    infowindow.open(map, marker);
-                    currentInfoWindow = infowindow;
-                    highlightSlide(index);
-                });
-
-                const placeDiv = document.createElement("div");
-                placeDiv.classList.add("place-card");
-
-                placeDiv.innerHTML =
-                    '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
-                    place.place_name + '</a></strong>' +
-                    '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
-                    (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
-
-                placeDiv.dataset.index = index;
-
-                placeDiv.onclick = (function (marker, infowindow, pos, index) {
-                    return function () {
-                        map.setCenter(pos);
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         if (currentInfoWindow) currentInfoWindow.close();
                         infowindow.open(map, marker);
                         currentInfoWindow = infowindow;
-                        highlightSlide(index);
-                    };
-                })(marker, infowindow, pos, index);
+                        highlightSlide(idx);
+                    });
 
-                slidePanel.appendChild(placeDiv);
-                bounds.extend(pos);
-            });
+                    const placeDiv = document.createElement("div");
+                    placeDiv.classList.add("place-card");
 
-            map.setBounds(bounds);
-        }
+                    placeDiv.innerHTML =
+                        '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration: none; color: black;">' +
+                        place.place_name + '</a></strong>' +
+                        '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
+                        (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
 
-        function highlightSlide(index) {
-            const items = document.querySelectorAll(".place-card");
-            items.forEach(function (el, i) {
-                el.classList.toggle("highlight", i === index);
-            });
-        }
-    });
-};
-document.head.appendChild(kakaoScript);
-</script>
+                    placeDiv.dataset.index = index;
+
+                    placeDiv.onclick = (function (marker, infowindow, pos, index) {
+                        return function () {
+                            map.setCenter(pos);
+                            if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
+                            infowindow.open(map, marker);
+                            currentInfoWindow = infowindow;
+                            highlightSlide(index);
+                        };
+                    })(marker, infowindow, pos, index);
+
+                    slidePanel.appendChild(placeDiv);
+                    bounds.extend(pos);
+                });
+
+                map.setBounds(bounds);
+            } else {
+                slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
+            }
+        });
 
 
-
-
+    // Kakao 지도 비동기 로딩
+    const kakaoScript = document.createElement("script");
+    kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=303355970f1d1827f32ff70b2b262aed&autoload=false&libraries=services";
+    kakaoScript.onload = function () {
+        kakao.maps.load(function () {
+            initKakaoMap();
+            // 페이지 로딩 시 전체 검색 자동 실행
+            window.applySubFilter({ value: "all" });
+        });
+    };
+    document.head.appendChild(kakaoScript);
+    </script>
 </body>
 </html>
