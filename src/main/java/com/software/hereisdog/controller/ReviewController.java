@@ -2,7 +2,8 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.ReviewForm;
 import com.software.hereisdog.service.ReviewService;
-import jakarta.validation.Valid;
+import com.software.hereisdog.service.ReviewFormValidator;
+//import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController {
 
     private final ReviewService reviewService;
-
+    private final ReviewFormValidator reviewFormValidator;
+    
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService,
+    						ReviewFormValidator reviewFormValidator) {
         this.reviewService = reviewService;
+        this.reviewFormValidator = reviewFormValidator;
     }
 
     /** 특정 장소에 대한 리뷰 목록 조회 */
@@ -41,11 +45,17 @@ public class ReviewController {
     /** 리뷰 작성 처리 */
     @PostMapping("/{placeId}/new")
     public String createReview(@PathVariable Long placeId,
-                                @Valid @ModelAttribute ReviewForm reviewForm,
-                                BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+                                @ModelAttribute ReviewForm reviewForm,
+                                BindingResult bindingResult,
+                                Model model) {
+    	reviewFormValidator.validate(reviewForm, bindingResult);
+    	
+    	if (bindingResult.hasErrors()) {
+            model.addAttribute("placeId", placeId); // 다시 전달 필요
+            model.addAttribute("reviewForm", reviewForm);
             return "review/createReviewForm";
         }
+
         reviewService.registerReview(placeId, reviewForm);
         return "redirect:/reviews/" + placeId;
     }

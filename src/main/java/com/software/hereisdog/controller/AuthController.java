@@ -3,7 +3,7 @@ package com.software.hereisdog.controller;
 import com.software.hereisdog.controller.LoginForm;
 import com.software.hereisdog.controller.SignupForm;
 import com.software.hereisdog.service.AuthService;
-import jakarta.validation.Valid;
+//import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 
+import com.software.hereisdog.service.SignupFormValidator;
+import com.software.hereisdog.service.LoginFormValidator;
 
 /**
  * 로그인, 로그아웃, 회원가입을 담당하는 컨트롤러
@@ -20,10 +22,16 @@ import jakarta.servlet.http.HttpSession;
 public class AuthController {
 
     private final AuthService authService;
+    private final SignupFormValidator signupFormValidator;
+    private final LoginFormValidator loginFormValidator;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, 
+    		SignupFormValidator signupFormValidator,
+    		LoginFormValidator loginFormValidator) {
         this.authService = authService;
+        this.signupFormValidator = signupFormValidator;
+        this.loginFormValidator = loginFormValidator;
     }
 
     /** 로그인 폼 페이지 요청 */
@@ -35,9 +43,11 @@ public class AuthController {
 
     /** 로그인 처리 */
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm loginForm,
+    public String login(@ModelAttribute LoginForm loginForm,
                         BindingResult bindingResult,
                         HttpSession session) {
+    	loginFormValidator.validate(loginForm, bindingResult);
+    	
         if (bindingResult.hasErrors()) {
             return "auth/loginForm";
         }
@@ -76,11 +86,23 @@ public class AuthController {
         authService.signup(signupForm);
         return "redirect:/auth/login";
     }*/
+    /** 회원가입 처리 */
     @PostMapping("/signup")
-    public String signup(@ModelAttribute SignupForm form) {
+    public String signup(@ModelAttribute SignupForm form,
+                         BindingResult bindingResult,
+                         Model model) {
+
+        // 수동 검증기 호출
+        signupFormValidator.validate(form, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("signupForm", form);
+            return "auth/signupForm";
+        }
+
+        // 회원가입 성공 처리
         authService.signup(form);
-        System.out.println("회원가입 성공");
-        return "회원가입 성공";
+        return "redirect:/auth/login";
     }
 
 }

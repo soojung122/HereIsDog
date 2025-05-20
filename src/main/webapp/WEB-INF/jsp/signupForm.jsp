@@ -36,6 +36,7 @@
 
             <div class="form-group">
                 <label>비밀번호</label>
+                <p>최소 6자 이상이어야 합니다</p>
                 <form:password path="password" />
             </div>
 

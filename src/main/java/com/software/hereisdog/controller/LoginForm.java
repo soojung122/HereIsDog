@@ -1,16 +1,16 @@
 package com.software.hereisdog.controller;
 
-import jakarta.validation.constraints.NotEmpty;
+//import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 로그인 시 사용자로부터 입력받는 데이터
  */
 public class LoginForm {
 
-    @NotEmpty(message = "아이디를 입력하세요.")
+    //@NotEmpty(message = "아이디를 입력하세요.")
     private String username;
 
-    @NotEmpty(message = "비밀번호를 입력하세요.")
+    //@NotEmpty(message = "비밀번호를 입력하세요.")
     private String password;
 
     // 기본 생성자
