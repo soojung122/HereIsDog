@@ -12,7 +12,9 @@ public class LoginForm {
 
     //@NotEmpty(message = "비밀번호를 입력하세요.")
     private String password;
-
+    
+    private String role; // "guest" or "owner"
+    
     // 기본 생성자
     public LoginForm() {}
 

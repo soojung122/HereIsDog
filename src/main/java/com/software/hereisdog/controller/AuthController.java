@@ -38,7 +38,7 @@ public class AuthController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
-        return "auth/loginForm";
+        return "loginForm";
     }
 
     /** 로그인 처리 */
@@ -49,7 +49,7 @@ public class AuthController {
     	loginFormValidator.validate(loginForm, bindingResult);
     	
         if (bindingResult.hasErrors()) {
-            return "auth/loginForm";
+            return "loginForm";
         }
 
         if (authService.login(loginForm.getUsername(), loginForm.getPassword())) {
@@ -57,7 +57,7 @@ public class AuthController {
             return "redirect:/";
         } else {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 잘못되었습니다.");
-            return "auth/loginForm";
+            return "loginForm";
         }
     }
 
@@ -104,5 +104,43 @@ public class AuthController {
         authService.signup(form);
         return "redirect:/auth/login";
     }
+    @GetMapping("/find-id")
+    public String showFindIdForm() {
+        return "findIdForm";
+    }
 
+    @PostMapping("/verify-id")
+    public String verifyId(@RequestParam String email, @RequestParam String role, Model model) {
+        // 아이디 찾기 로직 후 model에 아이디 전달
+        model.addAttribute("foundId", "user1234");
+        return "idResultForm";  // 아이디 결과 보여주는 JSP
+    }
+
+    @GetMapping("/find-password")
+    public String showFindPasswordForm() {
+        return "findPasswordForm";
+    }
+
+    @PostMapping("/verify-password")
+    public String verifyPassword(@RequestParam String email, @RequestParam String username, Model model) {
+        // 비밀번호 재설정 화면으로 이동
+        model.addAttribute("username", username);
+        return "resetPasswordForm";
+    }
+    
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String username,
+                                @RequestParam String newPassword,
+                                @RequestParam String confirmPassword,
+                                Model model) {
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("username", username);
+            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+            return "resetPasswordForm"; // 다시 폼으로
+        }
+
+        // TODO: 실제 비밀번호 저장 로직 (예: authService.updatePassword(username, newPassword))
+
+        return "redirect:/auth/login"; // 🔁 로그인 페이지로 이동
+    }
 }
