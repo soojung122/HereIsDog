@@ -43,22 +43,28 @@ public class AuthController {
 
     /** 로그인 처리 */
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginForm loginForm,
-                        BindingResult bindingResult,
-                        HttpSession session) {
-    	loginFormValidator.validate(loginForm, bindingResult);
-    	
+    public String loginSubmit(@ModelAttribute("loginForm") LoginForm loginForm,
+                              BindingResult bindingResult,
+                              HttpSession session) {
+
+     // 수동 검증기 호출
+        loginFormValidator.validate(loginForm, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return "loginForm";
         }
 
-        if (authService.login(loginForm.getUsername(), loginForm.getPassword())) {
-            session.setAttribute("username", loginForm.getUsername());
-            return "redirect:/";
-        } else {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 잘못되었습니다.");
+        boolean result = authService.login(loginForm.getUsername(), loginForm.getPassword(), loginForm.getRole());
+
+        if (!result) {
+            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 틀렸습니다.");
             return "loginForm";
         }
+
+        session.setAttribute("loginUser", loginForm.getUsername());
+        session.setAttribute("role", loginForm.getRole());
+
+        return "redirect:/";  // 로그인 성공 시 메인 페이지로 이동
     }
 
     /** 로그아웃 처리 */
