@@ -45,8 +45,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean login(String username, String password) {
-        return false; // 로그인 생략
+    public boolean login(String username, String password, String role) {
+        if ("owner".equals(role)) {
+            Owner owner = userMapper.findOwnerByUsername(username);
+            return owner != null && owner.getPassword().equals(password);
+        } else {
+            Customer customer = userMapper.findCustomerByUsername(username);
+            return customer != null && customer.getPassword().equals(password);
+        }
     }
 
     @Override
