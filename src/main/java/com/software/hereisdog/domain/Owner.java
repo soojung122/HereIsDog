@@ -9,7 +9,7 @@ public class Owner extends User {
         super();
     }
 
-    public Owner(Long id, String username, String password, String nickname, String email, String businessNumber) {
-        super(id, username, password, nickname, email, businessNumber);
+    public Owner(Long id, String username, String password, String email, String businessNumber) {
+        super(id, username, password, email, businessNumber);
     }
 }

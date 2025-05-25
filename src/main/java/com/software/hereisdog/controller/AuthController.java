@@ -78,7 +78,7 @@ public class AuthController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupForm", new SignupForm());
-        return "signupForm";
+        return "jsp/signupForm";
     }
 
     /** 회원가입 처리 */
@@ -103,7 +103,7 @@ public class AuthController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("signupForm", form);
-            return "auth/signupForm";
+            return "jsp/signupForm";
         }
 
         // 회원가입 성공 처리

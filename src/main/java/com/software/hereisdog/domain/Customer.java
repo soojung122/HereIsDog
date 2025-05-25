@@ -9,7 +9,7 @@ public class Customer extends User {
         super();
     }
 
-    public Customer(Long id, String username, String password, String nickname, String email) {
-        super(id, username, password, nickname, email, null);  // businessNumber는 null
+    public Customer(Long id, String username, String password, String email) {
+        super(id, username, password, email, null);  // businessNumber는 null
     }
 }

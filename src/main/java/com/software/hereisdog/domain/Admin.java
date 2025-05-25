@@ -10,7 +10,7 @@ public class Admin extends User {
         super();
     }
 
-    public Admin(Long id, String username, String password, String nickname, String email) {
-        super(id, username, password, nickname, email, null); // businessNumber는 사용하지 않음
+    public Admin(Long id, String username, String password, String email) {
+        super(id, username, password, email, null); // businessNumber는 사용하지 않음
     }
 }

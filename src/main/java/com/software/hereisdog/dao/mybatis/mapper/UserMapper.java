@@ -14,10 +14,10 @@ public interface UserMapper {
     @Select("SELECT * FROM users WHERE username = #{username}")
     User findByUsername(String username);
     
-    @Insert("INSERT INTO customer (username, password, nickname, email) VALUES (#{username}, #{password}, #{nickname}, #{email})")
+    @Insert("INSERT INTO customer (username, password, email) VALUES (#{username}, #{password}, #{email})")
     void insertCustomer(Customer customer);
 
-    @Insert("INSERT INTO owner (username, password, nickname, email, business_number) VALUES (#{username}, #{password}, #{nickname}, #{email}, #{businessNumber})")
+    @Insert("INSERT INTO owner (username, password, email, business_number) VALUES (#{username}, #{password}, #{email}, #{businessNumber})")
     void insertOwner(Owner owner);
     
     @Select("SELECT * FROM customer WHERE username = #{username}")

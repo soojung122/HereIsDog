@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
             Owner owner = new Owner();
             owner.setUsername(form.getUsername());
             owner.setPassword(form.getPassword());
-            owner.setNickname(form.getNickname());
+            //owner.setNickname(form.getNickname());
             owner.setEmail(form.getEmail());
             owner.setBusinessNumber(form.getBusinessNumber());
 
@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
             Customer customer = new Customer();
             customer.setUsername(form.getUsername());
             customer.setPassword(form.getPassword());
-            customer.setNickname(form.getNickname());
+            //customer.setNickname(form.getNickname());
             customer.setEmail(form.getEmail());
 
             userMapper.insertCustomer(customer);

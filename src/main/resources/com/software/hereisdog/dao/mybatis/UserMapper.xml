@@ -6,13 +6,13 @@
 <mapper namespace="com.software.hereisdog.dao.mybatis.mapper.UserMapper">
 
     <insert id="insertCustomer" parameterType="com.software.hereisdog.domain.Customer">
-        INSERT INTO CUSTOMER (username, password, nickname, email)
-        VALUES (#{username}, #{password}, #{nickname}, #{email})
+        INSERT INTO CUSTOMER (username, password, email)
+        VALUES (#{username}, #{password}, #{email})
     </insert>
 
     <insert id="insertOwner" parameterType="com.software.hereisdog.domain.Owner">
-        INSERT INTO OWNER (username, password, nickname, email, businessNumber)
-        VALUES (#{username}, #{password}, #{nickname}, #{email}, #{businessNumber})
+        INSERT INTO OWNER (username, password, email, businessNumber)
+        VALUES (#{username}, #{password}, #{email}, #{businessNumber})
     </insert>
 
 </mapper>
