@@ -48,10 +48,12 @@
 		
 		<!-- Oracle JDBC driver -->
 		<dependency>
-			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc11</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc11</artifactId>
+    <version>21.7.0.0</version>   <!-- 또는 23.5.0.24.07, 둘 중 하나만! -->
+    <scope>runtime</scope>
+</dependency>
+
 		
 		<!-- JSP, JSTL dependencies -->
 		<dependency>

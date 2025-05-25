@@ -2,12 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-
-<%
-    String type = request.getParameter("type");
-    if (type == null || type.trim().isEmpty()) type = "공원";
-%>
-
 <head>
     <meta charset="UTF-8">
     <title>여기다멍 지도 페이지</title>
@@ -104,9 +98,7 @@
 </head>
 <body>
     <div class="logo">
-        <div class="logo">
         <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 60px; height: 60px;">
-        </div>
         <h2>여기다멍</h2>
     </div>
     <div class="filter-dropdown">
@@ -127,12 +119,16 @@
         </div>
     </div>
 
-    <!-- Kakao 지도 API -->
-    <script>]
+    <!-- Kakao 지도 API 및 JS 로직은 body "끝"에서 실행 (중요!) -->
+    <script>
     let map, ps, markers = [], currentInfoWindow = null;
 
     function initKakaoMap() {
         const container = document.getElementById("map");
+        if (!container) {
+            alert("지도 영역이 없습니다! (id='map' 확인)");
+            return;
+        }
         const options = {
             center: new kakao.maps.LatLng(37.5665, 126.9780),
             level: 3
@@ -151,12 +147,14 @@
         items.forEach((el, i) => el.classList.toggle("highlight", i === index));
     }
 
-    // 필터 변경 시 동작 함수 (전역 등록)
     window.applySubFilter = function(select) {
-        var value = select.value;
+        var value = select.value || "all";
         let keyword = "동물병원";
-        if (value === "24hours") keyword = "24시간 동물병원";
-        if (value === "emergency") keyword = "응급실 동물병원";
+        if (value === "24hours") keyword = "24시간 동물병원","심야 동물";
+        if (value === "emergency") keyword = "응급 동물";
+
+        // ps가 아직 정의되지 않았다면 함수 종료!
+        if (!ps) return;
 
         ps.keywordSearch(keyword, function(data, status) {
             clearMarkers();
@@ -195,17 +193,17 @@
                         '<span>📍 ' + (place.road_address_name || place.address_name) + '</span>' +
                         (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
 
-                    placeDiv.dataset.index = index;
+                    placeDiv.dataset.index = idx;
 
                     placeDiv.onclick = (function (marker, infowindow, pos, index) {
                         return function () {
                             map.setCenter(pos);
-                            if (currentInfoWindow) currentInfoWindow.close(); // ✅ 이전 InfoWindow 닫기
+                            if (currentInfoWindow) currentInfoWindow.close();
                             infowindow.open(map, marker);
                             currentInfoWindow = infowindow;
                             highlightSlide(index);
                         };
-                    })(marker, infowindow, pos, index);
+                    })(marker, infowindow, pos, idx);
 
                     slidePanel.appendChild(placeDiv);
                     bounds.extend(pos);
@@ -216,19 +214,22 @@
                 slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
             }
         });
-
+    };
 
     // Kakao 지도 비동기 로딩
-    const kakaoScript = document.createElement("script");
-    kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=303355970f1d1827f32ff70b2b262aed&autoload=false&libraries=services";
-    kakaoScript.onload = function () {
-        kakao.maps.load(function () {
-            initKakaoMap();
-            // 페이지 로딩 시 전체 검색 자동 실행
-            window.applySubFilter({ value: "all" });
-        });
+    window.onload = function() {
+        const kakaoScript = document.createElement("script");
+        kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=303355970f1d1827f32ff70b2b262aed&autoload=false&libraries=services";
+        kakaoScript.onload = function () {
+            kakao.maps.load(function () {
+                initKakaoMap();
+                // ps가 생성된 후, 반드시 여기서만 최초 applySubFilter 실행!
+                const selectEl = document.getElementById("subFilter");
+                window.applySubFilter(selectEl);
+            });
+        };
+        document.head.appendChild(kakaoScript);
     };
-    document.head.appendChild(kakaoScript);
     </script>
 </body>
 </html>
