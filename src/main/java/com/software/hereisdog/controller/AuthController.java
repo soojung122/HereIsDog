@@ -47,8 +47,8 @@ public class AuthController {
                               BindingResult bindingResult,
                               HttpSession session) {
 
-     // 수동 검증기 호출
-        loginFormValidator.validate(loginForm, bindingResult);
+    	// 수동 검증기 호출
+    	loginFormValidator.validate(loginForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "loginForm";
@@ -61,6 +61,7 @@ public class AuthController {
             return "loginForm";
         }
 
+        // 세션에 로그인 정보 저장
         session.setAttribute("loginUser", loginForm.getUsername());
         session.setAttribute("role", loginForm.getRole());
 
@@ -70,7 +71,7 @@ public class AuthController {
     /** 로그아웃 처리 */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate();
+        session.invalidate(); //세션 전부 제거
         return "redirect:/";
     }
 
@@ -92,6 +93,18 @@ public class AuthController {
         authService.signup(signupForm);
         return "redirect:/auth/login";
     }*/
+    @GetMapping("/check-session")
+    public String checkSession(HttpSession session, Model model) {
+        Object loginUser = session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/auth/login";  // 로그인 안 되어 있으면 로그인 페이지로
+        }
+
+        model.addAttribute("username", loginUser);
+        return "sessionInfoPage";  // 로그인된 사용자 정보 보여주는 뷰
+    }
+
+    
     /** 회원가입 처리 */
     @PostMapping("/signup")
     public String signup(@ModelAttribute SignupForm form,
@@ -103,7 +116,7 @@ public class AuthController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("signupForm", form);
-            return "jsp/signupForm";
+            return "signupForm";
         }
 
         // 회원가입 성공 처리
