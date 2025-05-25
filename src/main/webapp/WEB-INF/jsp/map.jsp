@@ -128,8 +128,7 @@
     </div>
 
     <!-- Kakao 지도 API -->
-    <script>
-    // Kakao 지도 관련 전역 변수
+    <script>]
     let map, ps, markers = [], currentInfoWindow = null;
 
     function initKakaoMap() {
