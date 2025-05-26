@@ -59,7 +59,34 @@ public class PlaceController {
         placeService.registerPlace(placeForm);
         return "redirect:/places";
     }
+    
+    @GetMapping("/detail")
+    public String showPlaceDetail(@RequestParam String name,
+                                  @RequestParam String address,
+                                  @RequestParam(required = false) String phone,
+                                  @RequestParam(required = false) String image,
+                                  @RequestParam(required = false, name = "place_url") String placeUrl,
+                                  Model model) {
 
+        model.addAttribute("name", name);
+        model.addAttribute("address", address);
+        model.addAttribute("phone", phone);
+
+        // 기본값 처리
+        if (image == null || image.trim().isEmpty()) {
+            image = "https://via.placeholder.com/600x300";
+        }
+        if (placeUrl == null || placeUrl.trim().isEmpty()) {
+            placeUrl = null;
+        }
+
+        model.addAttribute("image", image);
+        model.addAttribute("place_url", placeUrl);
+        model.addAttribute("hours", "24시간 운영"); // 예시값
+
+        return "detail"; // /WEB-INF/jsp/detail.jsp 로 이동
+    }
+    
     // JSON 응답용 필터 API
     @GetMapping("/filter")
     @ResponseBody
