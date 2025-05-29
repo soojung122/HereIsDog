@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <style>
     .site-header {
@@ -45,6 +46,12 @@
         <img src="/images/HereIsDog-logo.png" alt="로고">
         여기다멍
     </a>
+    <!-- 마이페이지 버튼 삽입 영역 -->
+    <c:choose>
+    <c:when test="${pageName eq 'detail'}">
+        <button style="padding: 8px 12px;">마이페이지</button>
+    </c:when>
+</c:choose>
 </div>
 
 <script>

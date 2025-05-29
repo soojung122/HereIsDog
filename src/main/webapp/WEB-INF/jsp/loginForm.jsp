@@ -1,6 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
-
+<%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
 <html>
 <head>
     <title>여기다멍 - 로그인</title>
@@ -43,25 +43,6 @@
 
         .radio-group-inline label {
             font-weight: normal;
-        }
-
-        .logo {
-            margin: 0;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo img {
-            width: 40px;
-            height: 40px;
-            margin: 0;
-        }
-
-        .logo h2 {
-            margin: 0;
-            font-size: 24px;
         }
 
         .error { color: red; font-size: 0.9em; }
@@ -109,11 +90,6 @@
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고">
-        <h2>여기다멍</h2>
-    </div>
-
     <div class="form-box">
         <h2>로그인</h2>
 
@@ -145,6 +121,11 @@
             <div class="form-group">
                 <button type="submit">로그인</button>
             </div>
+			
+			
+			<div class="form-group">
+			    <button type="button" style="background-color: #e0e0e3; color: #333; border: 1px solid #bbb;" onclick="location.href='/auth/signup'">회원가입</button>
+			</div>
 
             <div class="link-group">
                 <a href="/auth/find-id">아이디 찾기</a> |

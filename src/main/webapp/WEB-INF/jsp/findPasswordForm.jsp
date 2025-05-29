@@ -1,5 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
 <html>
 <head>
     <title>비밀번호 찾기</title>
@@ -12,24 +13,6 @@
         input[type="text"], input[type="email"] {
             width: 100%; padding: 8px;
         }
-        .logo {
-            margin: 0;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logo img {
-            width: 40px;
-            height: 40px;
-            margin: 0;
-        }
-
-        .logo h2 {
-            margin: 0;
-            font-size: 24px;
-        }
         button {
             width: 100%; padding: 10px;
             background-color: #333; color: white; border: none;
@@ -37,10 +20,6 @@
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고">
-        <h2>여기다멍</h2>
-    </div>
     <div class="form-box">
         <h2>비밀번호 찾기</h2>
         <form method="post" action="/auth/verify-password">
