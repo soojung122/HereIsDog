@@ -1,5 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!-- 공통 네비게이션 바에 마이페이지 버튼을 추가하고 싶어서 -->
+<%
+    request.setAttribute("pageName", "detail");
+%>
+<%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -11,6 +17,7 @@
             margin: 0;
             padding: 0;
             background: #f7f7f7;
+            padding-top: 70px;
         }
         .header {
             display: flex;
@@ -109,11 +116,6 @@
     </script>
 </head>
 <body>
-    <div class="header">
-        <div class="paw">🐾</div>
-        <h2>여기다멍</h2>
-        <button style="margin-left:auto; padding: 8px 12px;">마이페이지</button>
-    </div>
 
     <div class="container">
         <div class="main">

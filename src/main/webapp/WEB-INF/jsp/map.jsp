@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
 <%
     String type = request.getParameter("type");
     if (type == null || type.trim().isEmpty()) type = "동물병원";
@@ -17,24 +18,11 @@
             height: 100%;
             font-family: Arial, sans-serif;
             box-sizing: border-box;
+            padding-top: 30px;
         }
         body {
             display: flex;
             flex-direction: column;
-        }
-        .logo {
-            margin: 30px 20px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo .paw {
-            font-size: 40px;
-            margin: 0;
-        }
-        .logo h2 {
-            margin: 0;
-            font-size: 28px;
         }
         .filter-dropdown {
             background: #ffffff;
@@ -52,7 +40,7 @@
         .container {
             display: flex;
             width: 100%;
-            height: 500px;
+            height: 550px;
             box-sizing: border-box;
         }
         .sidebar {
@@ -102,10 +90,6 @@
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 60px; height: 60px;">
-        <h2>여기다멍</h2>
-    </div>
     <div class="filter-dropdown">
         <select id="subFilter" onchange="applySubFilterAjax(this)">
             <option value="all">전체</option>
