@@ -1,5 +1,6 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
 <html>
 <head>
@@ -33,12 +34,15 @@
             <div class="form-group">
                 <label>비밀번호 확인</label>
                 <input type="password" name="confirmPassword" required />
-            </div>
-
+	            </div>
+	        <c:if test="${not empty error}">
+			    <p style="color:red; text-align:center;">${error}</p>
+			</c:if>
             <div class="form-group">
                 <button type="submit">완료</button>
             </div>
         </form>
+
     </div>
 </body>
 </html>

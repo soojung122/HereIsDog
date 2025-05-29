@@ -131,7 +131,14 @@ public class AuthController {
     @PostMapping("/verify-id")
     public String verifyId(@RequestParam String email, @RequestParam String role, Model model) {
         // 아이디 찾기 로직 후 model에 아이디 전달
-        model.addAttribute("foundId", "user1234");
+        
+        String foundId = authService.findUsernameByEmailAndRole(email, role);
+        
+        if (foundId != null) {
+            model.addAttribute("foundId", foundId);
+        } else {
+            model.addAttribute("foundId", "입력한 정보와 일치하는 아이디가 없습니다.");
+        }
         return "idResultForm";  // 아이디 결과 보여주는 JSP
     }
 
@@ -159,7 +166,7 @@ public class AuthController {
         }
 
         // TODO: 실제 비밀번호 저장 로직 (예: authService.updatePassword(username, newPassword))
-
+        authService.updatePassword(username, newPassword);
         return "redirect:/auth/login"; // 🔁 로그인 페이지로 이동
     }
 }

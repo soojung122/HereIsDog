@@ -8,4 +8,8 @@ import com.software.hereisdog.controller.SignupForm;
 public interface AuthService {
     boolean login(String username, String password, String role);
     void signup(SignupForm signupForm);
+    // 아이디 찾기 DB연동
+    String findUsernameByEmailAndRole(String email, String role);
+    // 비밀번호 재설정 DB연동
+    void updatePassword(String username, String newPassword);
 }
