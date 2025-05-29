@@ -83,4 +83,33 @@ public class AuthServiceImpl implements AuthService {
         System.out.println("회원가입 요청 - " + form.getUsername());
 
     }
+    
+    // 아이디 찾기 관련
+    @Override
+    public String findUsernameByEmailAndRole(String email, String role) {
+        if ("owner".equals(role)) {
+            Owner owner = userMapper.findOwnerByEmail(email);
+            return owner != null ? owner.getUsername() : null;
+        } else {
+            Customer customer = userMapper.findCustomerByEmail(email);
+            return customer != null ? customer.getUsername() : null;
+        }
+    }
+    
+    // 비밀번호 재설정 관련
+    @Override
+    public void updatePassword(String username, String newPassword) {
+        // 먼저 owner 테이블에서 찾기
+        Owner owner = userMapper.findOwnerByUsername(username);
+        if (owner != null) {
+            userMapper.updateOwnerPassword(username, newPassword);
+            return;
+        }
+
+        // 없으면 customer 테이블에서 찾기
+        Customer customer = userMapper.findCustomerByUsername(username);
+        if (customer != null) {
+            userMapper.updateCustomerPassword(username, newPassword);
+        }
+    }
 }

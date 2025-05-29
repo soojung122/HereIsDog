@@ -25,4 +25,19 @@ public interface UserMapper {
 
     @Select("SELECT * FROM owner WHERE username = #{username}")
     Owner findOwnerByUsername(String username);
+    
+    @Select("SELECT * FROM customer WHERE email = #{email}")
+    Customer findCustomerByEmail(String email);
+
+    @Select("SELECT * FROM owner WHERE email = #{email}")
+    Owner findOwnerByEmail(String email);
+    
+    // 비밀번호 재설정 - Customer용
+    @Update("UPDATE customer SET password = #{newPassword} WHERE username = #{username}")
+    void updateCustomerPassword(@Param("username") String username, @Param("newPassword") String newPassword);
+    
+    // 비밀번호 재설정 - Owner용
+    @Update("UPDATE owner SET password = #{newPassword} WHERE username = #{username}")
+    void updateOwnerPassword(@Param("username") String username, @Param("newPassword") String newPassword);
+
 }
