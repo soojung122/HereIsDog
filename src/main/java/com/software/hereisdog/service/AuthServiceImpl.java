@@ -28,6 +28,8 @@ import com.software.hereisdog.controller.SignupForm;
 import com.software.hereisdog.dao.mybatis.mapper.UserMapper;
 import com.software.hereisdog.domain.Customer;
 import com.software.hereisdog.domain.Owner;
+import com.software.hereisdog.domain.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +56,16 @@ public class AuthServiceImpl implements AuthService {
             return customer != null && customer.getPassword().equals(password);
         }
     }
-
+    
+    @Override
+    public User getUserByUsernameAndRole(String username, String role) {
+        if ("owner".equals(role)) {
+            return userMapper.findOwnerByUsername(username);
+        } else {
+            return userMapper.findCustomerByUsername(username);
+        }
+    }
+    
     @Override
     public void signup(SignupForm form) {
         //SignupForm form = (SignupForm) signupForm;
