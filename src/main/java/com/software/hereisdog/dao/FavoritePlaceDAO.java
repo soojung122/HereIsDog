@@ -6,5 +6,5 @@ public interface FavoritePlaceDAO {
     List<FavoritePlace> findByUserId(Long userId);
 
     void insertFavorite(FavoritePlace favoritePlace);
-    void deleteFavorite(Long userId, Long placeId);
+    void deleteFavoriteById(Long id);
 }

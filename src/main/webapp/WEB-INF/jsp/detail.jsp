@@ -109,11 +109,7 @@
             border-radius: 6px;
         }
     </style>
-    <script>
-        function handleWishlistClick() {
-            alert("찜 완료되었습니다!");
-        }
-    </script>
+
 </head>
 <body>
 
@@ -136,9 +132,29 @@
             <div class="info-section">
                 <div class="highlight">
                     <span>${name}</span>
-                    <button onclick="handleWishlistClick()" title="찜하기">
+                    <!-- 찜하기 버튼 (찜 등록) -->
+                    <button onclick="addFavorite('${name}', '${address}')" title="찜하기">
                         <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
                     </button>
+					
+					<script>
+					function addFavorite(name, address) {
+					    fetch('/favorites/add', {
+					        method: 'POST',
+					        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					        body: new URLSearchParams({
+					            name: name,
+					            address: address
+					            // 필요 시 phone, image, place_url도 추가
+					        })
+					    })
+					    .then(res => res.text())
+					    .then(message => {
+					        alert(message);  // 서버 응답을 그대로 alert!
+					    });
+					}
+
+					</script>
                 </div>
                 <div>영업시간: ${hours}</div>
                 <div>주소: ${address}</div>

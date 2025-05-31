@@ -2,6 +2,7 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.LoginForm;
 import com.software.hereisdog.controller.SignupForm;
+import com.software.hereisdog.domain.User;
 import com.software.hereisdog.service.AuthService;
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,15 @@ public class AuthController {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 틀렸습니다.");
             return "loginForm";
         }
+        
+        // User 객체 조회 및 userId 세션 저장
+        User user = authService.getUserByUsernameAndRole(
+                loginForm.getUsername(),
+                loginForm.getRole()
+            );
 
+        session.setAttribute("userId", user.getId());   
+        
         // 세션에 로그인 정보 저장
         session.setAttribute("loginUser", loginForm.getUsername());
         session.setAttribute("role", loginForm.getRole());
