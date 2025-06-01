@@ -136,16 +136,17 @@
                 <div class="highlight">
                     <span>${name}</span>
                     <!-- 찜하기 버튼 (찜 등록) -->
-                    <button onclick="addFavorite('${name}', '${address}')" title="찜하기">
+                    <button onclick="addFavorite('${placeId}', '${name}', '${address}')" title="찜하기">
                         <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
                     </button>
 					
 					<script>
-					function addFavorite(name, address) {
+					function addFavorite(placeId, name, address) {
 					    fetch('/favorites/add', {
 					        method: 'POST',
 					        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 					        body: new URLSearchParams({
+					        	placeId: Number(placeId),
 					            name: name,
 					            address: address
 					            // 필요 시 phone, image, place_url도 추가

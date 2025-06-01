@@ -6,15 +6,17 @@ package com.software.hereisdog.domain;
 public class FavoritePlace {
     private Long id;
     private Long userId;   // 즐겨찾기한 사용자 ID
+    private Long placeId;
     private String name;       // 장소 이름
     private String address;    // 장소 주소
     private String liked;     // 찜 여부
 
     public FavoritePlace() {}
 
-    public FavoritePlace(Long id, Long userId, String name, String address, String liked) {
+    public FavoritePlace(Long id, Long userId, Long placeId, String name, String address, String liked) {
         this.id = id;
         this.userId = userId;
+        this.placeId = placeId;
         this.name = name;
         this.address = address;
         this.liked = liked;
@@ -34,6 +36,14 @@ public class FavoritePlace {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+    
+    public Long getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Long placeId) {
+        this.placeId = placeId;
     }
     
     public String getName() {

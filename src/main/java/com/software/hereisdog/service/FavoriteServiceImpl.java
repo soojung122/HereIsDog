@@ -12,11 +12,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoritePlaceMapper favoritePlaceMapper;
 
     @Override
-    public String addFavorite(Long userId, String name, String address) {
-        FavoritePlace existing = favoritePlaceMapper.findByUserIdAndPlace(userId, name, address);
+    public String addFavorite(Long userId, Long placeId, String name, String address) {
+        FavoritePlace existing = favoritePlaceMapper.findByUserIdAndPlaceId(userId, placeId);
 
         if (existing == null) {
-            FavoritePlace favorite = new FavoritePlace(null, userId, name, address, "Y");
+            FavoritePlace favorite = new FavoritePlace(null, userId, placeId, name, address, "Y");
             favoritePlaceMapper.insertFavorite(favorite);
             return "찜 완료!";
         } else if (!"Y".equals(existing.getLiked())) {
