@@ -18,10 +18,11 @@ public class ReviewFormValidator implements Validator {
         ReviewForm form = (ReviewForm) target;
 
         // content는 선택사항
-        if (form.getContent() == null || form.getContent().trim().isEmpty()) {
-           if (form.getContent().length() > 500) {
-           		errors.rejectValue("content", "length", "리뷰는 500자 이내로 작성해주세요.");
-           }
+        String content = form.getContent();
+        if (content != null && !content.trim().isEmpty()) {
+            if (content.length() > 500) {
+                errors.rejectValue("content", "length", "리뷰는 500자 이내로 작성해주세요.");
+            }
         }
         
         //평점은 필수사항

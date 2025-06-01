@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -84,7 +86,9 @@
 
         <!-- 오른쪽: 폼 영역 -->
         <div class="form-section">
-            <form action="/reviews/${placeId}" method="post">
+        <c:url var="SubmitUrl" value="/reviews/${placeId}" />
+		<form method="post" action="${SubmitUrl}">
+         
 				<input type="hidden" name="placeId" value="${placeId}">
     			<input type="hidden" name="name" value="${name}">
     			<input type="hidden" name="image" value="${image}">

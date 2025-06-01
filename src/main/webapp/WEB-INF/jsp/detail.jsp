@@ -176,7 +176,7 @@
 			
 		
         <div class="review-button">	
-      		<a href="/reviews/${placeId}/new?name=${name}&ddress=${address}&image=${image}">
+      		<a href="/reviews/${placeId}/new">
             	<button>리뷰 작성 하러가기</button>
          	</a>
         </div>

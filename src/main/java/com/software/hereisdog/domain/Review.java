@@ -6,7 +6,7 @@ public class Review {
     private Long placeId;
     private String userId;
     private String content;
-    private int rating;
+    private Integer rating;
 
     // Getter & Setter
     public Long getId() {
@@ -41,11 +41,11 @@ public class Review {
         this.content = content;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 }

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import com.software.hereisdog.service.ReviewFormValidator;
 
 import java.security.Principal;
+import java.util.Map;
 
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,54 +48,51 @@ public class ReviewController {
 
     /** 리뷰 작성 폼 요청 */
     @GetMapping("/{placeId}/new")
-    public String createReviewForm(@PathVariable Long placeId, @RequestParam String name,
-    							@RequestParam String image,HttpSession session, Model model) {
-    	// 세션에서 로그인 유저 ID 가져오기
-        /*User loginUser = (User) session.getAttribute("loginUser");
-        String userId;
-		if (loginUser != null)
-			userId = loginUser.getId().toString();
-		else
-			userId = null;*/
-    	
-    	//테스트용 하드코딩
+    public String createReviewForm(@PathVariable Long placeId,
+                                   HttpSession session,
+                                   Model model) {
+        Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
+        if (placeInfo == null) {
+            return "redirect:/"; // 세션 만료 시 홈
+        }
+
+        // 유저 ID는 하드코딩 테스트
         String userId = "test-user";
-        
-        model.addAttribute("placeId", placeId);
-        model.addAttribute("name", name);
-        model.addAttribute("image", image);
+
+        model.addAllAttributes(placeInfo);  // ✅ name, address, image, phone, place_url 전부 포함됨
+        model.addAttribute("placeId", placeId); // 중복으로 명시해도 OK
         model.addAttribute("userId", userId);
         model.addAttribute("reviewForm", new ReviewForm());
 
         return "review";
-
     }
+
 
     /** 리뷰 작성 처리 */
     @PostMapping("/{placeId}")
     public String createReview(@PathVariable Long placeId,
-    					       @RequestParam String name,
-    					       @RequestParam String image,
-    						   @RequestParam String address,
                                @ModelAttribute ReviewForm reviewForm,
                                BindingResult bindingResult,
+                               HttpSession session,
                                Model model,
                                Principal principal) {
-
-        reviewFormValidator.validate(reviewForm, bindingResult);
-
-        if (bindingResult.hasErrors()){
-            model.addAttribute("placeId", placeId);
-            model.addAttribute("name", name);
-            model.addAttribute("image", image);
-            model.addAttribute("userId", reviewForm.getUserId()); // 세션에서 꺼낸 경우에도 유지
-            model.addAttribute("reviewForm", reviewForm);
-            model.addAttribute("errors", bindingResult);
-            return "review";  // JSP 내부에서 ${name}, ${image} 그대로 사용 가능
+    	
+        Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
+        if (placeInfo == null) {
+            return "redirect:/"; 
         }
 
+        // 1차 검증: 사용자 정의 Validator 적용
+        reviewFormValidator.validate(reviewForm, bindingResult);
         
-        String userId = (principal != null) ? principal.getName() : "abcd";
+        if (bindingResult.hasErrors()) {
+            model.addAllAttributes(placeInfo);
+            model.addAttribute("reviewForm", reviewForm);
+            model.addAttribute("errors", bindingResult);
+            return "review";
+        }
+
+        String userId = (principal != null) ? principal.getName() : "test-user";
 
         Review review = new Review();
         review.setPlaceId(placeId);
@@ -103,11 +101,9 @@ public class ReviewController {
         review.setContent(reviewForm.getContent());
 
         reviewService.registerReview(review);
-        return "redirect:/places/detail?placeId=" + placeId
-        	     + "&name=" + URLEncoder.encode(name, StandardCharsets.UTF_8)
-        	     + "&address=" + URLEncoder.encode(address, StandardCharsets.UTF_8)
-        	     + "&image=" + URLEncoder.encode(image, StandardCharsets.UTF_8);
 
+        return "redirect:/places/detail?placeId=" + placeId; 
     }
+
 
 }

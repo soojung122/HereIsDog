@@ -2,13 +2,19 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.PlaceForm;
 import com.software.hereisdog.service.PlaceService;
+
+import jakarta.servlet.http.HttpSession;
+
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.software.hereisdog.service.PlaceFormValidator;
 
@@ -60,32 +66,50 @@ public class PlaceController {
         return "redirect:/places";
     }
     
-    @GetMapping("/detail")
-    public String showPlaceDetail(@RequestParam String name,
-                                  @RequestParam String address,
-                                  @RequestParam(required = false) String phone,
-                                  @RequestParam(required = false, name = "place_url") String placeUrl,
-                                  @RequestParam(required = false) String image,
-                                  Model model) {
+    @GetMapping(value = "/detail", params = {"name", "address"})
+    public String showPlaceDetailFromMap(@RequestParam String name,
+                                         @RequestParam String address,
+                                         @RequestParam(required = false) String phone,
+                                         @RequestParam(required = false, name = "place_url") String placeUrl,
+                                         @RequestParam(required = false) String image,
+                                         HttpSession session,
+                                         Model model) {
 
+        Map<String, Object> placeInfo = new HashMap<>();
+        placeInfo.put("name", name);
+        placeInfo.put("address", address);
+        placeInfo.put("phone", phone);
+        placeInfo.put("image", (image == null || image.trim().isEmpty()) ? "https://via.placeholder.com/600x300" : image);
+        placeInfo.put("place_url", placeUrl);
 
-        model.addAttribute("name", name);
-        model.addAttribute("address", address);
-        model.addAttribute("phone", phone);
+        session.setAttribute("placeDetail", placeInfo);
 
-        if (image == null || image.trim().isEmpty()) {
-            image = "https://via.placeholder.com/600x300";
-        }
-        if (placeUrl == null || placeUrl.trim().isEmpty()) {
-            placeUrl = null;
-        }
-
-        model.addAttribute("image", image);
-        model.addAttribute("place_url", placeUrl);
+        model.addAllAttributes(placeInfo);
         model.addAttribute("hours", "24시간 운영");
 
-        return "detail"; // /WEB-INF/jsp/detail.jsp 로 이동
+        return "detail";
     }
+
+    
+    @GetMapping("/detail")
+    public String showPlaceDetail(@RequestParam Long placeId,
+                                  HttpSession session,
+                                  Model model) {
+
+        Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
+        if (placeInfo == null) {
+            return "redirect:/"; // 세션 만료
+        }
+
+        model.addAllAttributes(placeInfo);
+        model.addAttribute("placeId", placeId);
+        model.addAttribute("hours", "24시간 운영");
+
+        return "detail";
+    }
+
+
+
     
     // JSON 응답용 필터 API
     @GetMapping("/filter")
