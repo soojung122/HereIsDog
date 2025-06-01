@@ -21,10 +21,11 @@ public class FavoriteController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addFavorite(@RequestParam String name,
+    public String addFavorite(@RequestParam Long placeId,
+                              @RequestParam String name,
                               @RequestParam String address,
                               @SessionAttribute("userId") Long userId) {
-        return favoriteService.addFavorite(userId, name, address); // ✅ 그대로 반환
+        return favoriteService.addFavorite(userId, placeId, name, address); // ✅ 그대로 반환
     }
 
 
