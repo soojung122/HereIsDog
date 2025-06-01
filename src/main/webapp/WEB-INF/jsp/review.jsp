@@ -89,6 +89,7 @@
         <c:url var="SubmitUrl" value="/reviews/${placeId}" />
 		<form method="post" action="${SubmitUrl}">
          
+         		<input type="hidden" name="userId" value="${userId}">
 				<input type="hidden" name="placeId" value="${placeId}">
     			<input type="hidden" name="name" value="${name}">
     			<input type="hidden" name="image" value="${image}">

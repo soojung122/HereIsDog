@@ -56,10 +56,12 @@ public class ReviewController {
             return "redirect:/"; // 세션 만료 시 홈
         }
 
-        // 유저 ID는 하드코딩 테스트
-        String userId = "test-user";
+        User loginUser = (User) session.getAttribute("loginUser");
+        String userId = (loginUser != null) ? loginUser.getId().toString() : "test-user";
+        
+        //System.out.println(userId);
 
-        model.addAllAttributes(placeInfo);  // ✅ name, address, image, phone, place_url 전부 포함됨
+        model.addAllAttributes(placeInfo);  
         model.addAttribute("placeId", placeId); // 중복으로 명시해도 OK
         model.addAttribute("userId", userId);
         model.addAttribute("reviewForm", new ReviewForm());
@@ -92,7 +94,8 @@ public class ReviewController {
             return "review";
         }
 
-        String userId = (principal != null) ? principal.getName() : "test-user";
+        User loginUser = (User) session.getAttribute("loginUser");
+        String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";  
 
         Review review = new Review();
         review.setPlaceId(placeId);

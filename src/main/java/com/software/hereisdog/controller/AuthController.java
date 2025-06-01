@@ -71,8 +71,11 @@ public class AuthController {
         session.setAttribute("userId", user.getId());   
         
         // 세션에 로그인 정보 저장
-        session.setAttribute("loginUser", loginForm.getUsername());
-        session.setAttribute("role", loginForm.getRole());
+        //session.setAttribute("loginUser", loginForm.getUsername());
+        //session.setAttribute("role", loginForm.getRole());
+        
+        session.setAttribute("loginUser", user);  // User 객체 전체 저장
+
 
         return "redirect:/";  // 로그인 성공 시 메인 페이지로 이동
     }
@@ -91,17 +94,7 @@ public class AuthController {
         return "signupForm";
     }
 
-    /** 회원가입 처리 */
-    /*@PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute SignupForm signupForm,
-                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "signupForm";
-        }
 
-        authService.signup(signupForm);
-        return "redirect:/auth/login";
-    }*/
     @GetMapping("/check-session")
     public String checkSession(HttpSession session, Model model) {
         Object loginUser = session.getAttribute("loginUser");
