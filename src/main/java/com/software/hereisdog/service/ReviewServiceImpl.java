@@ -1,6 +1,6 @@
 package com.software.hereisdog.service;
 
-import com.software.hereisdog.dao.ReviewDAO;
+import com.software.hereisdog.dao.mybatis.mapper.ReviewMapper;
 import com.software.hereisdog.domain.Review;
 import com.software.hereisdog.controller.ReviewForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,32 +15,32 @@ import java.util.List;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-	@Autowired
-    private ReviewDAO reviewDAO;
+    private final ReviewMapper reviewMapper;
 
-    @Override
-    public void registerReview(Long placeId, ReviewForm reviewForm) {
-        // ReviewForm → Review 변환 후 DAO로 전달
-        // (Customer는 로그인 세션에서 꺼내와야 할 수도 있음. 예시로 null)
-        Review review = new Review();
-        review.setContent(reviewForm.getContent());
-        review.setRating(reviewForm.getRating());
-        // place, customer 세팅 필요 (실제 서비스 로직에서 처리)
-        // review.setPlace(...); review.setCustomer(...);
-        // reviewDAO.insertReview(review); // 실제 등록
+    @Autowired
+    public ReviewServiceImpl(ReviewMapper reviewMapper) {
+        this.reviewMapper = reviewMapper;
     }
 
     @Override
-    public List<ReviewForm> findByPlaceId(Long placeId) {
-        List<Review> reviews = reviewDAO.findByPlaceId(placeId);
-        List<ReviewForm> result = new ArrayList<>();
-        for (Review review : reviews) {
-            ReviewForm form = new ReviewForm();
-            form.setContent(review.getContent());
-            form.setRating(review.getRating());
-            // 추가 필드 필요하면 여기에 세팅
-            result.add(form);
+    public void registerReview(Review review) {
+        List<Review> existing = reviewMapper.findByPlaceIdAndUserId(review.getPlaceId(), review.getUserId());
+
+        if (existing != null && !existing.isEmpty()) {
+            reviewMapper.updateReview(review);  // 내용 갱신
+        } else {
+            reviewMapper.insertReview(review);  // 새로 등록
         }
-        return result;
     }
+
+    @Override
+    public List<Review> getReviewsByPlaceId(Long placeId) {
+        return reviewMapper.findReviewsByPlaceId(placeId);
+    }
+
+    @Override
+    public List<Review> getReviewsByUserId(String userId) {
+        return reviewMapper.findReviewsByUserId(userId);
+    }
+    
 }

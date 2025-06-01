@@ -1,6 +1,8 @@
 package com.software.hereisdog.service;
 
 import com.software.hereisdog.controller.ReviewForm;
+import com.software.hereisdog.domain.Review;
+
 import java.util.List;
 
 /**
@@ -8,6 +10,7 @@ import java.util.List;
  */
 
 public interface ReviewService {
-    void registerReview(Long placeId, ReviewForm reviewForm);
-    List<ReviewForm> findByPlaceId(Long placeId);   // List<Object> → List<ReviewForm>
+    void registerReview(Review review);  // 이거 꼭 있어야 함
+    List<Review> getReviewsByPlaceId(Long placeId);
+    List<Review> getReviewsByUserId(String userId);
 }

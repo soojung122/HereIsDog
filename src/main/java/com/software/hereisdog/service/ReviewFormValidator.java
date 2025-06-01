@@ -17,15 +17,20 @@ public class ReviewFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
         ReviewForm form = (ReviewForm) target;
 
-        // 리뷰 내용 검사
+        // content는 선택사항
         if (form.getContent() == null || form.getContent().trim().isEmpty()) {
-            errors.rejectValue("content", "required", "리뷰 내용을 입력하세요.");
-        } else if (form.getContent().length() > 500) {
-            errors.rejectValue("content", "length", "리뷰는 500자 이내로 작성해주세요.");
+           if (form.getContent().length() > 500) {
+           		errors.rejectValue("content", "length", "리뷰는 500자 이내로 작성해주세요.");
+           }
         }
         
-        // 평점 검사 (1 ~ 5)
-        if (form.getRating() < 1 || form.getRating() > 5) {
+        //평점은 필수사항
+        // 선택하지 않은 경우
+        if (form.getRating() == null) {
+            errors.rejectValue("rating", "required", "평점을 선택해주세요.");
+        }
+        // 평점이 1~5 범위를 벗어나는 경우
+        else if (form.getRating() < 1 || form.getRating() > 5) {
             errors.rejectValue("rating", "range", "평점은 1점 이상 5점 이하로 입력해주세요.");
         }
     }

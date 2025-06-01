@@ -1,10 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!-- 공통 네비게이션 바에 마이페이지 버튼을 추가하고 싶어서 -->
 <%
     request.setAttribute("pageName", "detail");
 %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %> <!-- 공통 네비게이션 바 -->
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -162,14 +165,19 @@
             </div>
         </div>
 
+		<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
+		
         <div class="review-scroll">
             <div>사용자1: 매우 친절하고 깨끗했어요!</div>
             <div>사용자2: 우리 강아지도 좋아했어요 😊</div>
             <div>사용자3: 주차 공간이 협소한 점만 빼면 좋았어요.</div>
         </div>
-
-        <div class="review-button">
-            <button>리뷰 작성 하러가기</button>
+			
+		
+        <div class="review-button">	
+      		<a href="/reviews/${placeId}/new?name=${name}&ddress=${address}&image=${image}">
+            	<button>리뷰 작성 하러가기</button>
+         	</a>
         </div>
     </div>
 </body>
