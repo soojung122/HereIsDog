@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.software.hereisdog.service.SignupFormValidator;
 import com.software.hereisdog.service.LoginFormValidator;
+import com.software.hereisdog.service.PasswordResetvalidation;
 
 /**
  * 로그인, 로그아웃, 회원가입을 담당하는 컨트롤러
@@ -150,25 +151,32 @@ public class AuthController {
     }
 
     @PostMapping("/verify-password")
-    public String verifyPassword(@RequestParam String email, @RequestParam String username, Model model) {
-        // 비밀번호 재설정 화면으로 이동
-        model.addAttribute("username", username);
+    public String verifyPassword(@RequestParam String email,
+                                 @RequestParam String username,
+                                 Model model) {
+        SignupForm form = new SignupForm();
+        form.setUsername(username);  // 히든필드용
+        model.addAttribute("signupForm", form);  // ✅ modelAttribute 등록
+
         return "resetPasswordForm";
     }
     
+    @Autowired
+    private PasswordResetvalidation passwordRevalidation;
+
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String username,
-                                @RequestParam String newPassword,
-                                @RequestParam String confirmPassword,
+    public String resetPassword(@ModelAttribute("signupForm") SignupForm form,
+                                BindingResult result,
                                 Model model) {
-        if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("username", username);
-            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-            return "resetPasswordForm"; // 다시 폼으로
+
+        passwordRevalidation.validate(form, result);
+
+        if (result.hasErrors()) {
+            model.addAttribute("username", form.getUsername());  // 다시 넣어줘야 hidden 필드 유지됨
+            return "resetPasswordForm";
         }
 
-        // TODO: 실제 비밀번호 저장 로직 (예: authService.updatePassword(username, newPassword))
-        authService.updatePassword(username, newPassword);
-        return "redirect:/auth/login"; // 🔁 로그인 페이지로 이동
+        authService.updatePassword(form.getUsername(), form.getPassword());
+        return "redirect:/auth/login";
     }
 }
