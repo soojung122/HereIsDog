@@ -45,5 +45,11 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getReviewsByUserId(String userId) {
         return reviewMapper.findReviewsByUserId(userId);
     }
+    
+    @Override
+    public List<Review> findByCustomerId(Long customerId) {
+        return reviewDAO.findByCustomerId(customerId);
+    }
+
 
 }

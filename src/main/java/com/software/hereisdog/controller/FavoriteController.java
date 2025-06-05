@@ -31,10 +31,10 @@ public class FavoriteController {
 
     @PostMapping("/removeById")
     @ResponseBody
-    public String removeFavorite(@RequestParam Long id,
+    public String removeFavorite(@RequestParam Long placeId,
                                  @SessionAttribute(name = "userId") Long userId) {
-        // userId를 확인하려면 추가 검증 로직 가능 (optional)
-        favoriteService.removeFavoriteById(id);
+        favoriteService.removeFavorite(userId, placeId);
         return "success";
     }
+
 }
