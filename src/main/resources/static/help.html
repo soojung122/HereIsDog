@@ -1,53 +1,117 @@
+
 <html>
 <head>
     <title>여기다멍 - 서비스 안내</title>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <style type="text/css">
-        table#t1 {
-            background-image: url('/images/bkg-topbar.gif');
-            width: 100%;
-            border: none;
-            border-collapse: collapse;
-        }
+     .site-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background-color: white;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 1000;
+    }
 
-        table#t1 tr td {
-            padding: 5px;
-        }
+    .site-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+    }
 
-        table.t2 {
-            width: 100%;
-            border: none;
-            border-collapse: collapse;
-        }
-    </style>
+    .site-logo img {
+        width: 40px;
+        margin-right: 10px;
+    }
+	
+	logoBosy{
+		padding-top: 70px;
+	}
+	
+    body {
+        font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    table.t2 {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        font-size: 16px;
+        line-height: 1.8;
+        color: #333;
+    }
+
+    .t2 h1 {
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .t2 h3 {
+        text-align: center;
+        font-weight: normal;
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .t2 h2 {
+        font-size: 20px;
+        border-left: 4px solid #4CAF50;
+        padding-left: 12px;
+        margin-top: 40px;
+        margin-bottom: 10px;
+        color: #2b2b2b;
+    }
+
+    .t2 p {
+        margin-bottom: 24px;
+    }
+
+    .t2 strong {
+        color: #4CAF50;
+    }
+
+    .t2 hr {
+        margin-top: 60px;
+        border: none;
+        border-top: 1px solid #eee;
+    }
+
+    .t2 p[style] {
+        color: #999;
+        font-size: 14px;
+    }
+</style>
+
 </head>
 
 <body bgcolor="white">
-    <table id="t1">
-        <tbody>
-            <tr>
-                <td>
-                    <a href="/index.html">
-                        <img border="0" src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 80px; height: auto;">
-                    </a>
-                </td>
-                <td align="right">
-                    <a href="/place/list"><img border="0" src="/images/icon-places.gif" alt="장소찾기"></a>
-                    <img border="0" src="/images/separator.gif" alt="">
-                    <a href="/auth/login"><img border="0" src="/images/sign-in.gif" alt="로그인"></a>
-                    <img border="0" src="/images/separator.gif" alt="">
-                    <a href="/help.html"><img border="0" src="/images/help.gif" alt="도움말"></a>
-                </td>
-                <td align="left" valign="bottom">
-                    <form action="/place/search">
-                        <input name="keyword" size="14" placeholder="반려견 장소 검색">
-                        <input src="/images/search.gif" type="image">
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+	<div class="site-header">
+    	<a href="/index.html" class="site-logo">
+        	<img src="/images/HereIsDog-logo.png" alt="로고">
+        	여기다멍
+    	</a>
+    
+    	<div>
+        	<a href="/auth/login" style="margin-right: 15px;">로그인</a>
+        	<a href="/mypage">마이페이지</a>
+    	</div>
+	</div>
     <table class="t2" style="height: 85%">
         <tbody>
             <tr>

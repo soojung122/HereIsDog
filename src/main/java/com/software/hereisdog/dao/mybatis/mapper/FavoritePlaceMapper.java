@@ -8,9 +8,9 @@ import java.util.List;
 @Mapper
 public interface FavoritePlaceMapper {
 
-    // 1. 즐겨찾기 등록
-    @Insert("INSERT INTO FAVORITE_PLACES (ID, USER_ID, NAME, ADDRESS, LIKED) " +
-            "VALUES (#{id}, #{userId}, #{name}, #{address}, #{liked})")
+    // 1. 즐겨찾기 등록 (placeId 추가)
+    @Insert("INSERT INTO FAVORITE_PLACES (ID, USER_ID, PLACE_ID, NAME, ADDRESS, LIKED) " +
+            "VALUES (#{id}, #{userId}, #{placeId}, #{name}, #{address}, #{liked})")
     @SelectKey(statement = "SELECT user_seq.NEXTVAL FROM dual", keyProperty = "id", before = true, resultType = Long.class)
     void insertFavorite(FavoritePlace favoritePlace);
 
@@ -19,17 +19,16 @@ public interface FavoritePlaceMapper {
     List<FavoritePlace> findByUserId(Long userId);
 
     // 3. id로 삭제
-    @Delete("DELETE FROM favorite_places WHERE id = #{id}")
-    void deleteFavoriteById(Long id);
+    @Delete("DELETE FROM favorite_places WHERE user_id = #{userId} AND place_id = #{placeId}")
+    void deleteFavorite(@Param("userId") Long userId, @Param("placeId") Long placeId);
 
-    // ✅ 4. 특정 사용자의 name + address 중복 여부 확인
-    @Select("SELECT * FROM favorite_places WHERE user_id = #{userId} AND name = #{name} AND address = #{address}")
-    FavoritePlace findByUserIdAndPlace(@Param("userId") Long userId,
-                                       @Param("name") String name,
-                                       @Param("address") String address);
+    // ✅ 4. (userId, placeId) 기준으로 중복 확인
+    @Select("SELECT * FROM favorite_places WHERE user_id = #{userId} AND place_id = #{placeId}")
+    FavoritePlace findByUserIdAndPlaceId(@Param("userId") Long userId,
+                                         @Param("placeId") Long placeId);
 
-    // ✅ 5. liked 상태 토글 (true → false or false → true)
-    @Update("UPDATE favorite_places SET liked = NOT liked WHERE id = #{id}")
+    // ✅ 5. liked 상태 토글
+    @Update("UPDATE favorite_places SET liked = CASE WHEN liked = 'Y' THEN 'N' ELSE 'Y' END WHERE id = #{id}")
     void toggleLikedById(Long id);
 
     // (선택) liked 상태를 명시적으로 설정하고 싶을 때

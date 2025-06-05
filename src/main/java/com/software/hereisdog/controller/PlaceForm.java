@@ -6,7 +6,9 @@ package com.software.hereisdog.controller;
  * 장소 등록 및 표시용 DTO (지도 렌더링, REST 응답 포함)
  */
 public class PlaceForm {
-
+	
+	private Long placeId;  // 장소 식별용 ID
+	
     private String name;
 
     private String address;
@@ -22,6 +24,9 @@ public class PlaceForm {
     public PlaceForm() {}
 
     // Getter & Setter
+    public Long getId() { return placeId; }
+    public void setId(Long placeId) { this.placeId = placeId; }
+    
     public String getName() {
         return name;
     }

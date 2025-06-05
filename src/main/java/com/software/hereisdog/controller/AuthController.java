@@ -2,6 +2,7 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.LoginForm;
 import com.software.hereisdog.controller.SignupForm;
+import com.software.hereisdog.domain.User;
 import com.software.hereisdog.service.AuthService;
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.software.hereisdog.service.SignupFormValidator;
 import com.software.hereisdog.service.LoginFormValidator;
+import com.software.hereisdog.service.PasswordResetvalidation;
 
 /**
  * 로그인, 로그아웃, 회원가입을 담당하는 컨트롤러
@@ -60,10 +62,21 @@ public class AuthController {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 틀렸습니다.");
             return "loginForm";
         }
+        
+        // User 객체 조회 및 userId 세션 저장
+        User user = authService.getUserByUsernameAndRole(
+                loginForm.getUsername(),
+                loginForm.getRole()
+            );
 
+        session.setAttribute("userId", user.getId());   
+        
         // 세션에 로그인 정보 저장
-        session.setAttribute("loginUser", loginForm.getUsername());
-        session.setAttribute("role", loginForm.getRole());
+        //session.setAttribute("loginUser", loginForm.getUsername());
+        //session.setAttribute("role", loginForm.getRole());
+        
+        session.setAttribute("loginUser", user);  // User 객체 전체 저장
+
 
         return "redirect:/";  // 로그인 성공 시 메인 페이지로 이동
     }
@@ -82,17 +95,7 @@ public class AuthController {
         return "signupForm";
     }
 
-    /** 회원가입 처리 */
-    /*@PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute SignupForm signupForm,
-                         BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "signupForm";
-        }
 
-        authService.signup(signupForm);
-        return "redirect:/auth/login";
-    }*/
     @GetMapping("/check-session")
     public String checkSession(HttpSession session, Model model) {
         Object loginUser = session.getAttribute("loginUser");
@@ -131,7 +134,14 @@ public class AuthController {
     @PostMapping("/verify-id")
     public String verifyId(@RequestParam String email, @RequestParam String role, Model model) {
         // 아이디 찾기 로직 후 model에 아이디 전달
-        model.addAttribute("foundId", "user1234");
+        
+        String foundId = authService.findUsernameByEmailAndRole(email, role);
+        
+        if (foundId != null) {
+            model.addAttribute("foundId", foundId);
+        } else {
+            model.addAttribute("foundId", "입력한 정보와 일치하는 아이디가 없습니다.");
+        }
         return "idResultForm";  // 아이디 결과 보여주는 JSP
     }
 
@@ -141,25 +151,32 @@ public class AuthController {
     }
 
     @PostMapping("/verify-password")
-    public String verifyPassword(@RequestParam String email, @RequestParam String username, Model model) {
-        // 비밀번호 재설정 화면으로 이동
-        model.addAttribute("username", username);
+    public String verifyPassword(@RequestParam String email,
+                                 @RequestParam String username,
+                                 Model model) {
+        SignupForm form = new SignupForm();
+        form.setUsername(username);  // 히든필드용
+        model.addAttribute("signupForm", form);  // ✅ modelAttribute 등록
+
         return "resetPasswordForm";
     }
     
+    @Autowired
+    private PasswordResetvalidation passwordRevalidation;
+
     @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String username,
-                                @RequestParam String newPassword,
-                                @RequestParam String confirmPassword,
+    public String resetPassword(@ModelAttribute("signupForm") SignupForm form,
+                                BindingResult result,
                                 Model model) {
-        if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("username", username);
-            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-            return "resetPasswordForm"; // 다시 폼으로
+
+        passwordRevalidation.validate(form, result);
+
+        if (result.hasErrors()) {
+            model.addAttribute("username", form.getUsername());  // 다시 넣어줘야 hidden 필드 유지됨
+            return "resetPasswordForm";
         }
 
-        // TODO: 실제 비밀번호 저장 로직 (예: authService.updatePassword(username, newPassword))
-
-        return "redirect:/auth/login"; // 🔁 로그인 페이지로 이동
+        authService.updatePassword(form.getUsername(), form.getPassword());
+        return "redirect:/auth/login";
     }
 }

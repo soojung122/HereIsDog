@@ -19,17 +19,22 @@ public class FavoriteController {
         this.favoriteService = favoriteService;
     }
 
-    /** 즐겨찾기 추가 */
-    @PostMapping("/{placeId}")
-    public String addFavorite(@PathVariable Long placeId, @SessionAttribute(name = "userId") Long userId) {
-        favoriteService.addFavorite(userId, placeId);
-        return "redirect:/places";
+    @PostMapping("/add")
+    @ResponseBody
+    public String addFavorite(@RequestParam Long placeId,
+                              @RequestParam String name,
+                              @RequestParam String address,
+                              @SessionAttribute("userId") Long userId) {
+        return favoriteService.addFavorite(userId, placeId, name, address); // ✅ 그대로 반환
     }
 
-    /** 즐겨찾기 삭제 */
-    @DeleteMapping("/{placeId}")
-    public String removeFavorite(@PathVariable Long placeId, @SessionAttribute(name = "userId") Long userId) {
-        favoriteService.removeFavorite(userId, placeId);
-        return "redirect:/favorites";
+
+    @PostMapping("/removeById")
+    @ResponseBody
+    public String removeFavorite(@RequestParam Long id,
+                                 @SessionAttribute(name = "userId") Long userId) {
+        // userId를 확인하려면 추가 검증 로직 가능 (optional)
+        favoriteService.removeFavoriteById(id);
+        return "success";
     }
 }
