@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface ReviewDAO {
 	List<Review> findByPlaceId(Long placeId);
+	List<Review> findByCustomerId(Long customerId);
 }

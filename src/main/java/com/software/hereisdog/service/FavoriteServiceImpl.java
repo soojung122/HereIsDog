@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import com.software.hereisdog.dao.FavoritePlaceDAO;
 import com.software.hereisdog.domain.FavoritePlace;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 
 /**
@@ -25,4 +26,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void removeFavorite(Long userId, Long placeId) {
         favoritePlaceDAO.deleteFavorite(userId, placeId);
     }
+    
+    @Override
+    public List<FavoritePlace> findByUserId(Long userId) {
+        return favoritePlaceDAO.findByUserId(userId);
+    }
+
 }

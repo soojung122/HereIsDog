@@ -43,4 +43,10 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return result;
     }
+    
+    @Override
+    public List<Review> findByCustomerId(Long customerId) {
+        return reviewDAO.findByCustomerId(customerId);
+    }
+
 }
