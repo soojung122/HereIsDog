@@ -24,25 +24,24 @@ public class FavoriteController {
 
     @PostMapping("/add")
     @ResponseBody
-    public String addFavorite(@RequestParam Long placeId,
-                              @RequestParam String name,
+    public String addFavorite(@RequestParam String name,
                               @RequestParam String address,
                               HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) return "error: not logged in";
 
-        return favoriteService.addFavorite(userId, placeId, name, address);
+        return favoriteService.addFavorite(userId, name, address);
     }
 
-
-    @PostMapping("/removeById")
+    @PostMapping("/remove")
     @ResponseBody
-    public String removeFavorite(@RequestParam Long placeId,
+    public String removeFavorite(@RequestParam String name,
+                                 @RequestParam String address,
                                  HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) return "error: not logged in";
 
-        favoriteService.removeFavorite(userId, placeId);
+        favoriteService.removeFavorite(userId, name, address);
         return "success";
     }
 
