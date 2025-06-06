@@ -40,7 +40,7 @@ public class AuthController {
         this.loginFormValidator = loginFormValidator;
     }
 
-    /** 로그인 폼 페이지 요청 */
+    /** 로그인 폼 페이지 요청 처리*/
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
