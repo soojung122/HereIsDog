@@ -94,7 +94,6 @@
         <select id="subFilter" onchange="applySubFilterAjax(this)">
             <option value="all">전체</option>
             <option value="24hours">24시간 운영</option>
-            <option value="emergency">응급실</option>
         </select>
     </div>
     <div class="container">
@@ -114,9 +113,21 @@ const defaultType = "<%= type %>";
 function applySubFilterAjax(select) {
     const value = select.value;
     let keyword;
-    if (value === '24hours') keyword = '24시간 동물병원';
-    else if (value === 'emergency') keyword = '응급 동물';
-    else keyword = '동물병원';
+
+    if (defaultType === "동물병원") {
+        if (value === '24hours') keyword = '24시간 동물병원';
+        else if (value === 'emergency') keyword = '응급 동물병원';
+        else keyword = '동물병원';
+    } else if (defaultType === "애견카페") {
+        if (value === '24hours') keyword = '24시간 애견카페';
+        else keyword = '애견카페';
+    } else if (defaultType === "공원") {
+    	if (value === '24hours') keyword = '24시간 공원';
+        else keyword = '공원';keyword = '공원';
+    } else {
+        keyword = defaultType; // 기본 fallback
+    }
+
     if (typeof fetchPlaces === "function") {
         if (window.currentInfoWindow) {
             window.currentInfoWindow.close(); // 드롭다운 클릭 시 기존 열려있던 인포윈도우 닫기
@@ -164,7 +175,12 @@ kakaoScript.onload = function () {
                         allResults.push(...data);
                         if (page === 1 && pagination.hasNextPage) fetchPage(2);
                         else renderPlaces(allResults);
-                    } else slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
+                    } else {
+                    	// 🔧 마커 지우기
+                        markers.forEach(m => m.setMap(null));
+                        markers.length = 0;	
+                    	slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
+                    }
                 }, { location: userPosition, page });
             }
             fetchPage(1);
@@ -198,7 +214,7 @@ kakaoScript.onload = function () {
                 });
                 const div = document.createElement("div");
                 div.className = "place-card";
-                div.innerHTML = '<strong><a href="' + place.place_url + '" target="_blank" style="text-decoration:none;color:black">' + place.place_name + '</a></strong><br/><span>📍 ' + (place.road_address_name || place.address_name) + '</span><br/>' + (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
+                div.innerHTML = '<strong>' + place.place_name + '</a></strong><br/><span>📍 ' + (place.road_address_name || place.address_name) + '</span><br/>' + (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
                 div.dataset.index = index;
                 div.onclick = function () {
                     map.setCenter(pos);

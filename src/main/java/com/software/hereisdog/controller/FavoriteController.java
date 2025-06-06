@@ -1,6 +1,9 @@
 package com.software.hereisdog.controller;
 
 import com.software.hereisdog.service.FavoriteService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +27,21 @@ public class FavoriteController {
     public String addFavorite(@RequestParam Long placeId,
                               @RequestParam String name,
                               @RequestParam String address,
-                              @SessionAttribute("userId") Long userId) {
-        return favoriteService.addFavorite(userId, placeId, name, address); // ✅ 그대로 반환
+                              HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return "error: not logged in";
+
+        return favoriteService.addFavorite(userId, placeId, name, address);
     }
 
 
     @PostMapping("/removeById")
     @ResponseBody
     public String removeFavorite(@RequestParam Long placeId,
-                                 @SessionAttribute(name = "userId") Long userId) {
+                                 HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return "error: not logged in";
+
         favoriteService.removeFavorite(userId, placeId);
         return "success";
     }
