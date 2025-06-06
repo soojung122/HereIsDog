@@ -13,11 +13,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoritePlaceMapper favoritePlaceMapper;
 
     @Override
-    public String addFavorite(Long userId, Long placeId, String name, String address) {
-        FavoritePlace existing = favoritePlaceMapper.findByUserIdAndPlaceId(userId, placeId);
+    public String addFavorite(Long userId, String name, String address) {
+        FavoritePlace existing = favoritePlaceMapper.findByUserIdAndPlace(userId, name, address);
 
         if (existing == null) {
-            FavoritePlace favorite = new FavoritePlace(null, userId, placeId, name, address, "Y");
+            FavoritePlace favorite = new FavoritePlace(null, userId, name, address, "Y");
             favoritePlaceMapper.insertFavorite(favorite);
             return "찜 완료!";
         } else if (!"Y".equals(existing.getLiked())) {
@@ -30,8 +30,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public void removeFavorite(Long userId, Long placeId) {
-        favoritePlaceMapper.deleteFavorite(userId, placeId);
+    public void removeFavorite(Long userId, String name, String address) {
+        favoritePlaceMapper.deleteFavorite(userId, name, address);
     }
     
     @Override

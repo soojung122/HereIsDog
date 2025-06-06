@@ -1,10 +1,21 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
+    <meta charset="UTF-8">
     <title>여기다멍 - 서비스 안내</title>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
+
     <style type="text/css">
-     .site-header {
+    body {
+        font-family: 'Quicksand', sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .site-header {
         position: fixed;
         top: 0;
         left: 0;
@@ -32,28 +43,26 @@
         width: 40px;
         margin-right: 10px;
     }
-	
-	logoBosy{
-		padding-top: 70px;
-	}
-	
-    body {
-        font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
+
+    .auth-buttons a {
+        margin-left: 10px;
+        text-decoration: none;
+        background-color: #fdf5b2;
+        padding: 8px 14px;
+        border-radius: 5px;
+        color: black;
+        font-weight: bold;
     }
 
     table.t2 {
         max-width: 900px;
-        margin: 40px auto;
+        margin: 100px auto 40px;
         background: #ffffff;
         padding: 40px;
         border-radius: 12px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         font-size: 16px;
         line-height: 1.8;
-        color: #333;
     }
 
     .t2 h1 {
@@ -96,31 +105,48 @@
         color: #999;
         font-size: 14px;
     }
-</style>
+    </style>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch("/auth/checkLogin")
+            .then(response => response.json())
+            .then(data => {
+                const authArea = document.getElementById("authArea");
+                authArea.innerHTML = "";
+
+                if (data.loggedIn) {
+                    authArea.innerHTML = `
+                        <a href="/mypage">마이페이지</a>
+                        <a href="/auth/logout">로그아웃</a>
+                    `;
+                } else {
+                    authArea.innerHTML = `
+                        <a href="/auth/login">로그인</a>
+                        <a href="/auth/signup">회원가입</a>
+                    `;
+                }
+            });
+    });
+    </script>
 </head>
 
-<body bgcolor="white">
-	<div class="site-header">
-    	<a href="/index.html" class="site-logo">
-        	<img src="/images/HereIsDog-logo.png" alt="로고">
-        	여기다멍
-    	</a>
-    
-    	<div>
-        	<a href="/auth/login" style="margin-right: 15px;">로그인</a>
-        	<a href="/mypage">마이페이지</a>
-    	</div>
-	</div>
-    <table class="t2" style="height: 85%">
+<body>
+    <div class="site-header">
+        <a href="/index.html" class="site-logo">
+            <img src="/images/HereIsDog-logo.png" alt="로고">
+            여기다멍
+        </a>
+        <div id="authArea" class="auth-buttons"></div>
+    </div>
+
+    <table class="t2">
         <tbody>
             <tr>
                 <td valign="top">
                     <div style="text-align: center">
                         <h1>여기다멍 이용 안내</h1>
-                        <h3>
-                            반려견과 함께하는 모든 장소의 정보를 한눈에
-                        </h3>
+                        <h3>반려견과 함께하는 모든 장소의 정보를 한눈에</h3>
                     </div>
 
                     <p>
