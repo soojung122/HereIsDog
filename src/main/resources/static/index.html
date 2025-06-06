@@ -97,10 +97,33 @@
 </head>
 <body>
 
-    <div class="top-nav">
-        <a href="/auth/login">로그인</a>
-        <a href="/auth/signup">회원가입</a>
-    </div>
+    <!-- 로그인 상태에 따라 동적으로 버튼을 만들 영역 -->
+	<div class="top-nav" id="topNav">
+	    <!-- JavaScript가 이 부분을 로그인 상태에 따라 채우는 거임-->
+	</div>
+	
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+	    fetch('/auth/checkLogin')
+	        .then(response => response.json())
+	        .then(data => {
+	            const nav = document.getElementById("topNav");
+	            nav.innerHTML = "";  // 초기화
+	
+	            if (data.loggedIn) {
+	                nav.innerHTML = `
+	                    <a href="/mypage">마이페이지</a>
+	                    <a href="/auth/logout">로그아웃</a>
+	                `;
+	            } else {
+	                nav.innerHTML = `
+	                    <a href="/auth/login">로그인</a>
+	                    <a href="/auth/signup">회원가입</a>
+	                `;
+	            }
+	        });
+	});
+	</script>
 
     <div class="logo">
         <img src="/images/HereIsDog-logo.png" alt="여기다멍 로고" style="width: 60px; height: 60px;">

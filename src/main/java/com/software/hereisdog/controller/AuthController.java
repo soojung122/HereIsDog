@@ -4,6 +4,10 @@ import com.software.hereisdog.controller.LoginForm;
 import com.software.hereisdog.controller.SignupForm;
 import com.software.hereisdog.domain.User;
 import com.software.hereisdog.service.AuthService;
+
+import java.util.HashMap;
+import java.util.Map;
+
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +40,7 @@ public class AuthController {
         this.loginFormValidator = loginFormValidator;
     }
 
-    /** 로그인 폼 페이지 요청 */
+    /** 로그인 폼 페이지 요청 처리*/
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
@@ -178,5 +182,13 @@ public class AuthController {
 
         authService.updatePassword(form.getUsername(), form.getPassword());
         return "redirect:/auth/login";
+    }
+    
+    @GetMapping("/checkLogin")
+    @ResponseBody
+    public Map<String, Object> checkLogin(HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("loggedIn", session.getAttribute("loginUser") != null);  // 또는 "userId"
+        return result;
     }
 }
