@@ -46,25 +46,19 @@
         <img src="/images/HereIsDog-logo.png" alt="로고">
         여기다멍
     </a>
-    <!-- 로그인 여부에 따라 버튼 변경 -->
-    <c:choose>
-        <c:when test="${not empty sessionScope.loginUser}">
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/mypage'">
-                마이페이지
-            </button>
-        </c:when>
-        <c:otherwise>
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/auth/login'">
-                로그인
-            </button>
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/auth/signup'">
-                회원가입
-            </button>
-        </c:otherwise>
-    </c:choose>
+    <!-- 마이페이지 버튼 삽입 영역 -->
+	<c:choose>
+		<c:when test="${not empty sessionScope.loginUser}">
+			<button onclick="location.href='/mypage'" style="padding: 8px 12px;">마이페이지</button>
+		</c:when>
+		<c:otherwise>
+			<button onclick="location.href='/auth/login'"
+				style="padding: 8px 12px;">로그인</button>
+			<button onclick="location.href='/auth/signup'"
+				style="padding: 8px 12px;">회원가입</button>
+		</c:otherwise>
+	</c:choose>
+
 </div>
 
 <script>
