@@ -17,6 +17,7 @@ public abstract class User {
     private String password;        // 비밀번호
     private String email;           // 이메일
     private String businessNumber;  // 사업자 번호 (owner만)
+    private String userType;
 
     public User() {}
 
@@ -67,5 +68,12 @@ public abstract class User {
 
     public void setBusinessNumber(String businessNumber) {
         this.businessNumber = businessNumber;
+    }
+    
+    public String getUserType() {
+        return userType;
+    }
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }
