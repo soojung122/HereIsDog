@@ -48,7 +48,7 @@ public class AuthController {
     public String loginSubmit(@ModelAttribute("loginForm") LoginForm loginForm,
                               BindingResult bindingResult,
                               HttpSession session) {
-
+    	
     	// 수동 검증기 호출
     	loginFormValidator.validate(loginForm, bindingResult);
 
@@ -57,7 +57,7 @@ public class AuthController {
         }
 
         boolean result = authService.login(loginForm.getUsername(), loginForm.getPassword(), loginForm.getRole());
-
+        
         if (!result) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 틀렸습니다.");
             return "loginForm";

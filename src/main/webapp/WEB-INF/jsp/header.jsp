@@ -49,16 +49,14 @@
     <!-- 마이페이지 버튼 삽입 영역 -->
 	<c:choose>
 		<c:when test="${not empty sessionScope.loginUser}">
-			<button onclick="location.href='/mypage'" style="padding: 8px 12px;">마이페이지</button>
+			<a href="/mypage">마이페이지</a>
+			<a href="/auth/logout">로그아웃</a>
 		</c:when>
 		<c:otherwise>
-			<button onclick="location.href='/auth/login'"
-				style="padding: 8px 12px;">로그인</button>
-			<button onclick="location.href='/auth/signup'"
-				style="padding: 8px 12px;">회원가입</button>
+			<a href="/auth/login">로그인</a>
+			<a href="/auth/signup">회원가입</a>
 		</c:otherwise>
 	</c:choose>
-
 </div>
 
 <script>

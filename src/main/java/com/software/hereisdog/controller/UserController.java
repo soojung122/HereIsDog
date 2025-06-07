@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/user")
@@ -19,28 +21,25 @@ public class UserController {
     @Autowired
     private ReviewService reviewService;
 
-//    @GetMapping("/mypage")
-//    public String myPage(Model model, @SessionAttribute("loginUser") Customer customer) {
-//        Long userId = customer.getId();
-//
-//        model.addAttribute("user", customer); // 닉네임/이메일 등 마이페이지 표시
-//        model.addAttribute("favList", favoriteService.findByUserId(userId));
-//        model.addAttribute("reviewList", reviewService.findByCustomerId(userId));
-//        return "user"; 
-//    }
-    
-    @GetMapping("/mypage-test")
-    public String testMyPage(Model model) {
-      
-        Customer testUser = new Customer();
-        testUser.setId(5L); // DB에 있는 사용자 ID
-        testUser.setUsername("yun01");
-        testUser.setEmail("ab@naver.com");
-        
-        model.addAttribute("user", testUser);
-        model.addAttribute("favList", favoriteService.findByUserId(testUser.getId()));
-        model.addAttribute("reviewList", reviewService.findByCustomerId(testUser.getId()));
+    @GetMapping("/mypage")
+    public String myPage(HttpSession session, Model model) {
+        Object loginUser = session.getAttribute("loginUser");
+        if (loginUser == null || !(loginUser instanceof Customer)) {
+            return "redirect:/auth/login";
+        }
 
-        return "user";   
+        Customer customer = (Customer) loginUser;
+        Long userId = customer.getId();
+
+        // 닉네임 username 중 실제 있는 것만!
+        model.addAttribute("user", customer); // nickname/username 출력
+        model.addAttribute("favList", favoriteService.findByUserId(userId));
+        model.addAttribute("reviewList", reviewService.findByCustomerId(userId));
+        return "user"; // user.jsp
+    }
+
+    @GetMapping("")
+    public String userMain() {
+        return "user";
     }
 }

@@ -32,4 +32,9 @@ public class AdminController {
         adminService.deleteUser(userId);
         return "redirect:/admin/users";
     }
+    
+    @GetMapping("")
+    public String adminMain() {
+        return "admin";
+    }
 }
