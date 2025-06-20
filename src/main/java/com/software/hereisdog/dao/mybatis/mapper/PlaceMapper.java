@@ -26,4 +26,8 @@ public interface PlaceMapper {
 
     @Select("SELECT * FROM place WHERE owner_username = #{ownerUsername}")
     Place selectPlaceByOwner(String ownerUsername);
+    
+    @Select("SELECT * FROM place WHERE address = #{address}")
+    Place selectPlaceByAddress(String address);
+
 }

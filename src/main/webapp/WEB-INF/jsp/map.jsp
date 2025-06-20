@@ -235,7 +235,7 @@ kakaoScript.onload = function () {
                 });
                 const div = document.createElement("div");
                 div.className = "place-card";
-                div.innerHTML = '<strong>' + place.place_name + '</a></strong><br/><span>📍 ' + (place.road_address_name || place.address_name) + '</span><br/>' + (place.phone ? '<span>📞 ' + place.phone + '</span>' : '');
+                div.innerHTML = '<strong>' + place.place_name + '</a></strong><br/><span>📍 ' + (place.road_address_name || place.address_name) + '</span>';
                 div.dataset.index = index;
                 div.onclick = function () {
                     map.setCenter(pos);

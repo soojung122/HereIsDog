@@ -72,4 +72,20 @@ public class PlaceServiceImpl implements PlaceService {
         }
         return result;
     }
+    
+    @Override
+    public PlaceForm getPlaceByAddress(String address) {
+        Place place = placeMapper.selectPlaceByAddress(address);
+        if (place == null) return null;
+
+        PlaceForm form = new PlaceForm();
+        form.setName(place.getName());
+        form.setAddress(place.getAddress());
+        form.setDescription(place.getDescription());
+        form.setOwnerUsername(place.getOwnerUsername());
+        form.setOpeningHours(place.getOpeningHours());
+        form.setPhoneNumber(place.getPhoneNumber());
+        form.setType(place.getType()); // type 필드 있는 경우
+        return form;
+    }
 }

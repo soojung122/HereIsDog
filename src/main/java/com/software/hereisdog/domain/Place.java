@@ -7,9 +7,11 @@ public class Place {
     private String address;
     private String description;
 
-    private String ownerUsername;   // 추가
-    private String openingHours;    // 추가
-    private String phoneNumber;     // 추가
+    private String ownerUsername;   
+    private String openingHours;   
+    private String phoneNumber;     
+    private String type;
+
 
     public Place() {}
 
@@ -39,6 +41,14 @@ public class Place {
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getAddress() {

@@ -10,4 +10,5 @@ public interface PlaceService {
 	void registerPlace(PlaceForm placeForm);
     List<PlaceForm> findAll(); // DTO로 반환(프론트 친화적)
     List<PlaceForm> getPlacesByType(String type);
+    PlaceForm getPlaceByAddress(String address);
 }

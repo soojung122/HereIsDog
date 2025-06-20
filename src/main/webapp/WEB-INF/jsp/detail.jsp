@@ -177,6 +177,38 @@
                 <div>영업시간: ${hours}</div>
                 <div>주소: ${address}</div>
                 <div>전화번호: ${phone}</div>
+                
+                <form id="placeRegisterForm">
+				    <input type="hidden" name="name" value="${name}" />
+				    <input type="hidden" name="address" value="${address}" />
+				    <input type="hidden" name="description" value="${name}" />
+				    <input type="hidden" name="phoneNumber" value="${phone}" />
+				    <input type="hidden" name="openingHours" value="${hours}" />
+				    <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
+				</form>
+				
+				<script>
+				function submitMyPlace() {
+				    const form = document.getElementById('placeRegisterForm');
+				    const formData = new FormData(form);
+				
+				    fetch('/places/my', {
+				        method: 'POST',
+				        body: new URLSearchParams(formData)
+				    })
+				    .then(res => res.text())
+				    .then(message => {
+				        alert("가게 등록이 완료되었습니다.");
+				        // 필요하면 버튼 비활성화 등 처리
+				    })
+				    .catch(err => {
+				        alert("등록 중 오류가 발생했습니다.");
+				    });
+				}
+				</script>
+
+                
+                
             </div>
         </div>
 

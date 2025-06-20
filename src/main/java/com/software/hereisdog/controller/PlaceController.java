@@ -72,10 +72,11 @@ public class PlaceController {
                                          @RequestParam(required = false) String phone,
                                          @RequestParam(required = false, name = "place_url") String placeUrl,
                                          @RequestParam(required = false) String image,
+                                         @RequestParam(required = false) String type,
                                          HttpSession session,
                                          Model model) {
 
-        Map<String, Object> placeInfo = new HashMap<>();
+        /*Map<String, Object> placeInfo = new HashMap<>();
         placeInfo.put("name", name);
         placeInfo.put("address", address);
         placeInfo.put("phone", phone);
@@ -86,6 +87,24 @@ public class PlaceController {
 
         model.addAllAttributes(placeInfo);
         model.addAttribute("hours", "24시간 운영");
+
+        return "detail";*/
+    	PlaceForm place = placeService.getPlaceByAddress(address);
+
+        if (place != null) {
+            // DB에서 조회된 경우: DB 값 넘김
+            model.addAttribute("place", place);
+            model.addAttribute("fromDb", true);
+        } else {
+        	model.addAttribute("fromDb", false);
+            model.addAttribute("name", name);
+            model.addAttribute("hours", "9:00 ~ 18:00"); 
+            model.addAttribute("address", address);
+            model.addAttribute("phone", phone);
+            model.addAttribute("place_url", placeUrl);
+            model.addAttribute("image", image);
+            model.addAttribute("type", type);
+        }
 
         return "detail";
     }
