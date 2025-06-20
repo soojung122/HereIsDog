@@ -108,27 +108,35 @@
     </style>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch("/auth/checkLogin")
-            .then(response => response.json())
-            .then(data => {
-                const authArea = document.getElementById("authArea");
-                authArea.innerHTML = "";
-
-                if (data.loggedIn) {
-                    authArea.innerHTML = `
-                        <a href="/mypage">마이페이지</a>
-                        <a href="/auth/logout">로그아웃</a>
-                    `;
-                } else {
-                    authArea.innerHTML = `
-                        <a href="/auth/login">로그인</a>
-                        <a href="/auth/signup">회원가입</a>
-                    `;
-                }
-            });
-    });
-    </script>
+		document.addEventListener("DOMContentLoaded", function () {
+		    fetch("/auth/session-info")  // 🔁 checkLogin → session-info로 바뀌었으면 여기도 수정
+		        .then(response => response.json())
+		        .then(data => {
+		            const authArea = document.getElementById("authArea");
+		            authArea.innerHTML = "";
+		
+		            if (data.loggedIn) {
+		                let mypageUrl = "/mypage/user";  // 기본값
+		
+		                if (data.role === "OWNER") {
+		                    mypageUrl = "/mypage/owner";
+		                } else if (data.role === "ADMIN") {
+		                    mypageUrl = "/mypage/admin";
+		                }
+		
+		                authArea.innerHTML = `
+		                    <a href="${mypageUrl}">마이페이지</a>
+		                    <a href="/auth/logout">로그아웃</a>
+		                `;
+		            } else {
+		                authArea.innerHTML = `
+		                    <a href="/auth/login">로그인</a>
+		                    <a href="/auth/signup">회원가입</a>
+		                `;
+		            }
+		        });
+		});
+		</script>
 </head>
 
 <body>

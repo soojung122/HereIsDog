@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>여기다멍 - 관리자 페이지</title>
     <style>
-        body { background: #fff; font-family: '맑은 고딕', Arial, sans-serif; margin: 0; padding: 0; }
+        body { background: #fff; font-family: '맑은 고딕', Arial, sans-serif; margin: 0; padding: 40px; }
         .header { display: flex; align-items: center; margin-top: 40px; margin-bottom: 18px; gap: 14px; margin-left: 55px; }
         .logo { width: 48px; height: 48px; background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center/cover; }
         .header-title { font-size: 2.1rem; font-weight: bold; }
@@ -65,11 +65,6 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo"></div>
-        <span class="header-title">여기다멍</span>
-        <span class="admin-title">관리자 페이지</span>
-    </div>
     <div class="manage-box">
         <div class="manage-label">회원 관리(방문객, 오너)</div>
         <div class="member-table">

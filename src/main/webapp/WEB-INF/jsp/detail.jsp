@@ -53,9 +53,10 @@
             padding: 20px;
         }
         .image-section img {
-            width: 100%;
-            border-radius: 8px;
-        }
+		    width: 300px;     /* 가로 크기 고정 */
+		    height: auto;     /* 세로는 비율에 따라 자동 */
+		    border-radius: 8px;
+		}
         .info-section {
             width: 40%;
             padding: 20px;
@@ -119,18 +120,31 @@
     <div class="container">
         <div class="main">
             <div class="image-section">
-                <img src="${image}" alt="장소 이미지">
-                <div style="margin-top: 10px;">
-                    <c:choose>
-                        <c:when test="${not empty place_url}">
-                            <a href="${place_url}" target="_blank" style="color: blue;">카카오맵에서 보기</a>
-                        </c:when>
-                        <c:otherwise>
-                            <span style="color: gray;">카카오맵 링크: 준비 중입니다</span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
+			    <c:choose>
+			        <c:when test="${not empty image 
+			            and fn:contains(image, '/') 
+			            and not fn:contains(image, 'via.placeholder.com')}">
+			            <img src="${image}" alt="장소 이미지">
+			        </c:when>
+			        <c:otherwise>
+			            <c:choose>
+			                <c:when test="${param.type eq '동물병원'}">
+			                    <img src="/images/animal_hospital.png" alt="동물병원 이미지">
+			                </c:when>
+			                <c:when test="${param.type eq '애견카페'}">
+			                    <img src="/images/dog_cafe.png" alt="애견카페 이미지">
+			                </c:when>
+			                <c:when test="${param.type eq '공원'}">
+			                    <img src="/images/park.png" alt="공원 이미지">
+			                </c:when>
+			                <c:otherwise>
+			                    <img src="/images/HereIsDog-logo.png" alt="기본 이미지">
+			                </c:otherwise>
+			            </c:choose>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
+
 
             <div class="info-section">
                 <div class="highlight">

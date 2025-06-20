@@ -30,4 +30,20 @@ public class MypageController {
         // 3) 그 외는 일반 유저 페이지로
         return "redirect:/user";
     }
+    
+     // 명시적 페이지 매핑 추가
+        @GetMapping("/mypage/user")
+        public String userPage() {
+            return "user";
+        }
+    
+        @GetMapping("/mypage/owner")
+        public String ownerPage() {
+            return "owner";
+        }
+    
+        @GetMapping("/mypage/admin")
+        public String adminPage() {
+            return "admin";
+        }
 }

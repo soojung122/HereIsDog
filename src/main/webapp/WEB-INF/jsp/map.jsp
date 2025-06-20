@@ -228,7 +228,8 @@ kakaoScript.onload = function () {
                         + "&address=" + encodeURIComponent(place.road_address_name || place.address_name)
                         + "&phone=" + encodeURIComponent(place.phone || '')
                         + "&image=" + encodeURIComponent('')
-                        + "&place_url=" + encodeURIComponent(place.place_url || '');
+                        + "&place_url=" + encodeURIComponent(place.place_url || '')
+                        + "&type=" + encodeURIComponent(defaultType);
 
                     location.href = url;
                 };

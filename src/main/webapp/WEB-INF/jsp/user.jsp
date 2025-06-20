@@ -12,7 +12,7 @@
                     background: #fff;
                     font-family: '맑은 고딕', Arial, sans-serif;
                     margin: 0;
-                    padding: 0;
+                    padding: 40px;
                 }
 
                 .header {
@@ -153,10 +153,6 @@
         </head>
 
         <body>
-            <div class="header">
-                <div class="logo"></div>
-                <span class="header-title">여기다멍</span>
-            </div>
             <div class="main-wrap">
                 <div class="profile-area">
                     <div class="profile-img"
