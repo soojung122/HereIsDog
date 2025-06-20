@@ -55,38 +55,11 @@
         여기다멍
     </a>
     <!-- 로그인 여부에 따라 버튼 변경 -->
-    <div id="authArea"></div>
-		</div>
-		
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-			    fetch("/session-info")  // ← 여기에 맞게 경로 수정
-			        .then(response => response.json())
-			        .then(data => {
-			            const authArea = document.getElementById("authArea");
-			            authArea.innerHTML = "";
-			
-			            if (data.loggedIn) {
-			                let mypageUrl = "/mypage/user";  // 기본값
-			
-			                if (data.role === "OWNER") {
-			                    mypageUrl = "/mypage/owner";
-			                } else if (data.role === "ADMIN") {
-			                    mypageUrl = "/mypage/admin";
-			                }
-			
-			                authArea.innerHTML = `
-			                    <a href="${mypageUrl}">마이페이지</a>
-			                    <a href="/auth/logout">로그아웃</a>
-			                `;
-			            }
-			        })
-			        .catch(err => {
-			            console.error("세션 확인 실패:", err);
-			            document.getElementById("authArea").innerText = "네트워크 오류";
-			        });
-			});
-			</script>
+    <div id="authArea">
+    <button type="button" onclick="location.href='/mypage'">마이페이지</button>
+    <button type="button" onclick="location.href='/auth/logout'">로그아웃</button>
+	</div>
+</div>
 
 <script>
     let lastScrollTop = 0;

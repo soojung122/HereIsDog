@@ -18,7 +18,6 @@ public class MypageController {
         }
 
         String userType = loginUser.getUserType(); // "ADMIN", "OWNER", "USER" 중 하나
-        System.out.println(">> loginUser.getUserType() = " + userType);
         if ("ADMIN".equalsIgnoreCase(userType)) {
             return "redirect:/mypage/admin";
         } else if ("OWNER".equalsIgnoreCase(userType)) {
