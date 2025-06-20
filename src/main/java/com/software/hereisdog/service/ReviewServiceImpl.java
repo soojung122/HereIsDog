@@ -43,4 +43,37 @@ public class ReviewServiceImpl implements ReviewService {
         }
         return result;
     }
+<<<<<<< Updated upstream
+=======
+
+    @Override
+    public List<Review> getReviewsByPlaceId(String placeId) {
+        return reviewMapper.findByPlaceId(placeId);
+    }
+
+    @Override
+    public List<Review> getReviewsByUserId(String userId) {
+        return reviewMapper.findReviewsByUserId(userId);
+    }
+    
+    /*@Override
+    public List<Review> findByCustomerId(Long customerId) {
+        return reviewDAO.findByCustomerId(customerId);
+    }*/
+    
+    @Override
+    public Double getAverageRatingByPlaceId(String placeId) {
+        List<Review> reviews = reviewMapper.findByPlaceId(placeId); // ✅ Mapper로 통일
+        if (reviews.isEmpty()) return null;
+
+        return reviews.stream()
+                      .mapToInt(Review::getRating)
+                      .average()
+                      .orElse(0.0);
+    }
+
+
+
+
+>>>>>>> Stashed changes
 }

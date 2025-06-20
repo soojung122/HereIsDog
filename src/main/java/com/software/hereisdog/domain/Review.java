@@ -5,7 +5,13 @@ package com.software.hereisdog.domain;
  */
 public class Review {
 
+<<<<<<< Updated upstream
     private Long id;
+=======
+	private Long id;              // DB가 자동 생성
+    private String placeId;
+    private String userId;
+>>>>>>> Stashed changes
     private String content;
     private int rating;
     private Place place;
@@ -28,6 +34,25 @@ public class Review {
     public void setId(Long id) {
         this.id = id;
     }
+<<<<<<< Updated upstream
+=======
+    
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+>>>>>>> Stashed changes
 
     public String getContent() {
         return content;

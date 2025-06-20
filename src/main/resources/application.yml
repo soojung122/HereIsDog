@@ -36,6 +36,6 @@ logging:
           dao:
             mybatis:
               mapper: DEBUG           
-  
+
 server:
   port: 8080

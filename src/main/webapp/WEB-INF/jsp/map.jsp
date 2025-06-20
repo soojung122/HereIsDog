@@ -212,12 +212,32 @@
                     bounds.extend(pos);
                 });
 
+<<<<<<< Updated upstream
                 map.setBounds(bounds);
             } else {
                 slidePanel.innerHTML = "<div>검색 결과가 없습니다.</div>";
             }
         });
 
+=======
+                    const placeId = place.place_name + "_" + (place.road_address_name || place.address_name);
+                    const url = "/places/detail"
+                        + "?placeId=" + encodeURIComponent(placeId)
+                        + "&name=" + encodeURIComponent(place.place_name)
+                        + "&address=" + encodeURIComponent(place.road_address_name || place.address_name)
+                        + "&phone=" + encodeURIComponent(place.phone || '')
+                        + "&image=" + encodeURIComponent('')
+                        + "&place_url=" + encodeURIComponent(place.place_url || '');
+
+              	location.href = url;
+
+                };
+                slidePanel.appendChild(div);
+                bounds.extend(pos);
+            });
+            map.setBounds(bounds);
+        }
+>>>>>>> Stashed changes
 
     // Kakao 지도 비동기 로딩
     const kakaoScript = document.createElement("script");
