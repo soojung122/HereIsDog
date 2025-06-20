@@ -17,7 +17,7 @@ public class MypageController {
             return "redirect:/auth/login";  // 로그인 안 했으면 로그인 페이지로
         }
 
-        String userType = loginUser.getUserType(); // "ADMIN", "OWNER", "USER" 중 하나
+        String userType = loginUser.getUserType(); // "ADMIN", "OWNER", "USER" 중 하나인 타입 가져오기(마이페이지 연동을 위해)
         if ("ADMIN".equalsIgnoreCase(userType)) {
             return "redirect:/mypage/admin";
         } else if ("OWNER".equalsIgnoreCase(userType)) {

@@ -54,7 +54,7 @@
         <img src="/images/HereIsDog-logo.png" alt="로고">
         여기다멍
     </a>
-    <!-- 로그인 여부에 따라 버튼 변경 -->
+    <!-- 로그인 여부에 따라 버튼 변경 -> 이건 mypage 컨트롤러에서 -->
     <div id="authArea">
     <button type="button" onclick="location.href='/mypage'">마이페이지</button>
     <button type="button" onclick="location.href='/auth/logout'">로그아웃</button>
