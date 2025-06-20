@@ -42,12 +42,12 @@ public class OwnerController {
         // 오너 username으로 가게 조회
         String username = loginUser.getUsername();
         List<Place> places = ownerService.findPlacesByOwner(username);
-
+//        List<Place> places = ownerService.findPlacesByOwner("testOwnerUsername");
         // 한 가게만 보여주고 싶으면 (첫 번째 가게만)
         Place shop = places.isEmpty() ? null : places.get(0);
         model.addAttribute("shop", shop);
 
-        // 오너 정보도 같이 전달 (User 객체지만 JSP에서 owner.nickname 등 사용 가능)
+        //오너 정보도 같이 전달 (User 객체지만 JSP에서 owner.nickname 등 사용 가능)
         model.addAttribute("owner", loginUser);
 
         return "owner";

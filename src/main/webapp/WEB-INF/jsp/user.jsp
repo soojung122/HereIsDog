@@ -154,14 +154,7 @@ body {
 				👤</div>
 			<!-- 닉네임 또는 username 중 실제 DB 컬럼명과 맞게! -->
 			<div class="nickname">
-				<c:choose>
-					<c:when test="${not empty user.nickname}">
-                        ${user.nickname}
-                    </c:when>
-					<c:otherwise>
-                        ${user.username}
-                    </c:otherwise>
-				</c:choose>
+				${user.username}
 			</div>
 			<!-- 찜 목록 -->
 			<div class="fav-box">
@@ -198,6 +191,10 @@ body {
 					</c:if>
 				</div>
 			</div>
+<!-- 			<p>user.id = ${user.id}</p>
+			<p>user.username = ${user.username}</p>
+			<p>user.nickname = ${user.nickname}</p>
+-->
 		</div>
 	</div>
 </body>

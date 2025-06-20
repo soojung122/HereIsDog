@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpSession;
 import com.software.hereisdog.service.SignupFormValidator;
 import com.software.hereisdog.service.LoginFormValidator;
 import com.software.hereisdog.service.PasswordResetvalidation;
+import com.software.hereisdog.domain.Customer;
+import com.software.hereisdog.domain.Owner;
+
 
 /**
  * 로그인, 로그아웃, 회원가입을 담당하는 컨트롤러
@@ -48,37 +51,41 @@ public class AuthController {
     public String loginSubmit(@ModelAttribute("loginForm") LoginForm loginForm,
                               BindingResult bindingResult,
                               HttpSession session) {
-    	
-    	// 수동 검증기 호출
-    	loginFormValidator.validate(loginForm, bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            return "loginForm";
-        }
+        // 1) 검증 생략…
 
-        boolean result = authService.login(loginForm.getUsername(), loginForm.getPassword(), loginForm.getRole());
-        
+        boolean result = authService.login(
+            loginForm.getUsername(),
+            loginForm.getPassword(),
+            loginForm.getRole()
+        );
         if (!result) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 틀렸습니다.");
             return "loginForm";
         }
-        
-        // User 객체 조회 및 userId 세션 저장
-        User user = authService.getUserByUsernameAndRole(
-                loginForm.getUsername(),
-                loginForm.getRole()
+
+        // 2) role 값을 소문자로 고정해서 비교
+        String role = loginForm.getRole() == null 
+                      ? "" 
+                      : loginForm.getRole().trim().toLowerCase();
+
+        if ("owner".equals(role)) {
+            // 진짜 owner 라면
+            Owner owner = (Owner) authService.getUserByUsernameAndRole(
+                loginForm.getUsername(), loginForm.getRole()
             );
+            session.setAttribute("loginUser", owner);
+            session.setAttribute("userId", owner.getId());
+        } else {
+            // owner 외 모든 경우는 customer 로 처리
+            Customer customer = (Customer) authService.getUserByUsernameAndRole(
+                loginForm.getUsername(), loginForm.getRole()
+            );
+            session.setAttribute("loginUser", customer);
+            session.setAttribute("userId", customer.getId());
+        }
 
-        session.setAttribute("userId", user.getId());   
-        
-        // 세션에 로그인 정보 저장
-        //session.setAttribute("loginUser", loginForm.getUsername());
-        //session.setAttribute("role", loginForm.getRole());
-        
-        session.setAttribute("loginUser", user);  // User 객체 전체 저장
-
-
-        return "redirect:/";  // 로그인 성공 시 메인 페이지로 이동
+        return "redirect:/user";
     }
 
     /** 로그아웃 처리 */

@@ -28,13 +28,16 @@ public class UserController {
             return "redirect:/auth/login";
         }
 
-        Customer customer = (Customer) loginUser;
-        Long userId = customer.getId();
+        Customer customer = (Customer) session.getAttribute("loginUser");
 
+        Long userId = customer.getId();               // 찜용
+        String username = customer.getUsername();     // 리뷰용
+
+        
         // 닉네임 username 중 실제 있는 것만!
         model.addAttribute("user", customer); // nickname/username 출력
         model.addAttribute("favList", favoriteService.findByUserId(userId));
-        model.addAttribute("reviewList", reviewService.findByCustomerId(userId));
+        model.addAttribute("reviewList", reviewService.getReviewsByUserId(username));
         return "user"; // user.jsp
     }
 
