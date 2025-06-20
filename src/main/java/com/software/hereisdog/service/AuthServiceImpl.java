@@ -60,9 +60,17 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public User getUserByUsernameAndRole(String username, String role) {
         if ("owner".equals(role)) {
-            return userMapper.findOwnerByUsername(username);
+            Owner owner = userMapper.findOwnerByUsername(username);
+            if (owner != null) {
+                owner.setUserType("OWNER"); // 🔥 여기가 핵심!
+            }
+            return owner;
         } else {
-            return userMapper.findCustomerByUsername(username);
+            Customer customer = userMapper.findCustomerByUsername(username);
+            if (customer != null) {
+                customer.setUserType("USER"); // 🔥 여기도!
+            }
+            return customer;
         }
     }
     

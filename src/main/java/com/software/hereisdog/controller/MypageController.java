@@ -14,21 +14,18 @@ public class MypageController {
     public String redirectMypage(HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) {
-            return "redirect:/auth/login";  // 로그인 안했으면 로그인 페이지로
+            return "redirect:/auth/login";  // 로그인 안 했으면 로그인 페이지로
         }
 
-        // 1) 관리자 하드코딩 판단 (username으로)
-        if (ADMIN_USERNAME.equals(loginUser.getUsername())) {
-            return "redirect:/admin";
+        String userType = loginUser.getUserType(); // "ADMIN", "OWNER", "USER" 중 하나
+        System.out.println(">> loginUser.getUserType() = " + userType);
+        if ("ADMIN".equalsIgnoreCase(userType)) {
+            return "redirect:/mypage/admin";
+        } else if ("OWNER".equalsIgnoreCase(userType)) {
+            return "redirect:/mypage/owner";
+        } else {
+            return "redirect:/mypage/user";  // 기본은 일반 사용자
         }
-
-        // 2) 오너/유저 구분 : businessNumber 필드로 판단 (사업자 번호가 있으면 오너)
-        if (loginUser.getBusinessNumber() != null && !loginUser.getBusinessNumber().isEmpty()) {
-            return "redirect:/owner";
-        }
-
-        // 3) 그 외는 일반 유저 페이지로
-        return "redirect:/user";
     }
     
      // 명시적 페이지 매핑 추가
