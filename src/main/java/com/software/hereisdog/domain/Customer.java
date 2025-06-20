@@ -7,6 +7,7 @@ public class Customer extends User {
 
     public Customer() {
         super();
+        setRole("customer");
     }
 
     public Customer(Long id, String username, String password, String email) {

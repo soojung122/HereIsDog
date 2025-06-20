@@ -89,6 +89,27 @@
         }
     </style>
 </head>
+
+<c:forEach var="place" items="${places}">
+    <div class="place-card">
+        <div>
+            <strong>${place.name}</strong> 📍 ${place.address} ☎ ${place.phoneNumber}
+        </div>
+
+        <c:if test="${sessionScope.loginUser.role == 'owner'}">
+            <form method="post" action="/places/my">
+                <input type="hidden" name="name" value="${place.name}" />
+                <input type="hidden" name="address" value="${place.address}" />
+                <input type="hidden" name="description" value="${place.description}" />
+                <input type="hidden" name="phoneNumber" value="${place.phoneNumber}" />
+                <input type="hidden" name="openingHours" value="24시간 운영" />
+                <button type="submit">내 가게로 저장</button>
+            </form>
+        </c:if>
+    </div>
+</c:forEach>
+
+
 <body>
     <div class="filter-dropdown">
         <select id="subFilter" onchange="applySubFilterAjax(this)">

@@ -1,8 +1,5 @@
 package com.software.hereisdog.domain;
 
-/**
- * 장소(Place) 정보를 담는 클래스
- */
 public class Place {
 
     private Long id;
@@ -10,16 +7,24 @@ public class Place {
     private String address;
     private String description;
 
+    private String ownerUsername;   // 추가
+    private String openingHours;    // 추가
+    private String phoneNumber;     // 추가
+
     public Place() {}
 
-    public Place(Long id, String name, String address, String description) {
+    public Place(Long id, String name, String address, String description,
+                 String ownerUsername, String openingHours, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
+        this.ownerUsername = ownerUsername;
+        this.openingHours = openingHours;
+        this.phoneNumber = phoneNumber;
     }
 
-    // Getter & Setter
+    // Getter & Setter (필수 필드만)
     public Long getId() {
         return id;
     }
@@ -50,5 +55,29 @@ public class Place {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
+    }
+
+    public String getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(String openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -14,6 +14,10 @@ public class PlaceForm {
     private String address;
 
     private String description;
+    private String ownerUsername;
+    private String openingHours;
+    private String phoneNumber;
+
 
     // 지도 표시용 필드
     private double lat;    // 위도
@@ -74,4 +78,28 @@ public class PlaceForm {
     public void setType(String type) {
         this.type = type;
     }
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public void setOwnerUsername(String ownerUsername) {
+        this.ownerUsername = ownerUsername;
+    }
+
+    public String getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(String openingHours) {
+        this.openingHours = openingHours;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 }

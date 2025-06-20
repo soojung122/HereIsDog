@@ -7,6 +7,7 @@ public class Owner extends User {
 
     public Owner() {
         super();
+        setRole("owner");
     }
 
     public Owner(Long id, String username, String password, String email, String businessNumber) {

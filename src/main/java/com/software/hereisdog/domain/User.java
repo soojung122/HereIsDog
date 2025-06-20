@@ -18,7 +18,8 @@ public abstract class User {
     private String email;           // 이메일
     private String businessNumber;  // 사업자 번호 (owner만)
     private String userType;
-
+    private String role;
+    
     public User() {}
 
     public User(Long id, String username, String password, String email, String businessNumber) {
@@ -30,6 +31,14 @@ public abstract class User {
     }
 
     // Getter / Setter
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
     public Long getId() {
         return id;
     }
