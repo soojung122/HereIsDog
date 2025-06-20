@@ -1,184 +1,231 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <%@ include file="/WEB-INF/jsp/header.jsp" %>
-        <!DOCTYPE html>
-        <html lang="ko">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>여기다멍 - 마이페이지(사용자)</title>
+    <style>
+        body {
+            background: #fff;
+            font-family: '맑은 고딕', Arial, sans-serif;
+            margin: 0;
+            padding: 100px;
+        }
 
-        <head>
-            <meta charset="UTF-8">
-            <title>여기다멍 - 마이페이지(사용자)</title>
-            <style>
-                body {
-                    background: #fff;
-                    font-family: '맑은 고딕', Arial, sans-serif;
-                    margin: 0;
-                    padding: 40px;
-                }
+        .main-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
 
-                .header {
-                    display: flex;
-                    align-items: center;
-                    margin-top: 40px;
-                    margin-bottom: 12px;
-                    gap: 14px;
-                    margin-left: 55px;
-                }
+        .profile-row {
+            display: flex;
+            gap: 300px; /* 두 박스 사이 간격 */
+    		justify-content: flex-start;
+            align-items: flex-start;
+        }
 
-                .logo {
-                    width: 48px;
-                    height: 48px;
-                    background: url('https://cdn-icons-png.flaticon.com/512/616/616408.png') no-repeat center/cover;
-                }
+        .profile-img-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-                .header-title {
-                    font-size: 2.1rem;
-                    font-weight: bold;
-                }
+        .profile-img {
+            width: 180px;
+            height: 180px;
+            background: #e3e0ec;
+            border: 2px solid #888;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+        }
 
-                .main-wrap {
-                    display: flex;
-                    justify-content: center;
-                    margin-top: 40px;
-                }
+        .nickname {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-top: 12px;
+        }
 
-                .profile-area {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    min-width: 320px;
-                }
+        .fav-box {
+            background: #fdfca3;
+            border: 2px solid #888;
+            border-radius: 20px;
+            padding: 18px 20px;
+            min-width: 240px;
+            width: 300px;  
+		    height: 130px;    
+        }
 
-                .profile-img {
-                    width: 140px;
-                    height: 140px;
-                    background: #e3e0ec;
-                    border: 2px solid #888;
-                    border-radius: 15px;
-                    margin-bottom: 14px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
+        .fav-item {
+            font-size: 1.02rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
 
-                .profile-img img {
-                    width: 82px;
-                    height: 98px;
-                }
+        .fav-item:last-child {
+            margin-bottom: 0;
+        }
+		.fav-wrapper {
+		    display: flex;
+		    flex-direction: column;
+		    align-items: flex-start;  /* 제목과 박스를 왼쪽 정렬 */
+		    gap: 8px;
+		    margin-top: 12px;
+		}
+		.fav-title {
+		    text-align: left; 
+		    font-weight: bold;
+		    font-size: 1.1rem;
+		    margin-bottom: 10px;
+		    margin-left: 30px;
+		}
+		.fav-scroll {
+		    max-height: 130px;
+		    overflow-y: auto;
+		    padding-right: 10px;  /* 스크롤바와 텍스트 간격 */
+		    box-sizing: content-box;
+		}
+        .bone {
+            margin-right: 6px;
+        }
 
-                .nickname {
-                    font-size: 1.3rem;
-                    font-weight: 500;
-                    margin-bottom: 18px;
-                }
+        .reviews-box {
+            margin-top: 10px;
+            background: #fdfca3;
+            border: 2px solid #888;
+            border-radius: 30px;
+            padding: 25px;
+            width: 100%;  
+		    height: 200px;    
+            
+        }
 
-                .fav-box,
-                .reviews-box {
-                    background: #faf8b3;
-                    border: 2px solid #888;
-                    border-radius: 28px;
-                    padding: 16px 30px;
-                    box-sizing: border-box;
-                    margin-top: 12px;
-                    min-width: 260px;
-                    max-width: 340px;
-                }
+        .reviews-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-top: 40px;
+            margin-left: 30px;
+        }
 
-                .fav-title,
-                .reviews-title {
-                    font-size: 1.08rem;
-                    margin-bottom: 7px;
-                }
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 20px; 
+        }
 
-                .fav-item {
-                    font-size: 1.09rem;
-                    display: flex;
-                    align-items: center;
-                    margin-bottom: 5px;
-                    gap: 6px;
-                }
+        .review-item {
+            background: #eee;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #bbb;
+        }
+        .reviews-scroll {
+		    max-height: 200px;        
+		    overflow-y: auto;
+		    border-radius: 20px;      
+		}
 
-                .fav-item:last-child {
-                    margin-bottom: 0;
-                }
+        .flag {
+            color: #ef5151;
+        }
 
-                .bone {
-                    font-size: 1.12rem;
-                    margin-right: 6px;
-                }
+        @media (max-width: 768px) {
+            .profile-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
 
-                .reviews-list {
-                    max-height: 200px;
-                    overflow-y: auto;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                }
+            .fav-box {
+                width: 100%;
+            }
 
-                .review-item {
-                    background: #eee;
-                    border-radius: 9px;
-                    padding: 9px 14px;
-                    font-size: 1.02rem;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    border: 1.2px solid #ccc;
-                }
+            .reviews-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-wrap">
+    <div class="profile-row">
+	    <div class="profile-img-box">
+	        <div class="profile-img">👤</div>
+	        <div class="nickname">${user.nickname}</div>
+	    </div>
+	
+	    <div class="fav-column">
+	        <div class="fav-title">찜 목록<br><span style="font-size: 0.9rem; font-weight: normal;"></span></div>
+	        <div class="fav-box">
+			    <div class="fav-scroll">
+			        <c:choose>
+			            <c:when test="${empty favList}">
+			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
+			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
+			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
+			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
+			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
+			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
+			            </c:when>
+			            <c:otherwise>
+			                <c:forEach var="fav" items="${favList}">
+			                    <div class="fav-item">
+			                        <span class="bone">🦴</span> ${fav.placeName}
+			                    </div>
+			                </c:forEach>
+			            </c:otherwise>
+			        </c:choose>
+			    </div>
+			</div>
+	    </div>
+	</div>
 
-                .flag {
-                    font-size: 1.1rem;
-                    color: #ef5151;
-                    margin-right: 4px;
-                }
-
-                @media (max-width: 900px) {
-                    .main-wrap {
-                        flex-direction: column;
-                        align-items: center;
-                    }
-
-                    .profile-area {
-                        width: 95%;
-                        max-width: 95%;
-                    }
-
-                    .fav-box,
-                    .reviews-box {
-                        min-width: unset;
-                        max-width: unset;
-                        width: 95%;
-                    }
-                }
-            </style>
-        </head>
-
-        <body>
-            <div class="main-wrap">
-                <div class="profile-area">
-                    <div class="profile-img"
-                        style="font-size:70px; display:flex; align-items:center; justify-content:center;">
-                        👤
-                    </div>
-                    <div class="nickname">${user.nickname}</div>
-                    <div class="fav-box">
-                        <div class="fav-title"><b>찜</b></div>
-                        <c:forEach var="fav" items="${favList}">
-                            <div class="fav-item"><span class="bone">🔧</span>${fav.placeName}</div>
-                        </c:forEach>
-                    </div>
-                    <div class="reviews-box">
-                        <div class="reviews-title"><b>Review</b></div>
-                        <div class="reviews-list">
-                            <c:forEach var="review" items="${reviewList}">
-                                <div class="review-item">
-                                    <span class="flag">🚩</span> <b>${review.placeName}</b> <span
-                                        style="color:#888;">"${review.content}"</span>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </body>
-
-        </html>
+    <div class="reviews-title">작성한 리뷰</div>
+		<div class="reviews-box">
+			<div class="reviews-scroll"> 
+			    <div class="reviews-list">
+				    <c:choose>
+				        <c:when test="${empty reviewList}">
+				            <div class="review-item">
+				                <span class="flag">🚩</span> <b>예시카페</b>
+				                <span style="color:#888;">"분위기가 좋아요!"</span>
+				            </div>
+				            <div class="review-item">
+				                <span class="flag">🚩</span> <b>멍멍펍</b>
+				                <span style="color:#888;">"반려견과 편하게 즐겼어요."</span>
+				            </div>
+				            <div class="review-item">
+				                <span class="flag">🚩</span> <b>예시카페</b>
+				                <span style="color:#888;">"분위기가 좋아요!"</span>
+				            </div>
+				            <div class="review-item">
+				                <span class="flag">🚩</span> <b>멍멍펍</b>
+				                <span style="color:#888;">"반려견과 편하게 즐겼어요."</span>
+				            </div>
+				        </c:when>
+				        <c:otherwise>
+				            <c:forEach var="review" items="${reviewList}">
+				                <div class="review-item">
+				                    <span class="flag">🚩</span>
+				                    <b>${review.placeName}</b> <span style="color:#888;">"${review.content}"</span>
+				                </div>
+				            </c:forEach>
+				        </c:otherwise>
+				    </c:choose>
+				</div>
+			</div>
+		</div>
+</div>
+</body>
+</html>

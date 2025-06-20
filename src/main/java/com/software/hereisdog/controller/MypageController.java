@@ -14,7 +14,7 @@ public class MypageController {
     public String redirectMypage(HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) {
-            return "redirect:/auth/login";  // 로그인 안 했으면 로그인 페이지로
+            return "redirect:/auth/login";  // 로그인 안 했으면 로그인 페이지로 이동하게
         }
 
         String userType = loginUser.getUserType(); // "ADMIN", "OWNER", "USER" 중 하나인 타입 가져오기(마이페이지 연동을 위해)
