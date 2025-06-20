@@ -191,4 +191,21 @@ public class AuthController {
         result.put("loggedIn", session.getAttribute("loginUser") != null);  // 또는 "userId"
         return result;
     }
+    
+    @GetMapping("/session-info")
+    @ResponseBody
+    public Map<String, Object> getSessionInfo(HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        if (loginUser != null) {
+            result.put("loggedIn", true);
+            result.put("role", loginUser.getUserType());
+            result.put("username", loginUser.getUsername());
+        } else {
+            result.put("loggedIn", false);
+        }
+
+        return result;
+    }
 }

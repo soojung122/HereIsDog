@@ -39,6 +39,14 @@
     body {
         padding-top: 70px; /* 헤더 높이만큼 공간 확보 */
     }
+    button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
 </style>
 
 <div class="site-header" id="siteHeader">
@@ -47,24 +55,12 @@
         여기다멍
     </a>
     <!-- 로그인 여부에 따라 버튼 변경 -->
-    <c:choose>
-        <c:when test="${not empty sessionScope.loginUser}">
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/mypage'">
-                마이페이지
-            </button>
-        </c:when>
-        <c:otherwise>
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/auth/login'">
-                로그인
-            </button>
-            <button style="padding: 8px 12px;"
-                onclick="location.href='${pageContext.request.contextPath}/auth/signup'">
-                회원가입
-            </button>
-        </c:otherwise>
-    </c:choose>
+    <c:if test="${not empty sessionScope.loginUser}">
+    <button style="padding: 8px 12px;"
+        onclick="location.href='${pageContext.request.contextPath}/mypage'">
+        마이페이지
+    </button>
+	</c:if>
 </div>
 
 <script>
