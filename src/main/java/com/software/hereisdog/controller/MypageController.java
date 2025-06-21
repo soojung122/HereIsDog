@@ -33,10 +33,10 @@ public class MypageController {
             return "user";
         }
     
-        @GetMapping("/mypage/owner")
+        /*@GetMapping("/mypage/owner")
         public String ownerPage() {
             return "owner";
-        }
+        }*/
     
         @GetMapping("/mypage/admin")
         public String adminPage() {

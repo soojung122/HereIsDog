@@ -11,7 +11,7 @@ public class Place {
     private String openingHours;   
     private String phoneNumber;     
     private String type;
-
+    
 
     public Place() {}
 
