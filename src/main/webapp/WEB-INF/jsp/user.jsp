@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -162,7 +163,7 @@
     <div class="profile-row">
 	    <div class="profile-img-box">
 	        <div class="profile-img">👤</div>
-	        <div class="nickname">${user.nickname}</div>
+	        <div class="nickname">${user.username}</div>
 	    </div>
 	
 	    <div class="fav-column">
@@ -181,7 +182,7 @@
 			            <c:otherwise>
 			                <c:forEach var="fav" items="${favList}">
 			                    <div class="fav-item">
-			                        <span class="bone">🦴</span> ${fav.placeName}
+			                        <span class="bone">🦴</span> ${fav.name}
 			                    </div>
 			                </c:forEach>
 			            </c:otherwise>
@@ -216,11 +217,14 @@
 				        </c:when>
 				        <c:otherwise>
 				            <c:forEach var="review" items="${reviewList}">
-				                <div class="review-item">
-				                    <span class="flag">🚩</span>
-				                    <b>${review.placeName}</b> <span style="color:#888;">"${review.content}"</span>
-				                </div>
-				            </c:forEach>
+							    <div class="review-item">
+							        <c:set var="placeFull" value="${review.placeId}" />
+							        <c:set var="placeName" value="${fn:substringBefore(placeFull, '_')}" />
+							        <span class="flag">🚩</span>
+							        <b>${placeName}</b>
+							        <span style="color:#888;">"${review.content}"</span>
+							    </div>
+							</c:forEach>
 				        </c:otherwise>
 				    </c:choose>
 				</div>
