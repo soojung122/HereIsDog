@@ -9,6 +9,6 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceForm> findAll(); // DTO로 반환(프론트 친화적)
     List<PlaceForm> getPlacesByType(String type);
-    PlaceForm getPlaceByAddress(String address);
+    public PlaceForm getPlaceByNameAndAddress(String name, String address);
     void registerMyPlace(PlaceForm form, String username);
 }

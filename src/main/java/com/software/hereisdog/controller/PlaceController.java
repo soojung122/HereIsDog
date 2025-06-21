@@ -90,7 +90,7 @@ public class PlaceController {
                                          Model model) {
 
         
-    	PlaceForm place = placeService.getPlaceByAddress(address);
+    	PlaceForm place = placeService.getPlaceByNameAndAddress(name, address);
     	System.out.println(">>DB에서 가져온 값 = " + place);
 
         if (place != null) {

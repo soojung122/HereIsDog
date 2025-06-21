@@ -81,8 +81,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
     
     @Override
-    public PlaceForm getPlaceByAddress(String address) {
-        Place place = placeMapper.selectPlaceByAddress(address);
+    public PlaceForm getPlaceByNameAndAddress(String name, String address) {
+        Place place = placeMapper.findByNameAndAddress(name, address);
         if (place == null) return null;
 
         PlaceForm form = new PlaceForm();
@@ -92,7 +92,8 @@ public class PlaceServiceImpl implements PlaceService {
         form.setOwnerUsername(place.getOwnerUsername());
         form.setOpeningHours(place.getOpeningHours());
         form.setPhoneNumber(place.getPhoneNumber());
-        form.setType(place.getType()); // type 필드 있는 경우
+        form.setType(place.getType());
         return form;
     }
+
 }

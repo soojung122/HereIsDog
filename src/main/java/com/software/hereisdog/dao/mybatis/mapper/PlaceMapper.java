@@ -33,5 +33,14 @@ public interface PlaceMapper {
     Place selectPlaceByAddress(String address);
 
     @Select("SELECT * FROM place WHERE name = #{name} AND address = #{address}")
+    @Results({
+        @Result(property = "name", column = "name"),
+        @Result(property = "address", column = "address"),
+        @Result(property = "description", column = "description"),
+        @Result(property = "ownerUsername", column = "owner_username"),
+        @Result(property = "openingHours", column = "opening_hours"),
+        @Result(property = "phoneNumber", column = "phone_number"),
+        @Result(property = "type", column = "type")
+    })
     Place findByNameAndAddress(@Param("name") String name, @Param("address") String address);
 }
