@@ -52,7 +52,17 @@ public class AuthController {
                               BindingResult bindingResult,
                               HttpSession session) {
 
-        // 1) 검증 생략…
+    	// 관리자 하드코딩 체크 (아이디 + 비번)
+        if ("adminUsername".equals(loginForm.getUsername()) 
+            && "12345678".equals(loginForm.getPassword())) {
+            
+            User admin = new User() {
+                { setUsername("adminUsername"); }
+            };
+            session.setAttribute("loginUser", admin);
+            return "redirect:/admin";
+        }
+        
 
         boolean result = authService.login(
             loginForm.getUsername(),
@@ -64,20 +74,19 @@ public class AuthController {
             return "loginForm";
         }
 
-        // 2) role 값을 소문자로 고정해서 비교
         String role = loginForm.getRole() == null 
                       ? "" 
                       : loginForm.getRole().trim().toLowerCase();
 
         if ("owner".equals(role)) {
-            // 진짜 owner 라면
+
             Owner owner = (Owner) authService.getUserByUsernameAndRole(
                 loginForm.getUsername(), loginForm.getRole()
             );
             session.setAttribute("loginUser", owner);
             session.setAttribute("userId", owner.getId());
         } else {
-            // owner 외 모든 경우는 customer 로 처리
+           
             Customer customer = (Customer) authService.getUserByUsernameAndRole(
                 loginForm.getUsername(), loginForm.getRole()
             );
