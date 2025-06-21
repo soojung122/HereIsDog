@@ -37,10 +37,10 @@ public class MypageController {
         @GetMapping("/mypage/owner")
         public String ownerPage() {
             return "owner";
-        }*/
+        }
     
         @GetMapping("/mypage/admin")
         public String adminPage() {
             return "admin";
-        }
+        }*/
 }
