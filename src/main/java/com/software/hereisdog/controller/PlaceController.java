@@ -7,12 +7,13 @@ import jakarta.servlet.http.HttpSession;
 
 //import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
+import com.software.hereisdog.domain.User;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,8 @@ public class PlaceController {
     @PostMapping("/new")
     public String createPlace(@ModelAttribute PlaceForm placeForm,
                               BindingResult bindingResult,
-                              Model model) {
+                              Model model,
+                              @SessionAttribute(value = "loginUser", required = false) User loginUser) {
         // 수동 검증기 실행
         placeFormValidator.validate(placeForm, bindingResult);
 
@@ -61,8 +63,19 @@ public class PlaceController {
             model.addAttribute("placeForm", placeForm);
             return "place/createPlaceForm";
         }
+        
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
 
-        placeService.registerPlace(placeForm);
+        try {
+            placeService.registerMyPlace(placeForm, loginUser.getUsername());
+        } catch (IllegalStateException e) {
+            bindingResult.reject("place.register.duplicate", e.getMessage());
+            model.addAttribute("placeForm", placeForm);
+            return "place/createPlaceForm";
+        }
+
         return "redirect:/places";
     }
     
@@ -76,20 +89,9 @@ public class PlaceController {
                                          HttpSession session,
                                          Model model) {
 
-        /*Map<String, Object> placeInfo = new HashMap<>();
-        placeInfo.put("name", name);
-        placeInfo.put("address", address);
-        placeInfo.put("phone", phone);
-        placeInfo.put("image", (image == null || image.trim().isEmpty()) ? "https://via.placeholder.com/600x300" : image);
-        placeInfo.put("place_url", placeUrl);
-
-        session.setAttribute("placeDetail", placeInfo);
-
-        model.addAllAttributes(placeInfo);
-        model.addAttribute("hours", "24시간 운영");
-
-        return "detail";*/
+        
     	PlaceForm place = placeService.getPlaceByAddress(address);
+    	System.out.println(">>DB에서 가져온 값 = " + place);
 
         if (place != null) {
             // DB에서 조회된 경우: DB 값 넘김
@@ -106,8 +108,23 @@ public class PlaceController {
             model.addAttribute("type", type);
         }
 
+
         return "detail";
     }
+    
+    @PostMapping("/my")
+    @ResponseBody
+    public ResponseEntity<String> registerMyPlace(@ModelAttribute PlaceForm placeForm,
+                                  @SessionAttribute("loginUser") User user) {
+    	try {
+            placeForm.setOwnerUsername(user.getUsername());
+            placeService.registerMyPlace(placeForm, user.getUsername());
+            return ResponseEntity.ok("가게가 등록되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.ok("가게 등록 조건을 만족하지 않습니다.");
+        }
+    }
+
 
     
     @GetMapping("/detail")

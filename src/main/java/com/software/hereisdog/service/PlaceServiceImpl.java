@@ -20,23 +20,30 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Autowired
     private PlaceMapper placeMapper; // PlaceDao → PlaceMapper
-
-    @Override
-    public void registerPlace(PlaceForm placeForm) {
-        Place place = new Place();
-        place.setName(placeForm.getName());
-        place.setAddress(placeForm.getAddress());
-        place.setDescription(placeForm.getDescription());
-        place.setOwnerUsername(placeForm.getOwnerUsername());
-        place.setOpeningHours(placeForm.getOpeningHours());
-        place.setPhoneNumber(placeForm.getPhoneNumber());
-
-        Place existing = placeMapper.selectPlaceByOwner(place.getOwnerUsername());
-        if (existing == null) {
-            placeMapper.insertPlace(place);
-        } else {
-            placeMapper.updatePlace(place);
+    
+    public void registerMyPlace(PlaceForm form, String username) {
+    	// 1. 이미 이 사용자가 등록한 가게가 있는지 확인
+        Place myExistingPlace = placeMapper.selectPlaceByOwner(username);
+        if (myExistingPlace != null) {
+            throw new IllegalStateException("이미 등록한 가게가 있습니다.");
         }
+
+        // 2. 해당 장소가 이미 다른 오너에 의해 등록된 경우 등록 불가
+        Place existing = placeMapper.findByNameAndAddress(form.getName(), form.getAddress());
+        if (existing != null) {
+            throw new IllegalStateException("이미 다른 사용자가 등록한 가게입니다.");
+        }
+
+        // 3. 진짜로 등록 가능한 상태면 insert
+        Place newPlace = new Place();
+        newPlace.setName(form.getName());
+        newPlace.setAddress(form.getAddress());
+        newPlace.setDescription(form.getDescription());
+        newPlace.setPhoneNumber(form.getPhoneNumber());
+        newPlace.setOpeningHours(form.getOpeningHours());
+        newPlace.setOwnerUsername(username);
+
+        placeMapper.insert(newPlace);
     }
 
     @Override

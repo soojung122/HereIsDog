@@ -102,4 +102,16 @@ public class PlaceForm {
         this.phoneNumber = phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return "PlaceForm{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", description='" + description + '\'' +
+                ", ownerUsername='" + ownerUsername + '\'' +
+                ", openingHours='" + openingHours + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
 }

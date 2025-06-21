@@ -148,7 +148,16 @@
 
             <div class="info-section">
                 <div class="highlight">
-                    <span>${name}</span>
+                    <span>
+				        <c:choose>
+				            <c:when test="${fromDb}">
+				                ${place.name}
+				            </c:when>
+				            <c:otherwise>
+				                ${name}
+				            </c:otherwise>
+				        </c:choose>
+				    </span>
                     <!-- 찜하기 버튼 (찜 등록) -->
                     <button onclick="addFavorite('${placeId}', '${name}', '${address}')" title="찜하기">
                         <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
@@ -174,37 +183,65 @@
 
 					</script>
                 </div>
-                <div>영업시간: ${hours}</div>
+                <!-- <div>영업시간: ${hours}</div>
                 <div>주소: ${address}</div>
                 <div>전화번호: ${phone}</div>
-                
-                <form id="placeRegisterForm">
-				    <input type="hidden" name="name" value="${name}" />
-				    <input type="hidden" name="address" value="${address}" />
-				    <input type="hidden" name="description" value="${name}" />
-				    <input type="hidden" name="phoneNumber" value="${phone}" />
-				    <input type="hidden" name="openingHours" value="${hours}" />
-				    <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
-				</form>
+                -->
+
+				<c:choose>
+				  <c:when test="${fromDb}">
+				      <div>영업시간: ${place.openingHours}</div>
+				      <div>주소: ${place.address}</div>
+				      <div>전화번호: ${place.phoneNumber}</div>
+				  </c:when>
+				  <c:otherwise>
+				      <div>영업시간: ${hours}</div>
+				      <div>주소: ${address}</div>
+				      <div>전화번호: ${phone}</div>
+				  </c:otherwise>
+				</c:choose>
+				
+				<c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
+	                <form id="placeRegisterForm">
+					    <input type="hidden" name="name" value="${name}" />
+					    <input type="hidden" name="address" value="${address}" />
+					    <input type="hidden" name="description" value="${name}" />
+					    <input type="hidden" name="phoneNumber" value="${phone}" />
+					    <input type="hidden" name="openingHours" value="${hours}" />
+					    <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
+					</form>
+				</c:if>
 				
 				<script>
 				function submitMyPlace() {
 				    const form = document.getElementById('placeRegisterForm');
 				    const formData = new FormData(form);
-				
+
+				    for (let [key, val] of formData.entries()) {
+				        console.log(`${key} = ${val}`);
+				    }
+				    
 				    fetch('/places/my', {
 				        method: 'POST',
 				        body: new URLSearchParams(formData)
 				    })
-				    .then(res => res.text())
-				    .then(message => {
-				        alert("가게 등록이 완료되었습니다.");
-				        // 필요하면 버튼 비활성화 등 처리
-				    })
-				    .catch(err => {
-				        alert("등록 중 오류가 발생했습니다.");
+				   .then(res => res.text().then(text => {
+					    if (res.status === 200) {
+					        alert(text); // 성공
+					    } else if (res.status === 400) {
+					        alert(text); // 사용자 실수 (이미 등록한 가게 등)
+					    } else {
+					        alert("서버 오류가 발생했습니다.");
+					    }
+					}))
+								    
+					.catch(err => {
+				        alert(err.message); // 서버에서 넘긴 예외 메시지 출력
 				    });
 				}
+
+
+
 				</script>
 
                 
@@ -212,8 +249,8 @@
             </div>
         </div>
 
-		<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
-		
+		<!--<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
+		-->
         <div class="review-scroll">
             <div>사용자1: 매우 친절하고 깨끗했어요!</div>
             <div>사용자2: 우리 강아지도 좋아했어요 😊</div>
