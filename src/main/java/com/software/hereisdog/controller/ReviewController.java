@@ -62,10 +62,13 @@ public class ReviewController {
         System.out.println(userId);
 
         model.addAllAttributes(placeInfo);  
-        model.addAttribute("placeId", placeId); // 중복으로 명시해도 OK
+        model.addAttribute("placeId", placeId); 
         model.addAttribute("userId", userId);
         model.addAttribute("reviewForm", new ReviewForm());
-
+        model.addAttribute("type", placeInfo.get("type")); //ㅊ코드 추가
+        
+        //String type = (String) placeInfo.get("type");
+        
         return "review";
     }
 

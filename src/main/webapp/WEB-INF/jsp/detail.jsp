@@ -241,6 +241,7 @@
         </div>
 
         <div class="review-scroll">
+        <p>⭐ 평균 평점: ${averageRating}점</p>
             <c:forEach var="rev" items="${reviews}">
                 <div>
                     <strong>${rev.userId}</strong> (${rev.rating}점): <span>${rev.content}</span>

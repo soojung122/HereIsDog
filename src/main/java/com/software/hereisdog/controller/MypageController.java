@@ -1,7 +1,14 @@
 package com.software.hereisdog.controller;
 
+import com.software.hereisdog.dao.mybatis.mapper.ReviewMapper;
+import com.software.hereisdog.domain.Review;
 import com.software.hereisdog.domain.User;
+
+import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MypageController {
 
     private static final String ADMIN_USERNAME = "adminUsername";  // 하드코딩 관리자 ID
-
+    
     @GetMapping("/mypage")
     public String redirectMypage(HttpSession session) {
         User loginUser = (User) session.getAttribute("loginUser");

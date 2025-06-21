@@ -81,8 +81,24 @@
     <div class="container">
         <!-- 왼쪽: 장소 이미지 -->
         <div class="image-section">
-            <img src="${image}" alt="장소 이미지">
-        </div>
+        <%--<p>타입: ${type}</p>--%>        
+            <c:choose>
+                <c:when test="${type eq '동물병원'}">
+                    <img src="/images/animal_hospital.png" alt="동물병원 이미지">
+                </c:when>
+                <c:when test="${type eq '애견카페'}">
+                    <img src="/images/dog_cafe.png" alt="애견카페 이미지">
+                </c:when>
+                <c:when test="${type eq '공원'}">
+                    <img src="/images/park.png" alt="공원 이미지">
+                </c:when>
+                <c:otherwise>
+                    <img src="/images/HereIsDog-logo.png" alt="기본 이미지">
+                </c:otherwise>
+            </c:choose>
+
+         </div>
+
 
         <!-- 오른쪽: 폼 영역 -->
         <div class="form-section">

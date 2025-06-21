@@ -13,6 +13,7 @@ public interface ReviewMapper {
     void insertReview(Review review);
 
     @Select("SELECT * FROM review WHERE placename = #{placeName} AND address = #{placeAddress}")
+    @Result(property = "userId", column = "user_id")
     List<Review> findReviewsByPlace(@Param("placeName") String placeName, @Param("placeAddress") String placeAddress);
 
     @Select("SELECT * FROM review WHERE placename = #{placeName} AND address = #{placeAddress} AND user_id = #{userId}")
@@ -20,8 +21,7 @@ public interface ReviewMapper {
 
     @Update("UPDATE review SET rating = #{rating}, content = #{content} WHERE placename = #{placeName} AND address = #{placeAddress} AND user_id = #{userId}")
     void updateReview(Review review);
-
-
+    
     @Select("SELECT * FROM review WHERE user_id = #{userId}")
     List<Review> findReviewsByUserId(@Param("userId") String userId);
 }

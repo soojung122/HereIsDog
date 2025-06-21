@@ -263,6 +263,20 @@
 				function savePlace() {
 				    const form = document.getElementById('placeForm');
 				    const formData = new FormData(form);
+
+				    // 선택된 영업시간 값을 변환
+				    const openingValue = formData.get('openingHours');
+
+				    let formattedHours = openingValue;
+				    if (openingValue === '9-18') {
+				        formattedHours = '09:00~18:00';
+				    }
+
+				    // 기존 값 제거하고 변환된 값 추가
+				    formData.set('openingHours', formattedHours);
+				    
+				    //const form = document.getElementById('placeForm');
+				    //const formData = new FormData(form);
 				
 				    fetch('/mypage/owner/update', {
 				        method: 'POST',

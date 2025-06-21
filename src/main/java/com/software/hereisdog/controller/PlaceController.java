@@ -126,7 +126,7 @@ public class PlaceController {
         } else {
         	model.addAttribute("fromDb", false);
             model.addAttribute("name", name);
-            model.addAttribute("hours", "9:00 ~ 18:00"); 
+            model.addAttribute("hours", "09:00 ~ 18:00"); 
             model.addAttribute("address", address);
             model.addAttribute("phone", phone);
             model.addAttribute("place_url", placeUrl);
@@ -138,11 +138,13 @@ public class PlaceController {
             placeInfo.put("phone", phone);
             placeInfo.put("image", image);
             placeInfo.put("place_url", placeUrl);
-            placeInfo.put("hours", "9:00 ~ 18:00");
+            placeInfo.put("hours", "09:00 ~ 18:00");
             placeInfo.put("type", type);
             model.addAttribute("fromDb", false);
 
         }
+        
+        
         // 세션에 저장
         session.setAttribute("placeDetail", placeInfo);
         model.addAllAttributes(placeInfo);
@@ -159,6 +161,18 @@ public class PlaceController {
                 : List.of();
         model.addAttribute("reviews", reviews);
 
+     // 평균 평점 계산
+        double averageRating = 0.0;
+        if (!reviews.isEmpty()) {
+            double sum = 0.0;
+            for (Review review : reviews) {
+                sum += review.getRating();
+            }
+            averageRating = Math.round((sum / reviews.size()) * 10.0) / 10.0;  // 소수점 1자리 반올림
+        }
+
+        model.addAttribute("averageRating", averageRating);
+        
         return "detail";
     }
     
@@ -177,7 +191,7 @@ public class PlaceController {
 
 
     /** detail.jsp → placeId 파라미터로 넘어왔을 때 (세션에서 placeInfo 꺼내 사용) */
-    @GetMapping("/detail")
+   /* @GetMapping("/detail")
     public String showPlaceDetail(@RequestParam Long placeId,
                                   HttpSession session,
                                   Model model) {
@@ -203,7 +217,7 @@ public class PlaceController {
 
         return "detail";
     }
-
+*/
 
 
     
