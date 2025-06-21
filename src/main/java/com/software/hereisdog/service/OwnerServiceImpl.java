@@ -1,6 +1,7 @@
 package com.software.hereisdog.service;
 
 import com.software.hereisdog.dao.OwnerDAO;
+import com.software.hereisdog.dao.mybatis.mapper.OwnerMapper;
 import com.software.hereisdog.domain.Place;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,27 @@ import java.util.List;
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
-	@Autowired
-    private OwnerDAO ownerDAO;
+    private final OwnerMapper ownerMapper;
+
+    @Autowired
+    public OwnerServiceImpl(OwnerMapper ownerMapper) {
+        this.ownerMapper = ownerMapper;
+    }
 
     @Override
     public List<Place> findPlacesByOwner(String ownerUsername) {
-        return ownerDAO.findPlacesByOwnerUsername(ownerUsername);
+        return ownerMapper.selectPlacesByOwner(ownerUsername);
     }
+
+    @Override
+    public Place getPlaceByOwner(String ownerUsername) {
+        return ownerMapper.selectPlaceByOwner(ownerUsername); // ✅ 오류 없음
+    }
+    
+    @Override
+    public void updatePlace(Place place) {
+        ownerMapper.updatePlace(place);
+    }
+
 }
+

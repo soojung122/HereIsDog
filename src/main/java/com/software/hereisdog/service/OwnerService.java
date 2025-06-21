@@ -8,4 +8,8 @@ import java.util.List;
  */
 public interface OwnerService {
     List<Place> findPlacesByOwner(String ownerUsername);
+    Place getPlaceByOwner(String ownerUsername);
+    
+    public void updatePlace(Place place);
+
 }

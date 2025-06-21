@@ -196,32 +196,31 @@
 <body>
 <div class="main-wrap">
 
-    <!-- 🔶 프로필 | 가게 정보 + 서비스 기능 | 가게 정보 수정 폼 -->
+    
 	<div class="top-row">
 	
-	    <!-- 프로필 -->
+	    
 	    <div class="profile-area">
 	        <div class="profile-img">👤</div>
-	        <div class="nickname">${owner.nickname}</div>
+	        <div class="nickname">${owner.username}</div>
 	    </div>
 	
-	    <!-- 가게 정보 + 서비스 기능 -->
 	    <div class="left-column">
 	
-	        <!-- 가게 정보 -->
+	        
 			<div class="info-group">
 			    <div class="section-title"><span style="color:#ef5151;">🚩</span> 가게 정보</div>
 			    <div class="shop-info-box">
 			        <div class="shop-detail">
 			            이름 : ${shop.name}<br>
-			            영업시간 : ${shop.openingHour}<br>
+			            영업시간 : ${shop.openingHours}<br>
 			            주소 : ${shop.address}<br>
-			            전화번호 : ${shop.phone}
+			            전화번호 : ${shop.phoneNumber}
 			        </div>
 			    </div>
 			</div>
 			
-			<!-- 서비스 기능 -->
+			<%-- 서비스 기능 
 			<div class="info-group">
 			    <div class="section-title">서비스 기능 선택</div>
 			    <div class="service-box">
@@ -236,42 +235,57 @@
 				        </div>
 				    </form>
 				</div>
-			</div>
+			</div>--%>
 	    </div>
 	
 	    <!-- 🔸 가게 정보 수정 제목 -->
 	    <div>
 	        <div class="section-title">가게 정보 수정</div>
 	        <div class="shop-form-box">
-	            <form class="shop-form" action="/owner/shop/update" method="post">
+	            <form class="shop-form" id="placeForm" onsubmit="return false;">
 	                <label>이름
 	                    <input type="text" name="name" value="${shop.name}">
 	                </label>
 	                <label>영업시간
-	                    <select name="openingHour">
-	                        <option value="9-18" ${shop.openingHour eq '9-18' ? 'selected' : ''}>09:00~18:00</option>
-	                        <option value="24hours" ${shop.openingHour eq '24hours' ? 'selected' : ''}>24시간</option>
+	                    <select name="openingHours">
+	                        <option value="9-18" ${shop.openingHours eq '9-18' ? 'selected' : ''}>09:00~18:00</option>
+	                        <option value="24hours" ${shop.openingHours eq '24hours' ? 'selected' : ''}>24시간</option>
 	                    </select>
 	                </label>
 	                <label>전화번호
-	                    <input type="text" name="phone" value="${shop.phone}">
+	                    <input type="text" name="phoneNumber" value="${shop.phoneNumber}">
 	                </label>
-	                <div class="inline-radio">
-					  <label class="radio-label-main">영업상태</label>
-					
-					  <label class="radio-group">
-					    <input type="radio" name="status" value="OPEN" ${shop.status eq 'OPEN' ? 'checked' : ''}>
-					    <span class="radio-text">영업중</span>
-					  </label>
-					
-					  <label class="radio-group">
-					    <input type="radio" name="status" value="CLOSE" ${shop.status eq 'CLOSE' ? 'checked' : ''}>
-					    <span class="radio-text">휴업</span>
-					  </label>
-					</div>
 
-	                <button type="submit" class="save-btn">저장</button>
+	                 <button type="button" class="save-btn" onclick="savePlace()">저장</button>
 	            </form>
+	            
+	            <script>
+				function savePlace() {
+				    const form = document.getElementById('placeForm');
+				    const formData = new FormData(form);
+				
+				    fetch('/mypage/owner/update', {
+				        method: 'POST',
+				        headers: {
+				            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+				        },
+				        body: new URLSearchParams(formData)
+				    })
+				    .then(res => res.text())
+				    .then(msg => {
+				        if (msg === "success") {
+				            alert("저장되었습니다.");
+				        } else {
+				            alert("저장 실패");
+				        }
+				    })
+				    .catch(err => {
+				        alert("에러 발생");
+				        console.error(err);
+				    });
+				}
+				</script>
+
 	        </div>
 	    </div>
 	

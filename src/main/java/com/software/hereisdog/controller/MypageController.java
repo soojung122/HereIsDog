@@ -27,17 +27,17 @@ public class MypageController {
         }
     }
     
-     // 명시적 페이지 매핑 추가
+        // 명시적 페이지 매핑 추가
         /*
         @GetMapping("/mypage/user")
         public String userPage() {
             return "user";
         }
-    */
+
         @GetMapping("/mypage/owner")
         public String ownerPage() {
             return "owner";
-        }
+        }*/
     
         @GetMapping("/mypage/admin")
         public String adminPage() {
