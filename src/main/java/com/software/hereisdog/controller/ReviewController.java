@@ -41,8 +41,8 @@ public class ReviewController {
 
     /** 특정 장소에 대한 리뷰 목록 조회 */
     @GetMapping("/{placeId}")
-    public String listReviews(@PathVariable Long placeId, Model model) {
-        model.addAttribute("reviews", reviewService.getReviewsByPlaceId(placeId));
+    public String listReviews(@RequestParam String placeName, @RequestParam String placeAddress, Model model) {
+        model.addAttribute("reviews", reviewService.getReviewsByPlace(placeName, placeAddress));
         return "review/reviewList";
     }
 
@@ -93,23 +93,45 @@ public class ReviewController {
             model.addAttribute("errors", bindingResult);
             return "review";
         }
-
+        
+     // 세션에서 로그인 유저 정보 가져오기
         User loginUser = (User) session.getAttribute("loginUser");
-        String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";  
+        String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";
 
+        // 장소 정보
+        String name = (String) placeInfo.get("name");
+        String address = (String) placeInfo.get("address");
+        String phone = (String) placeInfo.getOrDefault("phone", "");
+        String image = (String) placeInfo.getOrDefault("image", "");
+        String placeUrl = (String) placeInfo.getOrDefault("place_url", "");
+        String type = (String) placeInfo.getOrDefault("type", "");
+
+        // 필수 필드 null 방어
+        if (name == null || address == null) {
+            model.addAttribute("errorMessage", "장소 정보가 누락되었습니다.");
+            return "review";
+        }
+
+        // Review 객체 생성 및 값 세팅
         Review review = new Review();
-        Map<String, Object> urlInfo = (Map<String, Object>) session.getAttribute("placeDetail");
+        review.setUserId(userId);
+        review.setPlaceName(name);
+        review.setPlaceAddress(address);
+        review.setContent(reviewForm.getContent());
+        review.setRating(reviewForm.getRating());
+        // 필요한 필드 더 있으면 여기서 추가
 
-        String name = URLEncoder.encode((String) urlInfo.get("name"), StandardCharsets.UTF_8);
-        String address = URLEncoder.encode((String) urlInfo.get("address"), StandardCharsets.UTF_8);
-        String phone = URLEncoder.encode((String) urlInfo.getOrDefault("phone", ""), StandardCharsets.UTF_8);
-        String image = URLEncoder.encode((String) urlInfo.getOrDefault("image", ""), StandardCharsets.UTF_8);
-        String placeUrl = URLEncoder.encode((String) urlInfo.getOrDefault("place_url", ""), StandardCharsets.UTF_8);
-        String type = URLEncoder.encode((String) urlInfo.getOrDefault("type", ""), StandardCharsets.UTF_8);
+        // 저장
+        reviewService.registerReview(review);
 
-        // 최종 리다이렉트 경로
+        // 리다이렉트 URL (값 인코딩 처리)
         String redirectUrl = String.format("redirect:/places/detail?name=%s&address=%s&phone=%s&image=%s&place_url=%s&type=%s",
-                name, address, phone, image, placeUrl, type);
+                URLEncoder.encode(name, StandardCharsets.UTF_8),
+                URLEncoder.encode(address, StandardCharsets.UTF_8),
+                URLEncoder.encode(phone, StandardCharsets.UTF_8),
+                URLEncoder.encode(image, StandardCharsets.UTF_8),
+                URLEncoder.encode(placeUrl, StandardCharsets.UTF_8),
+                URLEncoder.encode(type, StandardCharsets.UTF_8));
 
         return redirectUrl;
 

@@ -37,9 +37,11 @@ public class PlaceController {
 
     @Autowired
     public PlaceController(PlaceService placeService,
+    		ReviewService reviewService,
                            PlaceFormValidator placeFormValidator) {
         this.placeService = placeService;
         this.placeFormValidator = placeFormValidator;
+        this.reviewService = reviewService;
     }
 
     /** 장소 목록 조회 */
@@ -144,13 +146,14 @@ public class PlaceController {
         // 5) placeId, reviews 넣기 (기존대로)
         Long pid = (place != null ? place.getId() : null);
         model.addAttribute("placeId", pid);
-        List<Review> reviews = (pid != null)
-                ? reviewService.getReviewsByPlaceId(pid)
+
+        String placeName = (place != null) ? place.getName() : name;
+        String placeAddress = (place != null) ? place.getAddress() : address;
+
+        List<Review> reviews = (placeName != null && placeAddress != null)
+                ? reviewService.getReviewsByPlace(placeName, placeAddress)
                 : List.of();
         model.addAttribute("reviews", reviews);
-
-        
-
 
         return "detail";
     }
@@ -180,15 +183,20 @@ public class PlaceController {
             return "redirect:/"; // 세션 만료
         }
 
+        // 장소 기본 정보를 모델에 추가
         model.addAllAttributes(placeInfo);
         model.addAttribute("placeId", placeId);
         model.addAttribute("hours", "9:00 ~ 18:00");
 
-        // 리뷰 조회 후 모델에 삽입
-        List<Review> reviews = reviewService.getReviewsByPlaceId(placeId);
+        // 리뷰 조회: name, address를 placeInfo에서 추출
+        String placeName = (String) placeInfo.get("name");
+        String placeAddress = (String) placeInfo.get("address");
+
+        List<Review> reviews = (placeName != null && placeAddress != null)
+                ? reviewService.getReviewsByPlace(placeName, placeAddress)
+                : List.of();
         model.addAttribute("reviews", reviews);
 
-        
         return "detail";
     }
 
