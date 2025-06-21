@@ -216,10 +216,6 @@
 				function submitMyPlace() {
 				    const form = document.getElementById('placeRegisterForm');
 				    const formData = new FormData(form);
-
-				    for (let [key, val] of formData.entries()) {
-				        console.log(`${key} = ${val}`);
-				    }
 				    
 				    fetch('/places/my', {
 				        method: 'POST',
