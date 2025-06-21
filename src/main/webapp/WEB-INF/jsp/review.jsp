@@ -86,39 +86,40 @@
 
         <!-- 오른쪽: 폼 영역 -->
         <div class="form-section">
-        <c:url var="SubmitUrl" value="/reviews/${placeId}" />
-		<form method="post" action="${SubmitUrl}">
-         
-         		<input type="hidden" name="userId" value="${userId}">
-				<input type="hidden" name="placeId" value="${placeId}">
-    			<input type="hidden" name="name" value="${name}">
-    			<input type="hidden" name="image" value="${image}">
-    			<input type="hidden" name="address" value="${address}">
-    			<input type="hidden" name="place_url" value="${place_url}">
-                <div class="form-group">
-                    <label for="rating">평점</label>
-                    <select name="rating" id="rating">
-                     	<option value="">별점을 선택해주세요</option>
-                        <option value="5">⭐️⭐️⭐️⭐️⭐️ (5점)</option>
-                        <option value="4">⭐️⭐️⭐️⭐️ (4점)</option>
-                        <option value="3">⭐️⭐️⭐️ (3점)</option>
-                        <option value="2">⭐️⭐️ (2점)</option>
-                        <option value="1">⭐️ (1점)</option>
-                    </select>
-                    <!-- 에러 메시지 출력 -->
-    				<c:if test="${errors != null && errors.hasFieldErrors('rating')}">
-        			<div class="text-danger">${errors.getFieldError('rating').defaultMessage}</div>
-    				</c:if>
-                </div>
+			<form method="post"
+				action="${pageContext.request.contextPath}/reviews/${placeId}">
+				<input type="hidden" name="placeId" value="${placeId}" /> <input
+					type="hidden" name="userId" value="${userId}" /> <input
+					type="hidden" name="userId" value="${userId}"> <input
+					type="hidden" name="placeId" value="${placeId}"> <input
+					type="hidden" name="name" value="${name}"> <input
+					type="hidden" name="image" value="${image}"> <input
+					type="hidden" name="address" value="${address}"> <input
+					type="hidden" name="place_url" value="${place_url}">
+				<div class="form-group">
+					<label for="rating">평점</label> <select name="rating" id="rating">
+						<option value="">별점을 선택해주세요</option>
+						<option value="5">⭐️⭐️⭐️⭐️⭐️ (5점)</option>
+						<option value="4">⭐️⭐️⭐️⭐️ (4점)</option>
+						<option value="3">⭐️⭐️⭐️ (3점)</option>
+						<option value="2">⭐️⭐️ (2점)</option>
+						<option value="1">⭐️ (1점)</option>
+					</select>
+					<!-- 에러 메시지 출력 -->
+					<c:if test="${errors != null && errors.hasFieldErrors('rating')}">
+						<div class="text-danger">${errors.getFieldError('rating').defaultMessage}</div>
+					</c:if>
+				</div>
 
-                <div class="form-group">
-                    <label for="content">리뷰</label>
-                    <textarea name="content" id="content" rows="6" placeholder="리뷰를 작성해주세요.">${reviewForm.content}</textarea>
-                </div>
+				<div class="form-group">
+					<label for="content">리뷰</label>
+					<textarea name="content" id="content" rows="6"
+						placeholder="리뷰를 작성해주세요.">${reviewForm.content}</textarea>
+				</div>
 
-                <button type="submit">리뷰 저장</button>
-            </form>
-        </div>
+				<button type="submit">리뷰 저장</button>
+			</form>
+		</div>
     </div>
 
 </body>
