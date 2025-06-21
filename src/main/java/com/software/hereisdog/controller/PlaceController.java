@@ -126,7 +126,7 @@ public class PlaceController {
         } else {
         	model.addAttribute("fromDb", false);
             model.addAttribute("name", name);
-            model.addAttribute("hours", "9:00 ~ 18:00"); 
+            model.addAttribute("hours", "09:00 ~ 18:00"); 
             model.addAttribute("address", address);
             model.addAttribute("phone", phone);
             model.addAttribute("place_url", placeUrl);
@@ -138,7 +138,7 @@ public class PlaceController {
             placeInfo.put("phone", phone);
             placeInfo.put("image", image);
             placeInfo.put("place_url", placeUrl);
-            placeInfo.put("hours", "9:00 ~ 18:00");
+            placeInfo.put("hours", "09:00 ~ 18:00");
             placeInfo.put("type", type);
             model.addAttribute("fromDb", false);
 

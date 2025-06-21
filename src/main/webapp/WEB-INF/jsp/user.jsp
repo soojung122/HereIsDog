@@ -172,12 +172,7 @@
 			    <div class="fav-scroll">
 			        <c:choose>
 			            <c:when test="${empty favList}">
-			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
-			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
-			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
-			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
-			                <div class="fav-item"><span class="bone">🦴</span> 예시카페 · 강남구</div>
-			                <div class="fav-item"><span class="bone">🦴</span> 멍멍하우스 · 마포구</div>
+                            <span>아직 선택된 장소가 없습니다.</span>
 			            </c:when>
 			            <c:otherwise>
 			                <c:forEach var="fav" items="${favList}">
@@ -198,22 +193,7 @@
 			    <div class="reviews-list">
 				    <c:choose>
 				        <c:when test="${empty reviewList}">
-				            <div class="review-item">
-				                <span class="flag">🚩</span> <b>예시카페</b>
-				                <span style="color:#888;">"분위기가 좋아요!"</span>
-				            </div>
-				            <div class="review-item">
-				                <span class="flag">🚩</span> <b>멍멍펍</b>
-				                <span style="color:#888;">"반려견과 편하게 즐겼어요."</span>
-				            </div>
-				            <div class="review-item">
-				                <span class="flag">🚩</span> <b>예시카페</b>
-				                <span style="color:#888;">"분위기가 좋아요!"</span>
-				            </div>
-				            <div class="review-item">
-				                <span class="flag">🚩</span> <b>멍멍펍</b>
-				                <span style="color:#888;">"반려견과 편하게 즐겼어요."</span>
-				            </div>
+				            <div>아직 작성된 리뷰가 없습니다</div>
 				        </c:when>
 				        <c:otherwise>
 				            <c:forEach var="review" items="${reviewList}">
