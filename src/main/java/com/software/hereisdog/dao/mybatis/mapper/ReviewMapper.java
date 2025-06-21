@@ -8,19 +8,21 @@ import java.util.List;
 @Mapper
 public interface ReviewMapper {
 
-    @Insert("INSERT INTO review (id, place_id, user_id, rating, content) " +
-            "VALUES (review_seq.NEXTVAL, #{placeId}, #{userId}, #{rating}, #{content})")
+    @Insert("INSERT INTO review (id, user_id, rating, content, placename, address) " +
+            "VALUES (review_seq.NEXTVAL, #{userId}, #{rating}, #{content}, #{placeName}, #{placeAddress})")
     void insertReview(Review review);
 
-    @Select("SELECT * FROM review WHERE place_id = #{placeId}")
-    List<Review> findReviewsByPlaceId(@Param("placeId") Long placeId);
+    @Select("SELECT * FROM review WHERE placename = #{placeName} AND address = #{placeAddress}")
+    List<Review> findReviewsByPlace(@Param("placeName") String placeName, @Param("placeAddress") String placeAddress);
 
-    @Select("SELECT * FROM review WHERE place_id = #{placeId} AND user_id = #{userId}")
-    List<Review> findByPlaceIdAndUserId(@Param("placeId") Long placeId, @Param("userId") String userId);
-    
-    @Update("UPDATE review SET rating = #{rating}, content = #{content} WHERE place_id = #{placeId} AND user_id = #{userId}")
+    @Select("SELECT * FROM review WHERE placename = #{placeName} AND address = #{placeAddress} AND user_id = #{userId}")
+    List<Review> findByPlaceAndUser(@Param("placeName") String placeName, @Param("placeAddress") String placeAddress, @Param("userId") String userId);
+
+    @Update("UPDATE review SET rating = #{rating}, content = #{content} WHERE placename = #{placeName} AND address = #{placeAddress} AND user_id = #{userId}")
     void updateReview(Review review);
-    
+
+
     @Select("SELECT * FROM review WHERE user_id = #{userId}")
     List<Review> findReviewsByUserId(@Param("userId") String userId);
 }
+

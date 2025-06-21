@@ -248,7 +248,7 @@
 	                </label>
 	                <label>영업시간
 	                    <select name="openingHours">
-	                        <option value="9-18" ${shop.openingHours eq '9-18' ? 'selected' : ''}>09:00~18:00</option>
+	                        <option value="9-18" ${shop.openingHours eq '9:00~18:00' ? 'selected' : ''}>09:00~18:00</option>
 	                        <option value="24hours" ${shop.openingHours eq '24hours' ? 'selected' : ''}>24시간</option>
 	                    </select>
 	                </label>

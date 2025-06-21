@@ -41,8 +41,8 @@ public class ReviewController {
 
     /** 특정 장소에 대한 리뷰 목록 조회 */
     @GetMapping("/{placeId}")
-    public String listReviews(@PathVariable Long placeId, Model model) {
-        model.addAttribute("reviews", reviewService.getReviewsByPlaceId(placeId));
+    public String listReviews(@RequestParam String placeName, @RequestParam String placeAddress, Model model) {
+        model.addAttribute("reviews", reviewService.getReviewsByPlace(placeName, placeAddress));
         return "review/reviewList";
     }
 
@@ -59,7 +59,7 @@ public class ReviewController {
         User loginUser = (User) session.getAttribute("loginUser");
         String userId = (loginUser != null) ? loginUser.getId().toString() : "test-user";
         
-        //System.out.println(userId);
+        System.out.println(userId);
 
         model.addAllAttributes(placeInfo);  
         model.addAttribute("placeId", placeId); // 중복으로 명시해도 OK
@@ -70,9 +70,9 @@ public class ReviewController {
     }
 
 
-    /** 리뷰 작성 처리 */
+    /** 리뷰 작성 처리: review->detail */
     @PostMapping("/{placeId}")
-    public String createReview(@PathVariable Long placeId,
+    public String saveReview(@PathVariable Long placeId,
                                @ModelAttribute ReviewForm reviewForm,
                                BindingResult bindingResult,
                                HttpSession session,
@@ -93,20 +93,49 @@ public class ReviewController {
             model.addAttribute("errors", bindingResult);
             return "review";
         }
-
+        
+     // 세션에서 로그인 유저 정보 가져오기
         User loginUser = (User) session.getAttribute("loginUser");
-        String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";  
+        String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";
 
+        // 장소 정보
+        String name = (String) placeInfo.get("name");
+        String address = (String) placeInfo.get("address");
+        String phone = (String) placeInfo.getOrDefault("phone", "");
+        String image = (String) placeInfo.getOrDefault("image", "");
+        String placeUrl = (String) placeInfo.getOrDefault("place_url", "");
+        String type = (String) placeInfo.getOrDefault("type", "");
+
+        // 필수 필드 null 방어
+        if (name == null || address == null) {
+            model.addAttribute("errorMessage", "장소 정보가 누락되었습니다.");
+            return "review";
+        }
+
+        // Review 객체 생성 및 값 세팅
         Review review = new Review();
-        review.setPlaceId(placeId);
         review.setUserId(userId);
-        review.setRating(reviewForm.getRating());
+        review.setPlaceName(name);
+        review.setPlaceAddress(address);
         review.setContent(reviewForm.getContent());
+        review.setRating(reviewForm.getRating());
+        // 필요한 필드 더 있으면 여기서 추가
 
+        // 저장
         reviewService.registerReview(review);
 
-        return "redirect:/places/detail?placeId=" + placeId; 
+        // 리다이렉트 URL (값 인코딩 처리)
+        String redirectUrl = String.format("redirect:/places/detail?name=%s&address=%s&phone=%s&image=%s&place_url=%s&type=%s",
+                URLEncoder.encode(name, StandardCharsets.UTF_8),
+                URLEncoder.encode(address, StandardCharsets.UTF_8),
+                URLEncoder.encode(phone, StandardCharsets.UTF_8),
+                URLEncoder.encode(image, StandardCharsets.UTF_8),
+                URLEncoder.encode(placeUrl, StandardCharsets.UTF_8),
+                URLEncoder.encode(type, StandardCharsets.UTF_8));
+
+        return redirectUrl;
+
     }
 
-
+   
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<!-- <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -6,12 +6,14 @@
 <mapper namespace="com.software.hereisdog.dao.mybatis.mapper.ReviewMapper">
 
     <!-- 🔹 리뷰 저장 -->
+    <!-- 
     <insert id="save" parameterType="com.software.hereisdog.domain.Review">
         INSERT INTO REVIEW (ID, PLACE_ID, USER_ID, RATING, CONTENT)
     	VALUES (review_seq.NEXTVAL, #{placeId}, #{userId}, #{rating}, #{content})
 	</insert>
 
     <!-- 🔹 리뷰 목록 조회 -->
+    <!-- 
     <select id="findByPlaceId" parameterType="long" resultType="com.software.hereisdog.domain.Review">
         SELECT * FROM REVIEW
         WHERE PLACE_ID = #{placeId}
@@ -19,3 +21,4 @@
     </select>
 
 </mapper>
+-->
