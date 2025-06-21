@@ -1,27 +1,40 @@
 package com.software.hereisdog.service;
-import com.software.hereisdog.dao.AdminDAO;
-import com.software.hereisdog.domain.User;
+
+import com.software.hereisdog.dao.mybatis.mapper.AdminMapper;
+import com.software.hereisdog.domain.Customer;
+import com.software.hereisdog.domain.Owner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    private final AdminDAO adminDAO;
+    private final AdminMapper adminMapper;
 
     @Autowired
-    public AdminServiceImpl(AdminDAO adminDAO) {
-        this.adminDAO = adminDAO;
+    public AdminServiceImpl(AdminMapper adminMapper) {
+        this.adminMapper = adminMapper;
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return adminDAO.findAllUsers();
+    public List<Customer> findAllCustomers() {
+        return adminMapper.findAllCustomers();
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        adminDAO.deleteUser(userId);
+    public List<Owner> findAllOwners() {
+        return adminMapper.findAllOwners();
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        adminMapper.deleteCustomer(id);
+    }
+
+    @Override
+    public void deleteOwner(Long id) {
+        adminMapper.deleteOwner(id);
     }
 }

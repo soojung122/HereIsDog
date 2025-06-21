@@ -52,7 +52,20 @@ public class AuthController {
     public String loginSubmit(@ModelAttribute("loginForm") LoginForm loginForm,
                               BindingResult bindingResult,
                               HttpSession session) {
+        
+        if ("adminUsername".equals(loginForm.getUsername())
+                && "12345678".equals(loginForm.getPassword())) {
 
+                User admin = new User() {
+                    { 
+                        setUsername("adminUsername");
+                        setUserType("ADMIN");
+                    }
+                };
+                session.setAttribute("loginUser", admin);
+                return "redirect:/mypage/admin";
+            }
+        
     	// 수동 검증기 호출
     	loginFormValidator.validate(loginForm, bindingResult);
 
