@@ -53,10 +53,10 @@
             padding: 20px;
         }
         .image-section img {
-		    width: 300px;     /* 가로 크기 고정 */
-		    height: auto;     /* 세로는 비율에 따라 자동 */
-		    border-radius: 8px;
-		}
+            width: 300px;     /* 가로 크기 고정 */
+            height: auto;     /* 세로는 비율에 따라 자동 */
+            border-radius: 8px;
+        }
         .info-section {
             width: 40%;
             padding: 20px;
@@ -120,120 +120,120 @@
     <div class="container">
         <div class="main">
             <div class="image-section">
-			    <c:choose>
-			        <c:when test="${not empty image 
-			            and fn:contains(image, '/') 
-			            and not fn:contains(image, 'via.placeholder.com')}">
-			            <img src="${image}" alt="장소 이미지">
-			        </c:when>
-			        <c:otherwise>
-			            <c:choose>
-			                <c:when test="${param.type eq '동물병원'}">
-			                    <img src="/images/animal_hospital.png" alt="동물병원 이미지">
-			                </c:when>
-			                <c:when test="${param.type eq '애견카페'}">
-			                    <img src="/images/dog_cafe.png" alt="애견카페 이미지">
-			                </c:when>
-			                <c:when test="${param.type eq '공원'}">
-			                    <img src="/images/park.png" alt="공원 이미지">
-			                </c:when>
-			                <c:otherwise>
-			                    <img src="/images/HereIsDog-logo.png" alt="기본 이미지">
-			                </c:otherwise>
-			            </c:choose>
-			        </c:otherwise>
-			    </c:choose>
-			</div>
+                <c:choose>
+                    <c:when test="${not empty image 
+                        and fn:contains(image, '/') 
+                        and not fn:contains(image, 'via.placeholder.com')}">
+                        <img src="${image}" alt="장소 이미지">
+                    </c:when>
+                    <c:otherwise>
+                        <c:choose>
+                            <c:when test="${param.type eq '동물병원'}">
+                                <img src="/images/animal_hospital.png" alt="동물병원 이미지">
+                            </c:when>
+                            <c:when test="${param.type eq '애견카페'}">
+                                <img src="/images/dog_cafe.png" alt="애견카페 이미지">
+                            </c:when>
+                            <c:when test="${param.type eq '공원'}">
+                                <img src="/images/park.png" alt="공원 이미지">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="/images/HereIsDog-logo.png" alt="기본 이미지">
+                            </c:otherwise>
+                        </c:choose>
+                    </c:otherwise>
+                </c:choose>
+            </div>
 
 
             <div class="info-section">
                 <div class="highlight">
                     <span>
-				        <c:choose>
-				            <c:when test="${fromDb}">
-				                ${place.name}
-				            </c:when>
-				            <c:otherwise>
-				                ${name}
-				            </c:otherwise>
-				        </c:choose>
-				    </span>
+                        <c:choose>
+                            <c:when test="${fromDb}">
+                                ${place.name}
+                            </c:when>
+                            <c:otherwise>
+                                ${name}
+                            </c:otherwise>
+                        </c:choose>
+                    </span>
                     <!-- 찜하기 버튼 (찜 등록) -->
                     <button onclick="addFavorite('${placeId}', '${name}', '${address}')" title="찜하기">
                         <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
                     </button>
-					
-					<script>
-					function addFavorite(placeId, name, address) {
-					    fetch('/favorites/add', {
-					        method: 'POST',
-					        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					        body: new URLSearchParams({
-					        	placeId: Number(placeId),
-					            name: name,
-					            address: address
-					            // 필요 시 phone, image, place_url도 추가
-					        })
-					    })
-					    .then(res => res.text())
-					    .then(message => {
-					        alert(message);  // 서버 응답을 그대로 alert!
-					    });
-					}
+                    
+                    <script>
+                    function addFavorite(placeId, name, address) {
+                        fetch('/favorites/add', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({
+                                placeId: Number(placeId),
+                                name: name,
+                                address: address
+                                // 필요 시 phone, image, place_url도 추가
+                            })
+                        })
+                        .then(res => res.text())
+                        .then(message => {
+                            alert(message);  // 서버 응답을 그대로 alert!
+                        });
+                    }
 
-					</script>
+                    </script>
                 </div>
-				<c:choose>
-				  <c:when test="${fromDb}">
-				      <div>영업시간: ${place.openingHours}</div>
-				      <div>주소: ${place.address}</div>
-				      <div>전화번호: ${place.phoneNumber}</div>
-				  </c:when>
-				  <c:otherwise>
-				      <div>영업시간: ${hours}</div>
-				      <div>주소: ${address}</div>
-				      <div>전화번호: ${phone}</div>
-				  </c:otherwise>
-				</c:choose>
-				
-				<c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
-	                <form id="placeRegisterForm">
-					    <input type="hidden" name="name" value="${name}" />
-					    <input type="hidden" name="address" value="${address}" />
-					    <input type="hidden" name="description" value="${name}" />
-					    <input type="hidden" name="phoneNumber" value="${phone}" />
-					    <input type="hidden" name="openingHours" value="${hours}" />
-					    <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
-					</form>
-				</c:if>
-				
-				<script>
-				function submitMyPlace() {
-				    const form = document.getElementById('placeRegisterForm');
-				    const formData = new FormData(form);
-				    
-				    fetch('/places/my', {
-				        method: 'POST',
-				        body: new URLSearchParams(formData)
-				    })
-				   .then(res => res.text().then(text => {
-					    if (res.status === 200) {
-					        alert(text); // 성공
-					    } else if (res.status === 400) {
-					        alert(text); // 사용자 실수 (이미 등록한 가게 등)
-					    } else {
-					        alert("서버 오류가 발생했습니다.");
-					    }
-					}))
-								    
-					.catch(err => {
-				        alert(err.message); // 서버에서 넘긴 예외 메시지 출력
-				    });
-				}
+                <c:choose>
+                  <c:when test="${fromDb}">
+                      <div>영업시간: ${place.openingHours}</div>
+                      <div>주소: ${place.address}</div>
+                      <div>전화번호: ${place.phoneNumber}</div>
+                  </c:when>
+                  <c:otherwise>
+                      <div>영업시간: ${hours}</div>
+                      <div>주소: ${address}</div>
+                      <div>전화번호: ${phone}</div>
+                  </c:otherwise>
+                </c:choose>
+                
+                <c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
+                    <form id="placeRegisterForm">
+                        <input type="hidden" name="name" value="${name}" />
+                        <input type="hidden" name="address" value="${address}" />
+                        <input type="hidden" name="description" value="${name}" />
+                        <input type="hidden" name="phoneNumber" value="${phone}" />
+                        <input type="hidden" name="openingHours" value="${hours}" />
+                        <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
+                    </form>
+                </c:if>
+                
+                <script>
+                function submitMyPlace() {
+                    const form = document.getElementById('placeRegisterForm');
+                    const formData = new FormData(form);
+                    
+                    fetch('/places/my', {
+                        method: 'POST',
+                        body: new URLSearchParams(formData)
+                    })
+                   .then(res => res.text().then(text => {
+                        if (res.status === 200) {
+                            alert(text); // 성공
+                        } else if (res.status === 400) {
+                            alert(text); // 사용자 실수 (이미 등록한 가게 등)
+                        } else {
+                            alert("서버 오류가 발생했습니다.");
+                        }
+                    }))
+                                    
+                    .catch(err => {
+                        alert(err.message); // 서버에서 넘긴 예외 메시지 출력
+                    });
+                }
 
 
 
-				</script>
+                </script>
 
                 
                 
@@ -243,8 +243,7 @@
         <div class="review-scroll">
             <c:forEach var="rev" items="${reviews}">
                 <div>
-                    <strong>${rev.userId}</strong> (${rev.rating}점)…
-                    <p>${rev.content}</p>
+                    <strong>${rev.userId}</strong> (${rev.rating}점): <span>${rev.content}</span>
                 </div>
             </c:forEach>
             <c:if test="${empty reviews}">
