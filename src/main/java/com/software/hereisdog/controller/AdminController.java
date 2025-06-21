@@ -1,14 +1,17 @@
 package com.software.hereisdog.controller;
+
+import com.software.hereisdog.domain.Customer;
+import com.software.hereisdog.domain.Owner;
 import com.software.hereisdog.service.AdminService;
-import com.software.hereisdog.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/mypage/admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -18,18 +21,27 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    /** 모든 회원 목록 조회 */
-    @GetMapping("/users")
-    public String listUsers(Model model) {
-        List<User> users = adminService.findAllUsers();
-        model.addAttribute("users", users);
-        return "admin/userList";
+    /** 방문객, 오너 전체 조회 */
+    @GetMapping
+    public String showAdminPage(Model model) {
+        List<Customer> customerList = adminService.findAllCustomers();
+        List<Owner> ownerList = adminService.findAllOwners();
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("ownerList", ownerList);
+        return "admin";  // /WEB-INF/jsp/admin.jsp
     }
 
-    /** 사용자 삭제 */
-    @PostMapping("/users/{userId}/delete")
-    public String deleteUser(@PathVariable Long userId) {
-        adminService.deleteUser(userId);
-        return "redirect:/admin/users";
+    /** 방문객 삭제 */
+    @PostMapping("/customer/delete")
+    public String deleteCustomer(@RequestParam("id") Long id) {
+        adminService.deleteCustomer(id);
+        return "redirect:/mypage/admin";
+    }
+
+    /** 오너 삭제 */
+    @PostMapping("/owner/delete")
+    public String deleteOwner(@RequestParam("id") Long id) {
+        adminService.deleteOwner(id);
+        return "redirect:/mypage/admin";
     }
 }

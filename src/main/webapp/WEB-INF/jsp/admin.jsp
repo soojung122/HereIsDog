@@ -71,10 +71,10 @@
                                 &nbsp;PW: <b>${cust.password}</b>
                                 &nbsp;EMAIL: <b>${cust.email}</b>
                             </span>
-                            <form action="/admin/customer/delete" method="post" style="display:inline;">
-                                <input type="hidden" name="id" value="${cust.id}">
-                                <button type="submit" class="delete-btn">삭제</button>
-                            </form>
+                            <form action="/mypage/admin/customer/delete" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+							    <input type="hidden" name="id" value="${cust.id}">
+							    <button type="submit" class="delete-btn">삭제</button>
+							</form>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -104,10 +104,10 @@
                                 &nbsp;EMAIL: <b>${own.email}</b>
                                 &nbsp;사업자번호: <b>${own.businessNumber}</b>
                             </span>
-                            <form action="/admin/owner/delete" method="post" style="display:inline;">
-                                <input type="hidden" name="id" value="${own.id}">
-                                <button type="submit" class="delete-btn">삭제</button>
-                            </form>
+                            <form action="/mypage/admin/owner/delete" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+							    <input type="hidden" name="id" value="${own.id}">
+							    <button type="submit" class="delete-btn">삭제</button>
+							</form>
                         </div>
                     </c:forEach>
                 </c:when>
@@ -126,5 +126,10 @@
         </div>
     </div>
 </div>
+<script>
+    function confirmDelete() {
+        return confirm("정말 삭제하시겠습니까?");
+    }
+</script>
 </body>
 </html>
