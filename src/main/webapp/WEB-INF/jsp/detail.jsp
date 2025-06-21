@@ -183,11 +183,6 @@
 
 					</script>
                 </div>
-                <!-- <div>영업시간: ${hours}</div>
-                <div>주소: ${address}</div>
-                <div>전화번호: ${phone}</div>
-                -->
-
 				<c:choose>
 				  <c:when test="${fromDb}">
 				      <div>영업시간: ${place.openingHours}</div>
@@ -245,20 +240,28 @@
             </div>
         </div>
 
-		<!--<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
-		-->
         <div class="review-scroll">
-            <div>사용자1: 매우 친절하고 깨끗했어요!</div>
-            <div>사용자2: 우리 강아지도 좋아했어요 😊</div>
-            <div>사용자3: 주차 공간이 협소한 점만 빼면 좋았어요.</div>
+            <c:forEach var="rev" items="${reviews}">
+                <div>
+                    <strong>${rev.userId}</strong> (${rev.rating}점)…
+                    <p>${rev.content}</p>
+                </div>
+            </c:forEach>
+            <c:if test="${empty reviews}">
+                <div>아직 작성된 리뷰가 없습니다</div>
+            </c:if>
         </div>
-			
-		
-        <div class="review-button">	
-      		<a href="/reviews/${placeId}/new">
-            	<button>리뷰 작성 하러가기</button>
-         	</a>
+    
+        <!--<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
+        -->
+        
+        <div class="review-button">
+            <a href="${pageContext.request.contextPath}/reviews/${placeId}/new">
+                <button type="button">리뷰 작성 하러가기</button>
+            </a>
         </div>
+
+        
     </div>
 </body>
 </html>

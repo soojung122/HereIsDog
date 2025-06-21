@@ -7,6 +7,9 @@ public class Review {
     private String userId;
     private String content;
     private Integer rating;
+    private String placeName;
+    private String placeAddress;
+
 
     // Getter & Setter
     public Long getId() {
@@ -48,4 +51,20 @@ public class Review {
     public void setRating(Integer rating) {
         this.rating = rating;
     }
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public String getPlaceAddress() {
+        return placeAddress;
+    }
+
+    public void setPlaceAddress(String placeAddress) {
+        this.placeAddress = placeAddress;
+    }
+
 }

@@ -86,8 +86,8 @@
 
         <!-- 오른쪽: 폼 영역 -->
         <div class="form-section">
-        <c:url var="SubmitUrl" value="/reviews/${placeId}" />
-		<form method="post" action="${SubmitUrl}">
+        <!--<c:url var="SubmitUrl" value="/reviews/${placeId}" />-->
+		<form method="post" action="${pageContext.request.contextPath}/reviews/${placeId}">
          
          		<input type="hidden" name="userId" value="${userId}">
 				<input type="hidden" name="placeId" value="${placeId}">

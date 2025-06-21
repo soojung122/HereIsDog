@@ -59,7 +59,7 @@ public class ReviewController {
         User loginUser = (User) session.getAttribute("loginUser");
         String userId = (loginUser != null) ? loginUser.getId().toString() : "test-user";
         
-        //System.out.println(userId);
+        System.out.println(userId);
 
         model.addAllAttributes(placeInfo);  
         model.addAttribute("placeId", placeId); // 중복으로 명시해도 OK
@@ -70,9 +70,9 @@ public class ReviewController {
     }
 
 
-    /** 리뷰 작성 처리 */
+    /** 리뷰 작성 처리: review->detail */
     @PostMapping("/{placeId}")
-    public String createReview(@PathVariable Long placeId,
+    public String saveReview(@PathVariable Long placeId,
                                @ModelAttribute ReviewForm reviewForm,
                                BindingResult bindingResult,
                                HttpSession session,
@@ -98,15 +98,22 @@ public class ReviewController {
         String userId = (loginUser != null) ? loginUser.getUsername() : "test-user";  
 
         Review review = new Review();
-        review.setPlaceId(placeId);
-        review.setUserId(userId);
-        review.setRating(reviewForm.getRating());
-        review.setContent(reviewForm.getContent());
+        Map<String, Object> urlInfo = (Map<String, Object>) session.getAttribute("placeDetail");
 
-        reviewService.registerReview(review);
+        String name = URLEncoder.encode((String) urlInfo.get("name"), StandardCharsets.UTF_8);
+        String address = URLEncoder.encode((String) urlInfo.get("address"), StandardCharsets.UTF_8);
+        String phone = URLEncoder.encode((String) urlInfo.getOrDefault("phone", ""), StandardCharsets.UTF_8);
+        String image = URLEncoder.encode((String) urlInfo.getOrDefault("image", ""), StandardCharsets.UTF_8);
+        String placeUrl = URLEncoder.encode((String) urlInfo.getOrDefault("place_url", ""), StandardCharsets.UTF_8);
+        String type = URLEncoder.encode((String) urlInfo.getOrDefault("type", ""), StandardCharsets.UTF_8);
 
-        return "redirect:/places/detail?placeId=" + placeId; 
+        // 최종 리다이렉트 경로
+        String redirectUrl = String.format("redirect:/places/detail?name=%s&address=%s&phone=%s&image=%s&place_url=%s&type=%s",
+                name, address, phone, image, placeUrl, type);
+
+        return redirectUrl;
+
     }
 
-
+   
 }

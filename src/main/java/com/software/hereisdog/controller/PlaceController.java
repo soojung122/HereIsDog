@@ -2,6 +2,7 @@ package com.software.hereisdog.controller;
 
 import com.software.hereisdog.controller.PlaceForm;
 import com.software.hereisdog.service.PlaceService;
+import com.software.hereisdog.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -13,7 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.software.hereisdog.domain.Review;
 import com.software.hereisdog.domain.User;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +33,7 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final PlaceFormValidator placeFormValidator;
+    private ReviewService reviewService;
 
     @Autowired
     public PlaceController(PlaceService placeService,
@@ -93,10 +99,24 @@ public class PlaceController {
     	PlaceForm place = placeService.getPlaceByNameAndAddress(name, address);
     	System.out.println(">>DB에서 가져온 값 = " + place);
 
+    	Map<String, Object> placeInfo = new HashMap<>();
         if (place != null) {
             // DB에서 조회된 경우: DB 값 넘김
             model.addAttribute("place", place);
             model.addAttribute("fromDb", true);
+            
+            placeInfo.put("name", place.getName());
+            placeInfo.put("address", place.getAddress());
+            placeInfo.put("phone", place.getPhoneNumber());
+            // ↓ 여기서 request 파라미터 image, placeUrl 그대로 사용
+            placeInfo.put("image", image);
+            placeInfo.put("place_url", placeUrl);
+            placeInfo.put("hours", place.getOpeningHours());
+            model.addAttribute("fromDb", true);
+
+            
+            
+            
         } else {
         	model.addAttribute("fromDb", false);
             model.addAttribute("name", name);
@@ -106,7 +126,30 @@ public class PlaceController {
             model.addAttribute("place_url", placeUrl);
             model.addAttribute("image", image);
             model.addAttribute("type", type);
+            
+            placeInfo.put("name", name);
+            placeInfo.put("address", address);
+            placeInfo.put("phone", phone);
+            placeInfo.put("image", image);
+            placeInfo.put("place_url", placeUrl);
+            placeInfo.put("hours", "9:00 ~ 18:00");
+            placeInfo.put("type", type);
+            model.addAttribute("fromDb", false);
+
         }
+        // 세션에 저장
+        session.setAttribute("placeDetail", placeInfo);
+        model.addAllAttributes(placeInfo);
+        
+        // 5) placeId, reviews 넣기 (기존대로)
+        Long pid = (place != null ? place.getId() : null);
+        model.addAttribute("placeId", pid);
+        List<Review> reviews = (pid != null)
+                ? reviewService.getReviewsByPlaceId(pid)
+                : List.of();
+        model.addAttribute("reviews", reviews);
+
+        
 
 
         return "detail";
@@ -126,7 +169,7 @@ public class PlaceController {
     }
 
 
-    
+    /** detail.jsp → placeId 파라미터로 넘어왔을 때 (세션에서 placeInfo 꺼내 사용) */
     @GetMapping("/detail")
     public String showPlaceDetail(@RequestParam Long placeId,
                                   HttpSession session,
@@ -139,8 +182,13 @@ public class PlaceController {
 
         model.addAllAttributes(placeInfo);
         model.addAttribute("placeId", placeId);
-        model.addAttribute("hours", "24시간 운영");
+        model.addAttribute("hours", "9:00 ~ 18:00");
 
+        // 리뷰 조회 후 모델에 삽입
+        List<Review> reviews = reviewService.getReviewsByPlaceId(placeId);
+        model.addAttribute("reviews", reviews);
+
+        
         return "detail";
     }
 
