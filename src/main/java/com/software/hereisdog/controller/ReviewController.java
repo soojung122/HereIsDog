@@ -7,6 +7,7 @@ import com.software.hereisdog.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
 
+import com.software.hereisdog.service.PlaceService;
 import com.software.hereisdog.service.ReviewFormValidator;
 
 import java.security.Principal;
@@ -51,21 +52,25 @@ public class ReviewController {
     public String createReviewForm(@PathVariable Long placeId,
                                    HttpSession session,
                                    Model model) {
+    	
+		User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null) {
+	        return "redirect:/login";
+	    }
+    	    
+	
         Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
         if (placeInfo == null) {
             return "redirect:/"; // 세션 만료 시 홈
         }
-
-        User loginUser = (User) session.getAttribute("loginUser");
-        String userId = (loginUser != null) ? loginUser.getId().toString() : "test-user";
         
-        System.out.println(userId);
+        System.out.println(loginUser);
 
         model.addAllAttributes(placeInfo);  
         model.addAttribute("placeId", placeId); 
-        model.addAttribute("userId", userId);
+        model.addAttribute("userId", loginUser);
         model.addAttribute("reviewForm", new ReviewForm());
-        model.addAttribute("type", placeInfo.get("type")); //ㅊ코드 추가
+        model.addAttribute("type", placeInfo.get("type")); 
         
         //String type = (String) placeInfo.get("type");
         
