@@ -196,12 +196,11 @@
 				            <div>아직 작성된 리뷰가 없습니다</div>
 				        </c:when>
 				        <c:otherwise>
-				            <c:forEach var="review" items="${reviewList}">
+				           <c:forEach var="review" items="${reviewList}">
 							    <div class="review-item">
-							        <c:set var="placeFull" value="${review.placeId}" />
-							        <c:set var="placeName" value="${fn:substringBefore(placeFull, '_')}" />
-							        <span class="flag">🚩</span>
-							        <b>${placeName}</b>
+							        
+							
+							        <b>${review.placeName}</b> <span class="flag">🚩</span>
 							        <span style="color:#888;">"${review.content}"</span>
 							    </div>
 							</c:forEach>
