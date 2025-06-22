@@ -53,19 +53,23 @@
             padding: 20px;
         }
         .image-section img {
-            width: 300px;     /* 가로 크기 고정 */
-            height: auto;     /* 세로는 비율에 따라 자동 */
+            width: 400px;     /* 가로 크기 고정 */
+            height: 300px;     /* 세로는 비율에 따라 자동 */
             border-radius: 8px;
         }
         .info-section {
+            margin-top: 20px;
             width: 40%;
             padding: 20px;
-            background: #f0f0f0;
+            height: 260px;
+            /*--background: #f0f0f0;*/
+            background: #E2E2E2;
             border-radius: 8px;
         }
         .info-section div {
+            margin-top: 5px;
             background: white;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 10px;
             border-radius: 6px;
             font-size: 16px;
@@ -102,10 +106,12 @@
         }
         .review-button {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
+
         }
         .review-button button {
             padding: 12px 24px;
+            padding-right: 20px;
             font-size: 16px;
             background-color: #333;
             color: white;
@@ -159,9 +165,12 @@
                         </c:choose>
                     </span>
                     <!-- 찜하기 버튼 (찜 등록) -->
-                    <button onclick="addFavorite('${placeId}', '${name}', '${address}')" title="찜하기">
-                        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
-                    </button>
+                    <c:if test="${sessionScope.loginUser.userType == 'USER'}">
+                        <button onclick="addFavorite('${placeId}', '${name}', '${address}')" title="찜하기">
+                            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="찜">
+                        </button>
+                    </c:if>
+
                     
                     <script>
                     function addFavorite(placeId, name, address) {
@@ -196,16 +205,7 @@
                   </c:otherwise>
                 </c:choose>
                 
-                <c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
-                    <form id="placeRegisterForm">
-                        <input type="hidden" name="name" value="${name}" />
-                        <input type="hidden" name="address" value="${address}" />
-                        <input type="hidden" name="description" value="${name}" />
-                        <input type="hidden" name="phoneNumber" value="${phone}" />
-                        <input type="hidden" name="openingHours" value="${hours}" />
-                        <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
-                    </form>
-                </c:if>
+
                 
                 <script>
                 function submitMyPlace() {
@@ -239,13 +239,15 @@
                 
             </div>
         </div>
+        
+
         <c:if test="${not empty sessionScope.alertMessage}">
-		    <script>
-		        alert("${sessionScope.alertMessage}");
-		    </script>
-		    <c:remove var="alertMessage" scope="session" />
-		</c:if>
-		
+            <script>
+                alert("${sessionScope.alertMessage}");
+            </script>
+            <c:remove var="alertMessage" scope="session" />
+        </c:if>
+        
         <div class="review-scroll">
         <p>⭐ 평균 평점: ${averageRating}점</p>
             <c:forEach var="rev" items="${reviews}">
@@ -257,15 +259,26 @@
                 <div>아직 작성된 리뷰가 없습니다</div>
             </c:if>
         </div>
-    
+         <c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
+              <form id="placeRegisterForm" class="review-button">
+                  <input type="hidden" name="name" value="${name}" />
+                  <input type="hidden" name="address" value="${address}" />
+                  <input type="hidden" name="description" value="${name}" />
+                  <input type="hidden" name="phoneNumber" value="${phone}" />
+                  <input type="hidden" name="openingHours" value="${hours}" />
+                  <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
+              </form>
+          </c:if>
         <!--<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
         -->
         
-        <div class="review-button">
-            <a href="${pageContext.request.contextPath}/reviews/${placeId}/new">
-                <button type="button">리뷰 작성 하러가기</button>
-            </a>
-        </div>
+        <c:if test="${sessionScope.loginUser.userType == 'USER'}">
+            <div class="review-button">
+                <a href="${pageContext.request.contextPath}/reviews/${placeId}/new">
+                    <button type="button">리뷰 작성 하러가기</button>
+                </a>
+            </div>
+        </c:if>
 
         
     </div>

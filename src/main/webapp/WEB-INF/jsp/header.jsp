@@ -62,7 +62,7 @@
 		</c:if>
     </div>
 		
-		</div>
+</div>
 		
 
 <script>
