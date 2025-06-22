@@ -58,7 +58,7 @@
 </head>
 <body>
 <div class="manage-box">
-    <div class="manage-label">회원 관리(방문객, 오너)</div>
+    <div class="manage-label">회원 관리(사용자, 사업자)</div>
     <div class="member-table">
         <!-- 왼쪽: 방문객 -->
         <div class="member-list">
@@ -67,7 +67,7 @@
                     <c:forEach var="cust" items="${customerList}">
                         <div class="member-card">
                             <span>
-                                방문객 | ID: <b>${cust.username}</b>
+                                사용자 | ID: <b>${cust.username}</b>
                                 &nbsp;PW: <b>${cust.password}</b>
                                 &nbsp;EMAIL: <b>${cust.email}</b>
                             </span>
@@ -83,7 +83,7 @@
                     <c:forEach var="i" begin="1" end="6">
                         <div class="member-card">
                             <span>
-                                방문객${i} 데이터 (아이디: guest${i}, 비밀번호: ****, 이메일: guest${i}@test.com)
+                                사용자${i} 데이터 (아이디: guest${i}, 비밀번호: ****, 이메일: guest${i}@test.com)
                             </span>
                             <button type="button" class="delete-btn">삭제</button>
                         </div>
@@ -99,7 +99,7 @@
                     <c:forEach var="own" items="${ownerList}">
                         <div class="member-card">
                             <span>
-                                오너 | ID: <b>${own.username}</b>
+                                사용자 | ID: <b>${own.username}</b>
                                 &nbsp;PW: <b>${own.password}</b>
                                 &nbsp;EMAIL: <b>${own.email}</b>
                                 &nbsp;사업자번호: <b>${own.businessNumber}</b>
@@ -116,7 +116,7 @@
                     <c:forEach var="i" begin="1" end="6">
                         <div class="member-card">
                             <span>
-                                오너${i} 데이터 (아이디: owner${i}, 비밀번호: ****, 이메일: owner${i}@biz.com, 사업자번호: 123-45-00${i})
+                                사업자${i} 데이터 (아이디: owner${i}, 비밀번호: ****, 이메일: owner${i}@biz.com, 사업자번호: 123-45-00${i})
                             </span>
                             <button type="button" class="delete-btn">삭제</button>
                         </div>

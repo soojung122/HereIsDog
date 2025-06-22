@@ -35,7 +35,7 @@ public class ReviewController {
     
     @Autowired
     public ReviewController(ReviewService reviewService,
-    						ReviewFormValidator reviewFormValidator) {
+                      ReviewFormValidator reviewFormValidator) {
         this.reviewService = reviewService;
         this.reviewFormValidator = reviewFormValidator;
     }
@@ -52,13 +52,13 @@ public class ReviewController {
     public String createReviewForm(@PathVariable Long placeId,
                                    HttpSession session,
                                    Model model) {
-    	
-		User loginUser = (User) session.getAttribute("loginUser");
-	    if (loginUser == null) {
-	        return "redirect:/login";
-	    }
-    	    
-	
+       
+      User loginUser = (User) session.getAttribute("loginUser");
+       if (loginUser == null) {
+           return "redirect:/login";
+       }
+           
+   
         Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
         if (placeInfo == null) {
             return "redirect:/"; // 세션 만료 시 홈
@@ -86,7 +86,7 @@ public class ReviewController {
                                HttpSession session,
                                Model model,
                                Principal principal) {
-    	
+       
         Map<String, Object> placeInfo = (Map<String, Object>) session.getAttribute("placeDetail");
         if (placeInfo == null) {
             return "redirect:/"; 

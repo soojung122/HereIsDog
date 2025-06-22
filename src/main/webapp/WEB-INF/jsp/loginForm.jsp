@@ -99,8 +99,8 @@
 			    <div class="label-radio-row">
 			        <label for="username">아이디</label>
 			        <div class="radio-group-inline">
-			            <label><input type="radio" name="role" value="guest" checked> 방문객</label>
-			            <label><input type="radio" name="role" value="owner"> 오너</label>
+			            <label><input type="radio" name="role" value="guest" checked>사용자</label>
+			            <label><input type="radio" name="role" value="owner">사업자</label>
 			        </div>
 			    </div>
 			

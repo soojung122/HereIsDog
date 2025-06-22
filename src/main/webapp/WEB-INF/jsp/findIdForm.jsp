@@ -37,8 +37,8 @@
             <div class="form-group">
                 <label>회원 유형</label>
                 <div class="radio-group">
-                    <label><input type="radio" name="role" value="guest" checked> 방문객</label>
-                    <label><input type="radio" name="role" value="owner"> 오너</label>
+                    <label><input type="radio" name="role" value="guest" checked>사용자</label>
+                    <label><input type="radio" name="role" value="owner">사업자</label>
                 </div>
             </div>
 

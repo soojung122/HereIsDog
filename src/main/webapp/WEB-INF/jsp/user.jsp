@@ -22,7 +22,7 @@
 
         .profile-row {
             display: flex;
-            gap: 300px; /* 두 박스 사이 간격 */
+            gap: 200px; /* 두 박스 사이 간격 */
     		justify-content: flex-start;
             align-items: flex-start;
         }
@@ -36,19 +36,21 @@
         .profile-img {
             width: 180px;
             height: 180px;
-            background: #e3e0ec;
+            background: #E2E2E2;
             border: 2px solid #888;
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 70px;
+            margin-let: 30px;
         }
 
         .nickname {
             font-size: 1.3rem;
             font-weight: 500;
             margin-top: 12px;
+            
         }
 
         .fav-box {
@@ -57,7 +59,7 @@
             border-radius: 20px;
             padding: 18px 20px;
             min-width: 240px;
-            width: 300px;  
+            width: 415px;  
 		    height: 130px;    
         }
 

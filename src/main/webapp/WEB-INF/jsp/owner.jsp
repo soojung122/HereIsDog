@@ -35,9 +35,10 @@
         }
 
         .profile-img {
+            margin-top: 33px;
             width: 180px;
             height: 180px;
-            background: #e3e0ec;
+            background: #E2E2E2;
             border: 2px solid #888;
             border-radius: 15px;
             margin-bottom: 14px;
@@ -57,6 +58,7 @@
 		    display: flex;
 		    flex-direction: column;
 		    gap: 4px; /* 제목과 박스 사이 간격 */
+		    
 		}
 		
 		.left-column {
@@ -66,8 +68,7 @@
 		}
 
         .shop-info-box,
-        .shop-form-box,
-        .service-box {
+        .shop-form-box{
             background: #faf8b3;
             border: 2px solid #888;
             border-radius: 28px;
@@ -75,6 +76,18 @@
             box-sizing: border-box;
             min-width: 330px;
             max-width: 420px;
+        }
+        
+        .service-box {
+            background: #E2E2E2;
+            border: 2px solid #888;
+            border-radius: 28px;
+            padding: 18px 30px;
+            box-sizing: border-box;
+            min-width: 330px;
+            max-width: 420px;
+            color:  black;
+            font-weight: bold;
         }
 
         .shop-title {
@@ -220,22 +233,13 @@
 			    </div>
 			</div>
 			
-			<%-- 서비스 기능 
+			 <!-- 서비스 기능--> 
 			<div class="info-group">
-			    <div class="section-title">서비스 기능 선택</div>
+			    <div class="section-title">주의사항</div>
 			    <div class="service-box">
-				    <form action="/owner/shop/service-update" method="post">
-				        <div class="service-checks">
-				            <label><input type="checkbox" name="service" value="WIFI" ${shop.serviceWifi ? 'checked' : ''}> Wi-Fi</label>
-				            <label><input type="checkbox" name="service" value="PARKING" ${shop.serviceParking ? 'checked' : ''}> 주차</label>
-				            <label><input type="checkbox" name="service" value="PET" ${shop.servicePet ? 'checked' : ''}> 반려동물 동반</label>
-				        </div>
-				        <div style="text-align: center;">
-				            <button type="submit" class="save-btn">저장</button>
-				        </div>
-				    </form>
+				    사업자는 한 계정당 하나의 가게만 관리가능
 				</div>
-			</div>--%>
+			</div>
 	    </div>
 	
 	    <!-- 🔸 가게 정보 수정 제목 -->
