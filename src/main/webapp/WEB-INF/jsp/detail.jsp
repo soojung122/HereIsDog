@@ -91,7 +91,7 @@
             height: 24px;
         }
         .review-scroll {
-            max-height: 150px;
+            max-height: 95px;
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
