@@ -120,6 +120,7 @@ public class PlaceController {
             placeInfo.put("hours", place.getOpeningHours());
             placeInfo.put("type", type);
             model.addAttribute("fromDb", true);
+            System.out.println(">> phone: " + phone);
             
         } else {
         	model.addAttribute("fromDb", false);
@@ -170,7 +171,7 @@ public class PlaceController {
         }
 
         model.addAttribute("averageRating", averageRating);
-        
+
         return "detail";
     }
     
