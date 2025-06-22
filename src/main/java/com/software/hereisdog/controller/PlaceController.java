@@ -106,6 +106,7 @@ public class PlaceController {
     	if (phone == null || phone.isBlank()) {
     	    phone = "010-0000-0000";
     	}
+    	
         if (place != null) {
             // DB에서 조회된 경우: DB 값 넘김
             model.addAttribute("place", place);
@@ -120,7 +121,7 @@ public class PlaceController {
             placeInfo.put("hours", place.getOpeningHours());
             placeInfo.put("type", type);
             model.addAttribute("fromDb", true);
-            System.out.println(">> phone: " + phone);
+            //System.out.println(">> phone: " + phone);
             
         } else {
         	model.addAttribute("fromDb", false);

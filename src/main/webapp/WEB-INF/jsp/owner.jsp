@@ -247,9 +247,9 @@
 	        <div class="section-title">가게 정보 수정</div>
 	        <div class="shop-form-box">
 	            <form class="shop-form" id="placeForm" onsubmit="return false;">
-	                <label>이름
+	                <!-- <label>이름
 	                    <input type="text" name="name" value="${shop.name}">
-	                </label>
+	                </label>-->
 	                <label>영업시간
 	                    <select name="openingHours">
 	                        <option value="9-18" ${shop.openingHours eq '9:00~18:00' ? 'selected' : ''}>09:00~18:00</option>

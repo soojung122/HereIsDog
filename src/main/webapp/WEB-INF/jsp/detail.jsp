@@ -238,8 +238,8 @@
                 
                 
             </div>
+  
         </div>
-        
 
         <c:if test="${not empty sessionScope.alertMessage}">
             <script>
@@ -259,16 +259,7 @@
                 <div>아직 작성된 리뷰가 없습니다</div>
             </c:if>
         </div>
-         <c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
-              <form id="placeRegisterForm" class="review-button">
-                  <input type="hidden" name="name" value="${name}" />
-                  <input type="hidden" name="address" value="${address}" />
-                  <input type="hidden" name="description" value="${name}" />
-                  <input type="hidden" name="phoneNumber" value="${phone}" />
-                  <input type="hidden" name="openingHours" value="${hours}" />
-                  <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
-              </form>
-          </c:if>
+
         <!--<c:set var="placeId" value="${fn:replace(phone, '-', '')}" />
         -->
         
@@ -279,7 +270,18 @@
                 </a>
             </div>
         </c:if>
-
+                
+          <c:if test="${sessionScope.loginUser.userType == 'OWNER'}">
+              <form id="placeRegisterForm" class="review-button">
+                  <input type="hidden" name="name" value="${name}" />
+                  <input type="hidden" name="address" value="${address}" />
+                  <input type="hidden" name="description" value="${name}" />
+                  <input type="hidden" name="phoneNumber" value="${phone}" />
+                  <input type="hidden" name="openingHours" value="${hours}" />
+                  <button type="button" onclick="submitMyPlace()">내 가게로 등록</button>
+              </form>
+          </c:if>
+        
         
     </div>
 </body>
