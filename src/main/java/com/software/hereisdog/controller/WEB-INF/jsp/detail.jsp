@@ -239,13 +239,7 @@
                 
             </div>
         </div>
-        <c:if test="${not empty sessionScope.alertMessage}">
-		    <script>
-		        alert("${sessionScope.alertMessage}");
-		    </script>
-		    <c:remove var="alertMessage" scope="session" />
-		</c:if>
-		
+
         <div class="review-scroll">
         <p>⭐ 평균 평점: ${averageRating}점</p>
             <c:forEach var="rev" items="${reviews}">

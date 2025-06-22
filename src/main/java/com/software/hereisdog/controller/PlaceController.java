@@ -118,10 +118,8 @@ public class PlaceController {
             placeInfo.put("image", image);
             placeInfo.put("place_url", placeUrl);
             placeInfo.put("hours", place.getOpeningHours());
+            placeInfo.put("type", type);
             model.addAttribute("fromDb", true);
-
-            
-            
             
         } else {
         	model.addAttribute("fromDb", false);

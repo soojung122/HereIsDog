@@ -81,7 +81,7 @@
     <div class="container">
         <!-- 왼쪽: 장소 이미지 -->
         <div class="image-section">
-        <%--<p>타입: ${type}</p> --%>
+        <%--<p>타입: ${type}</p>--%>        
             <c:choose>
                 <c:when test="${type eq '동물병원'}">
                     <img src="/images/animal_hospital.png" alt="동물병원 이미지">
